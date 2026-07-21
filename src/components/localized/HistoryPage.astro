@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import { localizedPath } from '../../i18n/config';
+import { toHans } from '../../i18n/detail';
+import type { TranslatedLocale } from '../../i18n/content';
+
+const { locale } = Astro.props as { locale: TranslatedLocale };
+const cnTimeline = [
+  ['明代', '许獬故宅“丛青轩”', '总兵署的前身是明代金门文人许獬的故宅“丛青轩”。许獬为明万历年间进士，以文章闻名，丛青轩是当时后浦的重要宅第。'],
+  ['1682', '总兵陈龙改建为官署', '清康熙二十一年（1682），总兵陈龙将丛青轩改建为金门镇总兵署，作为统辖金门水师与海防的最高军政机构。'],
+  ['清代', '金门海防军政中心', '有清一代，总兵署是金门镇总兵办公与议事之所，统领水师、管理海防，见证东南沿海军事部署与两岸往来。'],
+  ['民国以后', '多个行政机构使用', '进入民国，建筑先后作为县政府等行政机构使用，长期是后浦行政核心，也伴随金城市街发展。'],
+  ['当代', '修复为文化展示空间', '整修后以清代官署古迹面貌免费开放，设置大堂、科房、内署、战船与兵器等展陈。'],
+];
+const enTimeline = [
+  ['Ming period', 'Xu Xie’s residence, Congqing Xuan', 'The site began as Congqing Xuan, the residence of Kinmen scholar Xu Xie, a successful Ming civil-service examination candidate renowned for his writing.'],
+  ['1682', 'General Chen Long rebuilt the compound', 'In 1682, Chen Long converted the residence into the Kinmen regional military headquarters, the senior institution responsible for naval forces and coastal defence.'],
+  ['Qing period', 'Military centre of Kinmen', 'The commander worked and held council here, directing naval units and coastal defence while the site witnessed movement across the Taiwan Strait.'],
+  ['Republican era', 'Used by several administrations', 'The buildings later accommodated county government and other offices, remaining an administrative focus as Jincheng developed.'],
+  ['Today', 'Restored for public interpretation', 'The restored compound presents its halls, offices, inner residence, warships and weapons as a free heritage attraction.'],
+];
+const timeline = locale === 'en' ? enTimeline : cnTimeline;
+const copy = locale === 'en' ? {
+  title: 'From Congqing Xuan to a coastal defence headquarters', eyebrow: 'History', crumb: 'History',
+  description: 'The complete history of the Kinmen Military Headquarters, from a Ming scholar’s residence to Qing coastal administration and a modern heritage site.',
+  intro: 'Originally the Ming residence of Xu Xie, the site was rebuilt as an official headquarters by General Chen Long in 1682.',
+  roleTitle: 'What was a regional commander?', role: 'A zongbing was a senior officer of the Qing Green Standard Army with responsibility for the military affairs of a region. The Kinmen commander directed naval units and coastal defence and was effectively the area’s highest military authority.',
+  inside: 'Explore every interior space', route: 'Take the 90-minute history route',
+} : {
+  title: '从丛青轩到海防中枢', eyebrow: '历史沿革', crumb: '历史沿革',
+  description: '清金门镇总兵署完整历史：从明代许獬故宅丛青轩、1682 年改建官署，到今天的文化展示空间。',
+  intro: '明代许獬故宅“丛青轩”，清康熙二十一年（1682）由总兵陈龙改建为官署。',
+  roleTitle: '总兵是什么官？', role: '总兵是清代绿营的高阶武官，统辖一镇军务。金门镇总兵负责金门及周边海域水师与海防，相当于地区最高军事长官，总兵署就是其办公与统兵的官署。',
+  inside: '查看署内各个空间', route: '走 90 分钟深度路线',
+};
+---
+<Layout title={copy.eyebrow} description={copy.description} active="/history/" pageType="Article">
+  <PageHeader eyebrow={copy.eyebrow} crumb={copy.crumb} title={copy.title} intro={copy.intro} />
+  <div class="container-page py-12"><div class="mx-auto max-w-3xl">
+    <ol class="relative border-l-2 border-[var(--color-slate-line)] pl-8">
+      {timeline.map(([year, title, text]) => <li class="relative mb-10">
+        <span class="absolute -left-[42px] grid h-8 w-8 place-items-center rounded-full step-num text-xs font-bold">{year.slice(0, 2)}</span>
+        <div class="text-sm font-semibold text-[var(--color-brick)]">{year}</div><h2 class="mt-1 font-serif text-2xl font-bold text-[var(--color-ink)]">{title}</h2><p class="mt-2 leading-8 text-[var(--color-wood-soft)]">{text}</p>
+      </li>)}
+    </ol>
+    <div class="mt-4 rounded-2xl bg-[var(--color-paper-deep)] p-6"><h3 class="font-serif text-xl font-bold text-[var(--color-ink)]">{copy.roleTitle}</h3><p class="mt-2 leading-8 text-[var(--color-wood-soft)]">{copy.role}</p></div>
+    <div class="mt-6 flex flex-wrap gap-3"><a href={localizedPath(locale, '/inside/')} class="btn btn-primary">{copy.inside} →</a><a href={localizedPath(locale, '/routes/90-minute/')} class="btn btn-secondary">{copy.route} →</a></div>
+  </div></div>
+</Layout>

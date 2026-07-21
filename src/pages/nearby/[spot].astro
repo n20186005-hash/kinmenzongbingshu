@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import { getLocalImage } from '../../lib/images';
+import { nearbySpots, type NearbySpot } from '../../data/nearby';
+
+export function getStaticPaths() {
+  return nearbySpots
+    .filter((spot) => spot.slug !== 'model-street')
+    .map((spot) => ({ params: { spot: spot.slug }, props: { spot } }));
+}
+
+const { spot } = Astro.props as { spot: NearbySpot };
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
+const heroImage = getLocalImage(spot.image);
+---
+<Layout title={spot.name} description={`${spot.name}參觀指南：${spot.note}含歷史、建築看點、拍照提示與從清金門鎮總兵署出發的步行資訊。`} active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
+  <section class="relative min-h-[26rem] overflow-hidden">
+    <div class="absolute inset-0">
+      <ResponsiveImage src={heroImage} alt={spot.imageAlt} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/50 to-[var(--color-ink)]/25"></div>
+    </div>
+    <div class="container-page relative flex min-h-[26rem] flex-col justify-end py-12 sm:py-16">
+      <nav class="mb-3 text-xs text-white/75">
+        <a href="/" class="hover:text-white">首頁</a> / <a href="/nearby/" class="hover:text-white">附近景點</a> / {spot.name}
+      </nav>
+      <p class="eyebrow !text-[var(--color-paper)]/90">周邊順遊 · {spot.walk}</p>
+      <h1 class="mt-3 max-w-3xl font-serif text-3xl font-black !text-white sm:text-5xl">{spot.name}</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-8 text-white/90">{spot.lead}</p>
+      <div class="mt-5 flex flex-wrap gap-2 text-sm text-white">
+        <span class="rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">{spot.heritage}</span>
+        <span class="rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">{spot.walk}</span>
+        <span class="rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">{spot.stay}</span>
+      </div>
+      <a href="/credits/" class="mt-4 w-fit text-xs text-white/65 hover:text-white">實景照片 · 檢視來源與授權 →</a>
+    </div>
+  </section>
+
+  <div class="container-page py-12">
+    <div class="grid gap-10 lg:grid-cols-3">
+      <main class="lg:col-span-2">
+        <section class="prose-cn">
+          <h2>{spot.name}是什麼</h2>
+          <p>{spot.history}</p>
+        </section>
+
+        <section class="mt-10">
+          <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">現場重點看什麼</h2>
+          <div class="mt-5 grid gap-4 sm:grid-cols-3">
+            {spot.highlights.map((item, index) => (
+              <article class="rounded-2xl bg-white p-5 shadow-[var(--shadow-card)]">
+                <span class="text-xs font-bold text-[var(--color-brick)]">0{index + 1}</span>
+                <h3 class="mt-2 font-serif text-lg font-bold text-[var(--color-ink)]">{item.title}</h3>
+                <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section class="mt-10 rounded-2xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+          <h2 class="font-serif text-xl font-bold text-[var(--color-ink)]">到訪提示</h2>
+          <ul class="mt-4 space-y-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+            {spot.tips.map((tip) => <li class="flex gap-3"><span class="text-[var(--color-brick)]">●</span><span>{tip}</span></li>)}
+          </ul>
+        </section>
+      </main>
+
+      <aside class="space-y-5">
+        <div class="card">
+          <div class="text-sm font-semibold text-[var(--color-ink)]">從總兵署出發</div>
+          <div class="mt-3 font-serif text-2xl font-black text-[var(--color-brick)]">{spot.walk}</div>
+          <p class="mt-2 text-sm leading-6 text-[var(--color-wood-soft)]">{spot.distance}，後浦老城區大致平坦，步行即可順遊。</p>
+          <a href={mapUrl} target="_blank" rel="noopener" class="btn btn-primary mt-5 w-full">開啟地圖導航 ↗</a>
+        </div>
+        <div class="card">
+          <dl class="space-y-4 text-sm">
+            <div><dt class="text-xs text-[var(--color-slate)]">文化身份</dt><dd class="mt-1 font-bold text-[var(--color-ink)]">{spot.heritage}</dd></div>
+            <div><dt class="text-xs text-[var(--color-slate)]">建議停留</dt><dd class="mt-1 font-bold text-[var(--color-ink)]">{spot.stay}</dd></div>
+            <div><dt class="text-xs text-[var(--color-slate)]">參觀提醒</dt><dd class="mt-1 leading-6 text-[var(--color-wood-soft)]">戶外可直接觀賞；室內開放與活動安排以現場公告為準。</dd></div>
+          </dl>
+        </div>
+        <a href={spot.officialUrl} target="_blank" rel="noopener" class="card flex items-center justify-between text-sm font-medium text-[var(--color-brick)] transition-transform hover:-translate-y-0.5">
+          金門觀光旅遊網資料 <span>↗</span>
+        </a>
+      </aside>
+    </div>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-3">
+      <a href="/nearby/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">全部附近景點</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">繼續規劃後浦順遊</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+      <a href="/nearby/houpu-old-street/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">後浦老街深度路線</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">約 2 小時走完精華</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+      <a href="/nearby/food/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">附近美食</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">步行可達的 7 家老店</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+    </div>
+  </div>
+</Layout>

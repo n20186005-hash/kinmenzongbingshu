@@ -1,0 +1,232 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import ResponsiveImage from '../../../components/ResponsiveImage.astro';
+import { attraction } from '../../../data/site';
+import { localizedPath, type Locale } from '../../../i18n/config';
+import { type TranslatedLocale } from '../../../i18n/content';
+import { getTranslatedLocalePaths } from '../../../i18n/paths';
+
+export function getStaticPaths() {
+  return getTranslatedLocalePaths();
+}
+
+const { locale } = Astro.props as { locale: TranslatedLocale };
+const en = locale === 'en';
+const href = (path: string) => localizedPath(locale as Locale, path);
+
+const copy = en ? {
+  title: 'How to join the Houpu night tour',
+  description: 'Complete guide to the free 19:30 Houpu night tour from Kinmen Military Headquarters: on-site registration, route stops, evening schedule, practical advice and FAQs.',
+  eyebrow: 'Evening in Jincheng', crumb: 'Houpu night tour',
+  intro: 'Register on site for the free guided walk that leaves from Kinmen Military Headquarters at 19:30 and finishes on Mofan Street. Use this page to plan the complete evening.',
+  facts: [['Meeting time', 'Arrive by 19:20'], ['Registration', 'On site'], ['Cost', 'Free'], ['Finish', 'Mofan Street']],
+  registerEyebrow: 'Before departure', registerTitle: 'On-site registration in four steps',
+  registerSteps: [
+    ['Arrive early', 'Return to the headquarters around 19:20 so there is time to locate the registration point.'],
+    ['Find the registration point', 'Ask the on-site staff where that evening’s Houpu tour is registering.'],
+    ['Confirm current arrangements', 'Check that the walk is operating, where the group meets and whether weather or an event has changed the route.'],
+    ['Stay with the group', 'Be ready at the meeting point before the scheduled 19:30 departure.'],
+  ],
+  check: 'Check again on the day',
+  checkText: 'The tour is an on-site activity. Time, route and operation may change because of weather, festivals or temporary arrangements. The latest official and on-site notice takes priority.',
+  routeEyebrow: 'Walking route', routeTitle: 'From the headquarters to Mofan Street',
+  routeIntro: 'The route links official history, education, family life, religion and modern streetscape in central Houpu. Individual stops may be adjusted on the day.',
+  stops: [
+    ['Kinmen Military Headquarters', 'Departure point · begin with the Qing military and administrative centre.'],
+    ['Wujiang Academy', 'Learn how academies and Zhu Xi traditions shaped local education.'],
+    ['Ancestral halls', 'See how lineage spaces preserve family history and community memory.'],
+    ['Old-town temples', 'Understand the relationship between belief, neighbourhood life and local governance.'],
+    ['Western-style houses', 'Notice how overseas migration introduced new façades and building forms.'],
+    ['Qiu Liang-gong Memorial Arch', 'Read the carved stone monument within the everyday street.'],
+    ['Mofan Street', 'Finish among the red-brick arcades of Houpu’s best-known historic street.'],
+  ],
+  official: 'Check the official tour page', map: 'Directions to the meeting point',
+  scheduleEyebrow: 'Suggested plan', scheduleTitle: 'A practical way to arrange the evening',
+  schedule: [
+    ['17:30', 'Visit the headquarters', 'Complete the indoor route while there is still daylight.'],
+    ['18:30', 'Dinner in Jincheng', 'Eat within the old town and remain within walking distance.'],
+    ['19:20', 'Return to the meeting point', 'Register and confirm the evening’s arrangements.'],
+    ['19:30', 'The tour departs', 'Follow the guide through Houpu to Mofan Street.'],
+  ],
+  practicalEyebrow: 'Practical advice', practicalTitle: 'What to know before you set out',
+  practical: [
+    ['Shoes and walking', 'Wear comfortable shoes. The route uses historic lanes, pavements and road crossings.'],
+    ['Weather', 'Bring rain protection when needed. Severe weather may alter or cancel the activity.'],
+    ['Guide language', 'Commentary is normally delivered for the local group. Ask on site about the language used and any foreign-language support.'],
+    ['Children and older visitors', 'The pace is a group walk. Keep children close and allow extra care at kerbs, thresholds and traffic crossings.'],
+    ['Mobility access', 'Conditions vary between streets and heritage stops. Confirm the current route with staff if step-free access is essential.'],
+    ['Water and facilities', 'Use the facilities and carry water before departure; do not assume every stop has a toilet or shop.'],
+  ],
+  afterEyebrow: 'After the tour', afterTitle: 'What to do at Mofan Street',
+  after: [
+    ['Explore nearby sights', 'Continue with the Mofan Street and Houpu walking guides.', '/nearby/'],
+    ['Find food nearby', 'Check breakfast, snack, dessert and dinner options in the old town.', '/nearby/food/'],
+    ['Plan your return', 'Review walking, bus, taxi and parking information before it gets late.', '/transport/'],
+  ],
+  faqEyebrow: 'Frequently asked questions', faqTitle: 'Questions about joining the night tour',
+  faqs: [
+    ['Do I need to book online?', 'The published arrangement is on-site registration. Arrive early and confirm the current procedure with staff.'],
+    ['Where exactly does the tour start?', 'Registration and departure are at the Kinmen Military Headquarters area. Ask staff for that evening’s precise meeting point.'],
+    ['Is the tour conducted in English?', 'Do not assume English commentary is available. Ask on site about the guide language and any support for international visitors.'],
+    ['What happens when it rains?', 'Light rain may not stop a walking tour, but weather can change or cancel the activity. Check again on the day.'],
+    ['Can wheelchair users join?', 'Parts of the old town may include kerbs, thresholds or uneven surfaces. Ask staff whether the current route is suitable before registering.'],
+    ['How do I return after the finish?', 'Mofan Street remains within central Houpu and is a short walk from the headquarters and Jincheng Bus Station. Check the last transport you need in advance.'],
+  ],
+} : {
+  title: '后浦夜游怎么参加',
+  description: '后浦夜游完整指南：每天 19:30 从清金门镇总兵署出发，介绍现场报名、路线节点、晚间安排、参加提醒与常见问题。',
+  eyebrow: '后浦夜游', crumb: '后浦夜游',
+  intro: '夜游通常于 19:30 从清金门镇总兵署出发，免费参加、现场报名，最后抵达模范街。这里把整晚怎么安排一次说明清楚。',
+  facts: [['集合时间', '建议 19:20 前到'], ['报名方式', '现场报名'], ['费用', '免费'], ['终点', '模范街']],
+  registerEyebrow: '出发之前', registerTitle: '现场报名四步完成',
+  registerSteps: [
+    ['提前抵达', '建议 19:20 左右回到总兵署，预留寻找报名处与集合的时间。'],
+    ['找到报名处', '向总兵署现场人员询问当晚“后浦美丽小镇之旅”的报名位置。'],
+    ['确认当晚安排', '确认活动是否照常、准确集合位置，以及天气或节庆是否改变路线。'],
+    ['准时集合', '在 19:30 预定出发时间前回到集合点，跟随当晚带队人员。'],
+  ],
+  check: '当天还要再次确认',
+  checkText: '夜游属于现场活动，时间、路线和是否举办可能因天气、节庆或临时安排调整。请以官方最新公告和现场人员说明为准。',
+  routeEyebrow: '步行路线', routeTitle: '从总兵署一路走到模范街',
+  routeIntro: '路线把后浦的官署、教育、宗族、信仰、侨乡建筑与近代街区串在一起；当晚实际停靠点可能根据现场情况调整。',
+  stops: [
+    ['清金门镇总兵署', '出发点 · 从清代海防军政中心认识后浦。'],
+    ['浯江书院', '了解书院、朱子信仰与地方崇文传统。'],
+    ['宗祠', '从家族空间理解宗族历史和社区记忆。'],
+    ['老城庙宇', '认识地方信仰、街区生活与行政发展的关系。'],
+    ['洋楼', '观察侨汇与海外经验带来的立面和建筑变化。'],
+    ['邱良功母节孝坊', '在日常街道中近看 1812 年石牌坊与雕刻。'],
+    ['模范街', '在后浦代表性的红砖拱廊老街结束行程。'],
+  ],
+  official: '查看官方活动页面', map: '导航到集合地点',
+  scheduleEyebrow: '推荐安排', scheduleTitle: '这样安排一个晚上最顺',
+  schedule: [
+    ['17:30', '参观总兵署', '趁天色还亮，先走完署内主要空间。'],
+    ['18:30', '在金城用餐', '选择后浦老城区餐馆，不必离集合点太远。'],
+    ['19:20', '返回集合点', '完成现场报名，并确认当晚安排。'],
+    ['19:30', '夜游出发', '跟随解说穿过后浦，最后抵达模范街。'],
+  ],
+  practicalEyebrow: '参加提醒', practicalTitle: '出发前还要知道这些',
+  practical: [
+    ['鞋子与步行', '建议穿防滑、好走的鞋；路线会经过老街巷道、人行空间与道路交叉口。'],
+    ['天气变化', '视天气携带雨具；强风、大雨或其他状况可能造成路线调整或停办。'],
+    ['解说语言', '解说通常配合现场团体进行，外语服务不一定每天提供，请报名时确认当晚使用语言。'],
+    ['亲子与长辈', '这是团体步行活动，儿童请跟紧同行者，长辈经过门槛、路缘和道路时需多留意。'],
+    ['行动无障碍', '老城区不同路段条件不一；若必须使用全程无阶动线，请报名之前向现场人员确认。'],
+    ['饮水与洗手间', '建议出发前先使用洗手间并准备饮水，不要预期每个停靠点都有商店或厕所。'],
+  ],
+  afterEyebrow: '夜游结束后', afterTitle: '抵达模范街以后怎么安排',
+  after: [
+    ['继续逛附近景点', '查看模范街与后浦老街步行指南。', '/nearby/'],
+    ['找附近美食', '查看老城区早餐、小吃、甜品和晚餐选择。', '/nearby/food/'],
+    ['安排返程', '提前确认步行、公车、出租车或停车信息。', '/transport/'],
+  ],
+  faqEyebrow: '游客常见问题', faqTitle: '参加夜游前最常问的事',
+  faqs: [
+    ['需要提前在网上预约吗？', '目前公开方式为现场报名。建议提前抵达，并向现场人员确认当天流程。'],
+    ['具体从哪里出发？', '报名与出发地点位于清金门镇总兵署区域，抵达后请询问当晚准确集合位置。'],
+    ['有英文解说吗？', '不要默认每天提供英文解说；请现场确认当晚使用语言及是否有外语协助。'],
+    ['下雨还会举办吗？', '小雨不一定停办，但天气可能导致路线调整或取消，请当天再次确认。'],
+    ['轮椅可以参加吗？', '老城区部分路段可能有路缘、门槛或不平整地面，请在报名之前确认当晚路线是否合适。'],
+    ['在模范街结束后怎么回去？', '模范街仍位于后浦核心区，步行可返回总兵署或金城车站；需要搭车时请提前确认末班时间。'],
+  ],
+};
+
+const faqLd = {
+  '@type': 'FAQPage',
+  mainEntity: copy.faqs.map(([question, answer]) => ({
+    '@type': 'Question', name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+---
+<Layout title={copy.title} description={copy.description} active="/houpu-night-walk/" pageType="Article" structuredData={faqLd}>
+  <PageHeader eyebrow={copy.eyebrow} crumb={copy.crumb} title={copy.title} intro={copy.intro} />
+
+  <main class="container-page py-12">
+    <div class="grid gap-10 lg:grid-cols-3">
+      <div class="space-y-12 lg:col-span-2">
+        <section>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {copy.facts.map(([label, value]) => (
+              <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">{label}</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">{value}</div></div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <p class="eyebrow">{copy.registerEyebrow}</p>
+          <h2 class="mt-2 font-serif text-2xl font-bold">{copy.registerTitle}</h2>
+          <ol class="mt-5 grid gap-4 sm:grid-cols-2">
+            {copy.registerSteps.map(([title, text], index) => (
+              <li class="card flex gap-4"><span class="grid h-9 w-9 shrink-0 place-items-center rounded-full step-num text-sm font-bold">{index + 1}</span><div><h3 class="font-bold text-[var(--color-ink)]">{title}</h3><p class="mt-1 text-sm leading-7">{text}</p></div></li>
+            ))}
+          </ol>
+          <div class="mt-5 rounded-2xl border border-[var(--color-kapok)]/35 bg-[var(--color-paper-deep)] p-5">
+            <span class="tag tag-check">{copy.check}</span><p class="mt-3 text-sm leading-7">{copy.checkText}</p>
+          </div>
+        </section>
+
+        <section>
+          <p class="eyebrow">{copy.routeEyebrow}</p>
+          <h2 class="mt-2 font-serif text-2xl font-bold">{copy.routeTitle}</h2>
+          <p class="mt-3 max-w-2xl text-sm leading-7">{copy.routeIntro}</p>
+          <ol class="mt-6 space-y-3 border-l-2 border-[var(--color-slate-line)] pl-6">
+            {copy.stops.map(([name, note], index) => (
+              <li class="relative">
+                <span class="absolute -left-[34px] grid h-7 w-7 place-items-center rounded-full step-num text-xs font-bold">{index + 1}</span>
+                <div class="rounded-xl bg-white px-5 py-4 shadow-[var(--shadow-card)]"><h3 class="font-bold text-[var(--color-ink)]">{name}</h3><p class="mt-1 text-sm leading-6">{note}</p></div>
+              </li>
+            ))}
+          </ol>
+          <a href="https://kinmen.travel/zh-tw/discover/tour/22" target="_blank" rel="noopener" class="btn btn-secondary mt-6">{copy.official} ↗</a>
+        </section>
+      </div>
+
+      <aside class="space-y-5">
+        <div class="overflow-hidden rounded-2xl shadow-[var(--shadow-card)]">
+          <ResponsiveImage src="exterior2.jpg" alt={en ? 'Night-tour meeting point at Kinmen Military Headquarters' : '金门总兵署夜游集合地点'} class="aspect-[3/4] w-full object-cover" sizes="(min-width:1024px) 33vw,100vw" maxWidth={720} />
+        </div>
+        <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary w-full">{copy.map} ↗</a>
+        <a href={href('/nearby/')} class="btn btn-secondary w-full">{en ? 'Explore nearby Houpu' : '查看总兵署附近景点'} →</a>
+      </aside>
+    </div>
+
+    <section class="mt-16 rounded-3xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+      <p class="eyebrow">{copy.scheduleEyebrow}</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold">{copy.scheduleTitle}</h2>
+      <div class="mt-6 grid gap-3 lg:grid-cols-2">
+        {copy.schedule.map(([time, action, note]) => (
+          <div class="flex gap-4 rounded-xl bg-white p-4 shadow-[var(--shadow-card)]"><span class="w-16 shrink-0 font-serif text-lg font-bold text-[var(--color-brick)]">{time}</span><div><h3 class="font-medium text-[var(--color-ink)]">{action}</h3><p class="mt-1 text-sm leading-6">{note}</p></div></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <p class="eyebrow">{copy.practicalEyebrow}</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold">{copy.practicalTitle}</h2>
+      <div class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {copy.practical.map(([title, text]) => <article class="card"><h3 class="font-serif text-lg font-bold">{title}</h3><p class="mt-2 text-sm leading-7">{text}</p></article>)}
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <p class="eyebrow">{copy.afterEyebrow}</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold">{copy.afterTitle}</h2>
+      <div class="mt-6 grid gap-5 md:grid-cols-3">
+        {copy.after.map(([title, text, path]) => <a href={href(path)} class="card group"><h3 class="font-serif text-lg font-bold group-hover:text-[var(--color-brick)]">{title}</h3><p class="mt-2 text-sm leading-7">{text}</p><span class="mt-4 inline-block text-sm font-semibold text-[var(--color-brick)]">{en ? 'Open guide' : '查看指南'} →</span></a>)}
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <p class="eyebrow">{copy.faqEyebrow}</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold">{copy.faqTitle}</h2>
+      <div class="mt-6 divide-y divide-[var(--color-slate-line)] overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+        {copy.faqs.map(([question, answer], index) => (
+          <details class="group" open={index === 0}><summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 font-medium">{question}<span class="text-[var(--color-brick)] transition-transform group-open:rotate-45">＋</span></summary><p class="px-5 pb-5 text-sm leading-7">{answer}</p></details>
+        ))}
+      </div>
+    </section>
+  </main>
+</Layout>

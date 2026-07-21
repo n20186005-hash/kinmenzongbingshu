@@ -1,0 +1,44 @@
+---
+import { attraction } from '../data/site';
+import { getLocaleFromPath, localizedAttraction } from '../i18n/config';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const place = localizedAttraction[locale];
+const copy = locale === 'en'
+  ? { eyebrow: 'Location and directions', mapName: 'Google Maps listing: Kinmen Military Headquarters of the Qing Dynasty', open: 'Open in Google Maps', coordinates: 'Coordinates' }
+  : locale === 'zh-Hans'
+    ? { eyebrow: '位置与导航', mapName: 'Google 地图名称：清金门镇总兵署（浯江新庄）', open: '用 Google 地图打开位置', coordinates: '坐标' }
+    : { eyebrow: '位置與導航', mapName: 'Google 地圖名稱：清金門鎮總兵署（浯江新莊）', open: '用 Google 地圖開啟位置', coordinates: '座標' };
+const embedUrl = locale === 'en'
+  ? attraction.googleMapsEmbedUrl.replaceAll('!1szh-CN', '!1sen')
+  : locale === 'zh-Hant-TW'
+    ? attraction.googleMapsEmbedUrl.replaceAll('!1szh-CN', '!1szh-TW')
+    : attraction.googleMapsEmbedUrl;
+---
+<section class="card overflow-hidden p-0">
+  <div class="p-5 sm:p-6">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h2 class="mt-2 font-serif text-xl font-bold text-[var(--color-ink)]">{place.name}</h2>
+    <p class="mt-2 text-sm text-[var(--color-wood-soft)]">{place.address}</p>
+    <p class="mt-1 text-xs text-[var(--color-slate)]">{copy.mapName}</p>
+  </div>
+  <div class:list={['overflow-hidden border-y border-[var(--color-slate-line)] bg-[var(--color-paper-deep)]', compact ? 'aspect-square' : 'aspect-[16/9] min-h-72']}>
+    <iframe
+      src={embedUrl}
+      title={`${place.name} Google Maps`}
+      class="h-full w-full border-0"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  </div>
+  <div class="p-5 sm:p-6">
+    <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary w-full">↗ {copy.open}</a>
+    <p class="mt-3 text-center text-xs leading-5 text-[var(--color-slate)]">{copy.coordinates} {attraction.coordinates.lat}, {attraction.coordinates.lng}</p>
+  </div>
+</section>

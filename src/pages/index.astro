@@ -1,0 +1,247 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
+import heroImage from '../assets/images/hero-exterior.jpg';
+import { attraction, quickFacts, routes, highlights, nightWalk, faqs } from '../data/site';
+
+const timeline = [
+  { year: '明代', text: '許獬故宅「叢青軒」，為總兵署的前身建築。' },
+  { year: '1682', text: '清康熙二十一年，總兵陳龍改建為金門鎮總兵署。' },
+  { year: '清代', text: '成為金門海防軍政中心，統轄水師與海防事務。' },
+  { year: '民國以後', text: '曾作為多個行政機構使用，見證後浦城市發展。' },
+  { year: '修復後', text: '整修為古蹟與文化展示空間，免費對外開放。' },
+];
+
+const nextStops = [
+  { time: '還有 30 分鐘', place: '邱良功母節孝坊 + 浯江書院', href: '/nearby/' },
+  { time: '還有 1 小時', place: '模範街 + 城隍廟', href: '/nearby/' },
+  { time: '還有 2 小時', place: '後浦老街深度步行', href: '/nearby/' },
+  { time: '準備吃飯', place: '總兵署附近美食', href: '/nearby/food/' },
+  { time: '回機場', place: '金城 → 尚義機場', href: '/transport/kinmen-airport/' },
+  { time: '回水頭碼頭', place: '金城 → 水頭碼頭', href: '/transport/shuitou-pier/' },
+];
+
+const faqLd = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+};
+---
+<Layout title="首頁" active="/" preloadImage={heroImage} preloadSizes="100vw" structuredData={faqLd}>
+  <!-- 第一屏 -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <ResponsiveImage src={heroImage} alt="清金門鎮總兵署外觀" class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/60 to-[var(--color-ink)]/40"></div>
+    </div>
+    <div class="container-page relative py-16 sm:py-24 lg:py-28">
+      <p class="eyebrow text-[var(--color-paper)]/90">Kinmen Zong Bing Shu</p>
+      <h1 class="mt-4 max-w-3xl font-serif text-4xl font-black leading-tight !text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)] sm:text-5xl lg:text-6xl">
+        清金門鎮總兵署<br />遊客指南
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-white/90">
+        開放時間、門票、參觀地圖與後浦夜遊安排。免費參觀，位於金城後浦核心區，
+        普通遊客建議安排 30–60 分鐘，晚上可銜接後浦步行導覽。
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/visit/#routes" class="btn btn-primary">開始參觀</a>
+        <a href="/visit/#routes" class="btn btn-secondary">選擇遊覽時長</a>
+        <a href="/map/" class="btn btn-secondary">開啟地圖</a>
+      </div>
+      <div class="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-white/80">
+        <a class="hover:text-white" href={attraction.googleMapsUrl} target="_blank" rel="noopener">↗ 導航到總兵署</a>
+        <a class="hover:text-white" href="/visit/">檢視今日資訊</a>
+        <a class="hover:text-white" href="/houpu-night-walk/">夜遊後浦</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 資訊卡 -->
+  <section class="container-page -mt-10 relative z-10">
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {quickFacts.map((f) => (
+        <div class="card p-4">
+          <div class="text-xs text-[var(--color-slate)]">{f.label}</div>
+          <div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">{f.value}</div>
+        </div>
+      ))}
+    </div>
+    <p class="mt-3 text-xs text-[var(--color-slate)]">
+      資訊可能因維修、天氣或活動臨時調整，出發前請再次確認。
+    </p>
+  </section>
+
+  <!-- 值得去嗎 -->
+  <section class="container-page mt-16">
+    <p class="eyebrow">這個景點值得去嗎？</p>
+    <h2 class="mt-2 text-3xl">一座能「走進去」的清代官署</h2>
+    <div class="mt-6 grid gap-5 md:grid-cols-3">
+      <div class="card">
+        <div class="text-lg font-bold text-[var(--color-jade)]">適合這些遊客</div>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-[var(--color-wood-soft)]">
+          <li>· 想了解金門歷史與海防的人</li>
+          <li>· 喜歡古建築與人文空間的旅客</li>
+          <li>· 帶孩子或長輩、需要平地短動線</li>
+          <li>· 想在金城安排半日步行的自由行</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="text-lg font-bold text-[var(--color-kapok)]">可能覺得普通</div>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-[var(--color-wood-soft)]">
+          <li>· 只想拍網紅打卡照的人</li>
+          <li>· 對歷史與展陳完全不感興趣</li>
+          <li>· 期待大型互動或聲光設施</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="text-lg font-bold text-[var(--color-brick)]">我們的建議</div>
+        <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+          值得專程前往，尤其它位於後浦核心，可與<strong>模範街、城隍廟、邱良功母節孝坊</strong>組合成半日遊，
+          晚上還能接上 19:30 的後浦夜遊。是金城步行行程裡最合適的「起點」。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 你有多少時間 -->
+  <section class="container-page mt-16">
+    <p class="eyebrow">你有多少時間？</p>
+    <h2 class="mt-2 text-3xl">選一條適合你的路線</h2>
+    <div class="mt-6 grid gap-5 md:grid-cols-3">
+      {routes.map((r) => (
+        <a href={`/routes/${r.id}/`} class="card group flex flex-col transition-transform hover:-translate-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-serif text-4xl font-black text-[var(--color-brick)]">{r.minutes}<span class="text-lg">分鐘</span></span>
+            <span class="tag tag-onsite">{r.badge}</span>
+          </div>
+          <div class="mt-3 text-lg font-bold text-[var(--color-ink)]">{r.name}</div>
+          <p class="mt-1 text-sm text-[var(--color-wood-soft)]">{r.desc}</p>
+          <div class="mt-4 text-sm font-medium text-[var(--color-brick)] group-hover:underline">檢視路線 →</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 五個看點 -->
+  <section class="container-page mt-16">
+    <p class="eyebrow">五個不可錯過的看點</p>
+    <h2 class="mt-2 text-3xl">進去以後重點看什麼</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {highlights.map((h, i) => (
+        <div class="group overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+          <div class="relative aspect-[4/3] overflow-hidden">
+            <ResponsiveImage src={h.image} alt={h.name} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" maxWidth={720} />
+            <span class="absolute left-3 top-3 grid h-8 w-8 place-items-center rounded-full step-num text-sm">{i + 1}</span>
+          </div>
+          <div class="p-4">
+            <div class="font-serif text-lg font-bold text-[var(--color-ink)]">{h.name}</div>
+            <p class="mt-1 text-sm leading-6 text-[var(--color-wood-soft)]">{h.note}</p>
+          </div>
+        </div>
+      ))}
+      <a href="/map/" class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--color-slate-line)] p-6 text-center transition-colors hover:border-[var(--color-brick)]">
+        <span class="font-serif text-lg font-bold text-[var(--color-brick)]">開啟互動平面圖</span>
+        <span class="mt-1 text-sm text-[var(--color-wood-soft)]">看清 9 個點位與參觀動線 →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 為什麼重要 · 時間線 -->
+  <section class="mt-16 bg-[var(--color-paper-deep)] py-14">
+    <div class="container-page">
+      <p class="eyebrow">總兵署為什麼重要？</p>
+      <h2 class="mt-2 text-3xl">從叢青軒到海防中樞</h2>
+      <ol class="mt-8 space-y-0">
+        {timeline.map((t, i) => (
+          <li class="flex gap-5">
+            <div class="flex flex-col items-center">
+              <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full step-num text-sm font-bold">{t.year.slice(0,2)}</span>
+              {i < timeline.length - 1 && <span class="w-px flex-1 bg-[var(--color-slate-line)]"></span>}
+            </div>
+            <div class="pb-8">
+              <div class="font-serif text-lg font-bold text-[var(--color-ink)]">{t.year}</div>
+              <p class="mt-1 max-w-xl text-sm leading-7 text-[var(--color-wood-soft)]">{t.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <a href="/history/" class="btn btn-secondary mt-2">閱讀完整歷史沿革 →</a>
+    </div>
+  </section>
+
+  <!-- 晚上怎麼安排 -->
+  <section class="container-page mt-16">
+    <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
+      <div>
+        <p class="eyebrow">晚上怎麼安排？</p>
+        <h2 class="mt-2 text-3xl">白天參觀，接上後浦夜遊</h2>
+        <p class="mt-4 leading-8 text-[var(--color-wood-soft)]">{nightWalk.note}</p>
+        <div class="mt-6 space-y-3">
+          {[['17:30','總兵署參觀'],['18:30','金城用餐'],['19:20','返回集合點'],['19:30','後浦夜遊出發']].map(([time, act]) => (
+            <div class="flex items-center gap-4">
+              <span class="w-16 font-serif text-lg font-bold text-[var(--color-brick)]">{time}</span>
+              <span class="h-2 w-2 rounded-full" style="background:var(--color-kapok)"></span>
+              <span class="text-[var(--color-wood-soft)]">{act}</span>
+            </div>
+          ))}
+        </div>
+        <a href="/houpu-night-walk/" class="btn btn-primary mt-7">後浦夜遊怎麼參加 →</a>
+      </div>
+      <div class="overflow-hidden rounded-3xl shadow-[var(--shadow-card)]">
+        <ResponsiveImage src="exterior-day.jpg" alt="總兵署外觀" class="aspect-[4/3] w-full object-cover" sizes="(min-width: 1024px) 50vw, 100vw" maxWidth={960} />
+      </div>
+    </div>
+  </section>
+
+  <!-- 逛完下一站 -->
+  <section class="container-page mt-16">
+    <p class="eyebrow">逛完下一站</p>
+    <h2 class="mt-2 text-3xl">按剩餘時間接續行程</h2>
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {nextStops.map((s) => (
+        <a href={s.href} class="card flex items-center justify-between gap-3 py-4 transition-transform hover:-translate-y-0.5">
+          <div>
+            <div class="text-sm font-semibold text-[var(--color-brick)]">{s.time}</div>
+            <div class="mt-0.5 text-[var(--color-wood)]">{s.place}</div>
+          </div>
+          <span class="text-[var(--color-slate)]">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 交通 -->
+  <section class="container-page mt-16">
+    <div class="card flex flex-col items-start gap-6 bg-gradient-to-br from-white to-[var(--color-paper-deep)] md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="eyebrow">交通與停車</p>
+        <h2 class="mt-2 text-2xl">從金城站、機場或水頭碼頭出發</h2>
+        <p class="mt-2 max-w-xl text-sm text-[var(--color-wood-soft)]">
+          金城站距離總兵署約 195 米，步行約 3 分鐘即達。也提供機場、水頭碼頭與自駕停車的路線說明。
+        </p>
+      </div>
+      <a href="/transport/" class="btn btn-primary shrink-0">檢視交通指南 →</a>
+    </div>
+  </section>
+
+  <!-- 完整 FAQ -->
+  <section id="faq" class="container-page mt-16 scroll-mt-24">
+    <p class="eyebrow">遊客常見問題</p>
+    <h2 class="mt-2 text-3xl">出發前先看看</h2>
+    <div class="mt-6 divide-y divide-[var(--color-slate-line)] overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+      {faqs.map((f) => (
+        <details class="group">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 font-medium text-[var(--color-ink)]">
+            {f.q}
+            <span class="text-[var(--color-brick)] transition-transform group-open:rotate-45">＋</span>
+          </summary>
+          <p class="px-5 pb-5 text-sm leading-7 text-[var(--color-wood-soft)]">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+</Layout>

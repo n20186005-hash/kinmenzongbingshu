@@ -1,0 +1,90 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { transport, attraction, nightWalk } from '../../data/site';
+
+export function getStaticPaths() {
+  return transport.map((t) => ({ params: { origin: t.id }, props: { t } }));
+}
+const { t } = Astro.props;
+const mapUrl = attraction.googleMapsUrl;
+
+const detail: Record<string, { steps: string[]; back: string; rental?: string }> = {
+  'jincheng-bus-station': {
+    steps: [
+      '在金城車站下車，這是金門西半島的公車樞紐。',
+      '出站後沿浯江街方向步行，約 195 米、3 分鐘即可看到總兵署磚紅門樓。',
+      '沿途會經過後浦老街街區，可順道逛逛。',
+    ],
+    back: '返程同樣從金城車站搭乘各線公車，前往機場、水頭碼頭或其他景點。',
+  },
+  'kinmen-airport': {
+    steps: [
+      '從尚義機場搭乘 3 路公車前往金城車站，或直接搭出租車至金城市區。',
+      '公車車程約 15–20 分鐘，抵達金城車站後步行約 3 分鐘到總兵署。',
+      '自駕則約 15 分鐘，停金城公有停車場後步行進入。',
+    ],
+    back: '返回機場建議預留至少 40–60 分鐘：金城車站搭 3 路公車，或搭出租車直達。',
+    rental: '機場設有機車租賃服務點。若準備環島，可落地取電動或燃油機車；攜帶大件行李者，優先選擇有行李接送的業者，抵達金城後先合法停車再步行參觀。',
+  },
+  'shuitou-pier': {
+    steps: [
+      '小三通旅客在水頭碼頭入境後，搭乘 7 路公車前往金城車站。',
+      '車程約 12–15 分鐘，抵達金城車站後步行約 3 分鐘到總兵署。',
+      '也可在碼頭搭出租車直達金城市區。',
+    ],
+    back: '返回水頭碼頭搭乘 7 路公車，或搭出租車。趕船請預留充裕時間，班次有限。',
+    rental: '水頭旅運中心附近有電動與燃油機車租賃點，部分業者提供甲地租、乙地還及行李接送。取車前先確認駕照資格、還車站點和末班船時間。',
+  },
+};
+const d = detail[t.id];
+---
+<Layout title={`從${t.from}出發`} description={`從${t.from}前往清金門鎮總兵署的交通路線：${t.desc}`} active="/transport/">
+  <PageHeader eyebrow="交通路線" crumb="交通"
+    title={`從${t.from}到總兵署`}
+    intro={t.desc}>
+    <div class="mt-5 flex gap-4 text-sm text-[var(--color-wood)]">
+      <span class="rounded-full bg-white px-4 py-2">📍 {t.dist}</span>
+      <span class="rounded-full bg-white px-4 py-2">⏱ {t.minutes}</span>
+    </div>
+  </PageHeader>
+
+  <div class="container-page py-12">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">分步路線</h2>
+      <ol class="mt-5 space-y-4">
+        {d.steps.map((s, i) => (
+          <li class="flex gap-4 rounded-2xl bg-white p-5 shadow-[var(--shadow-card)]">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full step-num text-sm font-bold">{i + 1}</span>
+            <span class="leading-8 text-[var(--color-wood-soft)]">{s}</span>
+          </li>
+        ))}
+      </ol>
+
+      {d.rental && (
+        <div class="mt-8 rounded-2xl border border-[var(--color-slate-line)] bg-white p-6">
+          <div class="text-sm font-semibold text-[var(--color-brick)]">落地直接租車</div>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">{d.rental}</p>
+          <a href="/transport/e-scooter/" class="mt-4 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">比較機車、電動車與駕照要求 →</a>
+        </div>
+      )}
+
+      <div class="mt-8 rounded-2xl bg-[var(--color-paper-deep)] p-6">
+        <h3 class="font-serif text-lg font-bold text-[var(--color-ink)]">返程</h3>
+        <p class="mt-2 leading-8 text-[var(--color-wood-soft)]">{d.back}</p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={mapUrl} target="_blank" rel="noopener" class="btn btn-primary">↗ 開啟正確地點與導航</a>
+        <a href="/visit/" class="btn btn-secondary">今日開放資訊</a>
+        <a href="/routes/20-minute/" class="btn btn-secondary">時間緊？走 20 分鐘路線</a>
+      </div>
+
+      <div class="mt-8 rounded-2xl border border-[var(--color-slate-line)] p-5 text-sm text-[var(--color-wood-soft)]">
+        <strong class="text-[var(--color-ink)]">順便安排晚上：</strong>
+        總兵署開放至 22:00，{nightWalk.time} 可在署內現場報名後浦夜遊，
+        <a class="text-[var(--color-brick)] underline" href="/houpu-night-walk/">瞭解夜遊 →</a>
+      </div>
+    </div>
+  </div>
+</Layout>

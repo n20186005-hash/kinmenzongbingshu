@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import { nearbySpots } from '../../data/nearby';
+const walks = [
+  { time: '30 分鐘順遊', route: '總兵署 → 邱良功母節孝坊 → 將軍第', href: '/nearby/houpu-old-street/' },
+  { time: '1 小時順遊', route: '總兵署 → 浯江書院 → 模範街 → 城隍廟', href: '/nearby/houpu-old-street/' },
+  { time: '2 小時深度', route: '後浦老街深度路線，串聯古蹟、書院、廟宇與老街', href: '/nearby/houpu-old-street/' },
+];
+---
+<Layout title="附近景點" description="清金門鎮總兵署附近景點順遊：邱良功母節孝坊、將軍第、浯江書院、模範街、城隍廟，以及 30 分鐘到 2 小時步行路線。" active="/nearby/">
+  <PageHeader eyebrow="周邊順遊" crumb="附近"
+    title="總兵署附近還能去哪"
+    intro="總兵署位於後浦核心，周邊景點大多步行幾分鐘可達，很適合安排成金城半日步行路線。" />
+  <div class="container-page py-12">
+    <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">按剩餘時間安排順遊</h2>
+    <div class="mt-5 grid gap-4 md:grid-cols-3">
+      {walks.map((w) => (
+        <a href={w.href} class="card transition-transform hover:-translate-y-1">
+          <div class="font-serif text-lg font-bold text-[var(--color-brick)]">{w.time}</div>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">{w.route}</p>
+        </a>
+      ))}
+    </div>
+
+    <a href="/nearby/food/" class="mt-10 block overflow-hidden rounded-2xl shadow-[var(--shadow-card)] transition-transform hover:-translate-y-1">
+      <div class="relative">
+        <ResponsiveImage src="food-street.jpg" alt="總兵署附近美食" class="h-48 w-full object-cover sm:h-56" sizes="(min-width: 768px) 50vw, 100vw" maxWidth={960} />
+        <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-ink)]/85 to-[var(--color-ink)]/25"></div>
+        <div class="absolute inset-0 flex flex-col justify-center p-6 sm:p-8">
+          <div class="eyebrow text-[var(--color-paper)]/90">附近美食</div>
+          <div class="mt-2 font-serif text-2xl font-black text-white sm:text-3xl">總兵署附近吃什麼</div>
+          <p class="mt-2 max-w-md text-sm text-white/85">廣東粥、油條、蚵嗲、豆花……7 家步行 1–6 分鐘可達的老店推薦。</p>
+          <span class="mt-3 text-sm font-medium text-white">檢視美食推薦 →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 兩個專題入口 -->
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <a href="/nearby/houpu-old-street/" class="group relative block overflow-hidden rounded-2xl shadow-[var(--shadow-card)]">
+        <ResponsiveImage src="historic.jpg" alt="後浦老街深度路線" class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" sizes="(min-width: 768px) 50vw, 100vw" maxWidth={960} />
+        <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-ink)]/85 to-[var(--color-ink)]/25"></div>
+        <div class="absolute inset-0 flex flex-col justify-center p-6">
+          <div class="font-serif text-xl font-black text-white sm:text-2xl">後浦老街深度路線</div>
+          <p class="mt-1 max-w-xs text-sm text-white/85">約 2 小時，古蹟＋書院＋廟宇＋老街一次走完。</p>
+          <span class="mt-2 text-sm font-medium text-white">開始路線 →</span>
+        </div>
+      </a>
+      <a href="/nearby/model-street/" class="group relative block overflow-hidden rounded-2xl shadow-[var(--shadow-card)]">
+        <ResponsiveImage src="model-street.jpg" alt="模範街" class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" sizes="(min-width: 768px) 50vw, 100vw" maxWidth={960} />
+        <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-ink)]/85 to-[var(--color-ink)]/25"></div>
+        <div class="absolute inset-0 flex flex-col justify-center p-6">
+          <div class="font-serif text-xl font-black text-white sm:text-2xl">模範街</div>
+          <p class="mt-1 max-w-xs text-sm text-white/85">後浦最上鏡的紅磚連廊式老街。</p>
+          <span class="mt-2 text-sm font-medium text-white">瞭解模範街 →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="mt-12 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="eyebrow">實景圖鑑</p>
+        <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">附近景點</h2>
+      </div>
+      <p class="text-sm text-[var(--color-slate)]">全部從總兵署步行可達</p>
+    </div>
+    <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {nearbySpots.map((spot) => (
+        <a href={spot.href} class="group overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] transition-transform hover:-translate-y-1">
+          <div class="relative overflow-hidden">
+            <ResponsiveImage src={spot.image} alt={spot.imageAlt} class="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" maxWidth={720} />
+            <span class="absolute left-3 top-3 rounded-full bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">{spot.heritage}</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-serif text-xl font-bold text-[var(--color-ink)]">{spot.name}</h3>
+              <span class="shrink-0 text-[var(--color-brick)] transition-transform group-hover:translate-x-1">→</span>
+            </div>
+            <p class="mt-2 text-sm leading-6 text-[var(--color-wood-soft)]">{spot.note}</p>
+            <div class="mt-4 flex items-center justify-between border-t border-[var(--color-slate-line)] pt-3 text-xs text-[var(--color-slate)]">
+              <span>{spot.walk}</span><span>{spot.stay}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-10 rounded-2xl bg-[var(--color-paper-deep)] p-6 text-sm leading-7 text-[var(--color-wood-soft)]">
+      官方資料顯示，金城站距離總兵署約 195 米，邱良功古厝、靈濟寺、將軍第與模範街約在 74–95 米範圍內，
+      非常適合把總兵署當作後浦步行路線的起點。<a class="text-[var(--color-brick)] underline" href="/houpu-night-walk/">晚上還能接上後浦夜遊 →</a>
+    </div>
+  </div>
+</Layout>

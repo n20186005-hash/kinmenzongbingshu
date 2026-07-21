@@ -1,0 +1,27 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import ResponsiveImage from '../../../components/ResponsiveImage.astro';
+import { getLocalizedContent, type TranslatedLocale } from '../../../i18n/content';
+import { getTranslatedLocalePaths } from '../../../i18n/paths';
+
+export function getStaticPaths() {
+  return getTranslatedLocalePaths();
+}
+
+const { locale } = Astro.props as { locale: TranslatedLocale };
+const content = getLocalizedContent(locale);
+---
+<Layout title={content.highlightsPage.title} description={content.highlightsPage.intro} active="/highlights/">
+  <PageHeader eyebrow={locale === 'en' ? 'Highlights' : '必看重点'} crumb={locale === 'en' ? 'Highlights' : '必看重点'} title={content.highlightsPage.title} intro={content.highlightsPage.intro} />
+  <div class="container-page py-12">
+    <div class="grid gap-6 md:grid-cols-2">
+      {content.highlights.map(([name, image, note], index) => (
+        <article class="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+          <ResponsiveImage src={image} alt={name} class="aspect-[4/3] w-full object-cover" sizes="(min-width: 768px) 50vw, 100vw" maxWidth={960} />
+          <div class="p-5"><div class="text-sm font-bold text-[var(--color-brick)]">0{index + 1}</div><h2 class="mt-1 text-2xl">{name}</h2><p class="mt-2 leading-7 text-[var(--color-wood-soft)]">{note}</p></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout>

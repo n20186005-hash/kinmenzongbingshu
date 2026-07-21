@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import { localizedPath } from '../../i18n/config';
+import { getLocalizedContent, type TranslatedLocale } from '../../i18n/content';
+const { locale } = Astro.props as { locale: TranslatedLocale };
+const content = getLocalizedContent(locale);
+const copy = locale === 'en' ? { title: 'Choose a visit route', eyebrow: '20, 45 or 90 minutes', intro: 'The 45-minute route is the best default for a first visit. Choose the shorter or longer option according to your schedule.', description: 'Compare all three complete timed routes through the Kinmen Military Headquarters.', view: 'View the complete route', stop: 'stops' } : { title: '选择参观路线', eyebrow: '20／45／90 分钟', intro: '第一次到访优先选择 45 分钟标准路线；时间紧张或希望深入理解历史时，可改选另外两条。', description: '比较金门总兵署三条完整参观路线。', view: '查看完整路线', stop: '站' };
+---
+<Layout title={copy.title} description={copy.description} active="/visit/" pageType="Article"><PageHeader eyebrow={copy.eyebrow} crumb={copy.title} title={copy.title} intro={copy.intro} />
+  <main class="container-page py-10 sm:py-14"><div class="grid gap-5 lg:grid-cols-3">{content.routes.map((route) => <article class="card flex flex-col p-6"><p class="eyebrow">{route.badge}</p><h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">{route.name}</h2><p class="mt-3 leading-7 text-[var(--color-wood-soft)]">{route.desc}</p><ol class="mt-5 flex-1 space-y-2 text-sm text-[var(--color-wood-soft)]">{route.stopIds.map((id, index) => <li>{index + 1}. {content.rooms.find((room) => room.id === id)?.name}</li>)}</ol><div class="mt-4 text-xs text-[var(--color-slate)]">{route.stopIds.length} {copy.stop}</div><a class="btn-primary mt-5" href={localizedPath(locale, `/routes/${route.id}/`)}>{copy.view} →</a></article>)}</div></main>
+</Layout>

@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import { photoCredits } from '../../data/site';
+---
+<Layout title="照片版權" description="本站景點照片來自維基共享資源，依 CC BY / CC BY-SA 授權署名使用。此頁列出每張照片的作者、授權與來源。" active="/credits/">
+  <PageHeader eyebrow="照片版權" crumb="照片版權"
+    title="照片來源與授權"
+    intro="本站現階段使用的景點照片來自維基共享資源（Wikimedia Commons），依各自的 CC 授權條款署名使用。後續將逐步替換為原創實拍。" />
+  <div class="container-page py-12">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] text-left">
+            <th class="p-4 font-semibold text-[var(--color-ink)]">照片</th>
+            <th class="p-4 font-semibold text-[var(--color-ink)]">說明</th>
+            <th class="p-4 font-semibold text-[var(--color-ink)]">作者</th>
+            <th class="p-4 font-semibold text-[var(--color-ink)]">授權</th>
+          </tr>
+        </thead>
+        <tbody>
+          {photoCredits.map((c) => (
+            <tr class="border-b border-[var(--color-slate-line)] align-middle">
+              <td class="p-3"><ResponsiveImage src={c.file} alt={c.title} class="h-14 w-20 rounded-lg object-cover" sizes="80px" widths={[80, 160]} maxWidth={160} /></td>
+              <td class="p-3 text-[var(--color-wood)]"><a href={c.source} target="_blank" rel="noopener" class="hover:text-[var(--color-brick)] hover:underline">{c.title}</a></td>
+              <td class="p-3 text-[var(--color-wood-soft)]">{c.author}</td>
+              <td class="p-3"><span class="rounded-full bg-[var(--color-paper-deep)] px-2.5 py-1 text-xs text-[var(--color-wood-soft)]">{c.license}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-6 max-w-2xl text-sm leading-7 text-[var(--color-slate)]">
+      依 CC BY 與 CC BY-SA 授權，使用時須署名原作者；CC BY-SA 另要求以相同方式共享。點選照片說明可前往維基共享資源檢視原始檔案與完整授權條款。
+    </p>
+  </div>
+</Layout>

@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import LocationMap from '../../components/LocationMap.astro';
+
+const choices = [
+  { icon: '⛴', title: '我從水頭碼頭來', meta: '公車、計程車或直接取車', href: '/transport/shuitou-pier/' },
+  { icon: '✈', title: '我從金門機場來', meta: '公車、計程車或機場取車', href: '/transport/kinmen-airport/' },
+  { icon: '🚶', title: '我住在金城', meta: '金城車站步行約 3 分鐘', href: '/transport/jincheng-bus-station/' },
+  { icon: '🛵', title: '我騎機車／電動車', meta: '車型、駕照、共享與換電', href: '/transport/e-scooter/' },
+  { icon: '🅿', title: '我開汽車', meta: '停車後步行進入後浦', href: '/scooter-parking/#car' },
+  { icon: '🚌', title: '我搭公車', meta: '一般公車與臺灣好行', href: '#public-transit' },
+];
+
+const compare = [
+  ['一個人、自由安排景點', '燃油或一般電動機車'],
+  ['只在金城短程移動', '步行、微型電動二輪車或共享電動機車'],
+  ['兩人環島', '可合法雙載且符合駕照資格的機車'],
+  ['帶孩子、長輩或大件行李', '汽車或計程車'],
+  ['下雨、強風、夏季正午', '汽車、計程車或公車'],
+  ['只逛總兵署與後浦', '到金城後全程步行'],
+];
+---
+<Layout title="交通與停車" description="金門總兵署交通指南：從水頭碼頭、金門機場、金城車站出發，以及機車、電動機車、汽車停車和公車路線說明。" active="/transport/">
+  <PageHeader eyebrow="交通與停車" crumb="交通"
+    title="金門總兵署怎麼去"
+    intro="總兵署位於金城後浦核心。無論從機場、碼頭取車，或搭公車到金城，最後都建議停車後步行遊覽後浦老城區。" />
+  <div class="container-page py-12">
+    <p class="eyebrow">選擇你的到達方式</p>
+    <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">你現在從哪裡來？</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {choices.map((choice) => (
+        <a href={choice.href} class="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[var(--shadow-card)] transition-transform hover:-translate-y-1">
+          <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[var(--color-paper-deep)] text-2xl">{choice.icon}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-serif text-lg font-bold text-[var(--color-ink)]">{choice.title}</span>
+            <span class="mt-1 block text-sm text-[var(--color-wood-soft)]">{choice.meta}</span>
+          </span>
+          <span class="text-[var(--color-brick)] transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-5">
+      <section class="rounded-2xl bg-gradient-to-br from-[var(--color-brick)] to-[var(--color-brick-dark)] p-6 text-white lg:col-span-2 sm:p-8">
+        <p class="text-sm font-semibold text-white/75">先給結論</p>
+        <h2 class="mt-2 font-serif text-2xl font-black !text-white">到金城後，停車步行最輕鬆</h2>
+        <p class="mt-4 text-sm leading-7 text-white/85">總兵署、模範街、邱良功母節孝坊、奎閣與附近小吃都集中在步行範圍。把車輛停在合法車格後再逛，通常比騎進後浦巷弄更省事。</p>
+        <a href="/scooter-parking/" class="mt-6 inline-flex text-sm font-semibold text-white underline underline-offset-4">檢視機車與汽車停車指南 →</a>
+      </section>
+      <section class="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] lg:col-span-3">
+        <h2 class="p-5 pb-3 font-serif text-xl font-bold text-[var(--color-ink)] sm:px-6">不同遊客怎麼選</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <tbody>
+              {compare.map(([traveler, mode]) => (
+                <tr class="border-t border-[var(--color-slate-line)]"><th class="p-4 text-left font-medium text-[var(--color-wood-soft)] sm:px-6">{traveler}</th><td class="p-4 font-semibold text-[var(--color-ink)] sm:px-6">{mode}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section id="public-transit" class="mt-12 scroll-mt-24">
+      <p class="eyebrow">不騎車也能玩</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">公車與臺灣好行</h2>
+      <div class="mt-5 grid gap-5 md:grid-cols-2">
+        <div class="card">
+          <h3 class="font-serif text-lg font-bold text-[var(--color-ink)]">一般公車到金城車站</h3>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">從尚義機場可搭 3 路、從水頭碼頭可搭 7 路前往金城車站；下車後步行約 195 米到總兵署。班次可能調整，出發前請查即時資訊。</p>
+          <a href="https://bus.kinmen.gov.tw/" target="_blank" rel="noopener" class="mt-4 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">金門公車動態資訊 ↗</a>
+        </div>
+        <div class="card">
+          <h3 class="font-serif text-lg font-bold text-[var(--color-ink)]">臺灣好行環島景點</h3>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">A、B 線由金城車站出發，另有獅山民俗村、榕園太湖與尋找風獅爺等路線。適合不騎車、願意按固定時刻遊覽的旅客。</p>
+          <a href="https://kinmen.travel/zh-cn/information/TaiwanTrip" target="_blank" rel="noopener" class="mt-4 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">查看臺灣好行路線與時刻 ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="mt-10">
+      <LocationMap />
+    </div>
+  </div>
+</Layout>

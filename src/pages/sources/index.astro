@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+
+const sources = [
+  { title: '金門觀光旅遊網 · 清金門鎮總兵署', url: 'https://kinmen.travel/zh-tw/Travel/Attraction/393', note: '開放時間、門票、地址等基礎資訊來源。' },
+  { title: '金門觀光旅遊網 · 後浦美麗小鎮之旅', url: 'https://kinmen.travel/zh-tw/discover/tour/22', note: '後浦夜遊集合時間與路線。' },
+  { title: '金門觀光旅遊網 · 鄰近公車站', url: 'https://kinmen.travel/zh-tw/nearby/ebus?placeId=393&type=Attractions', note: '金城站與附近景點的距離資料。' },
+  { title: '金門觀光旅遊網 · 水頭租車業者', url: 'https://kinmen.travel/zh-tw/shop/details/2889', note: '電動與燃油機車、三處門市、甲租乙還、共享站點及換電服務。' },
+  { title: '金門觀光旅遊網 · 電動共享運具', url: 'https://kinmen.travel/zh-tw/news/details/3535', note: '2025 年首批 6 處共享租還點與 42 輛共享機車。' },
+  { title: '金門縣政府 · 微型電動二輪車規定', url: 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=DA9DD89A686C770D&sms=BF7D6D478B935644', note: '掛牌、保險、年齡、安全帽、限速與不得載人規定。' },
+  { title: '金門觀光旅遊網 · 臺灣好行', url: 'https://kinmen.travel/zh-cn/information/TaiwanTrip', note: '金門臺灣好行路線、票價與班次資訊。' },
+  { title: '維基共享資源 · 清金門鎮總兵署', url: 'https://commons.wikimedia.org/wiki/Category:Kinmen_Military_Headquarters_of_Qing_Dynasty', note: '現階段景點照片來源，依 CC 授權署名使用。' },
+];
+const levels = [
+  ['官方已核實', '官方資料確認', 'official'],
+  ['現場已核實', '編輯實地看到', 'onsite'],
+  ['等待現場確認', '第三方資訊，尚待實地核實', 'check'],
+  ['出發前再次確認', '容易變化的資訊', 'check'],
+];
+---
+<Layout title="資料來源" description="金門總兵署遊客指南的資料來源與內容核實方式，以及資訊可信度分級說明。" active="">
+  <PageHeader eyebrow="資料來源" crumb="資料來源" title="資料來源與核實方式" />
+  <div class="container-page py-12">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">主要資料來源</h2>
+      <div class="mt-5 space-y-3">
+        {sources.map((s) => (
+          <a href={s.url} target="_blank" rel="noopener" class="block rounded-2xl bg-white p-5 shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+            <div class="font-medium text-[var(--color-brick)]">{s.title} ↗</div>
+            <p class="mt-1 text-sm text-[var(--color-wood-soft)]">{s.note}</p>
+          </a>
+        ))}
+      </div>
+
+      <h2 class="mt-12 font-serif text-2xl font-bold text-[var(--color-ink)]">資訊可信度分級</h2>
+      <div class="mt-5 space-y-3">
+        {levels.map(([label, desc, tag]) => (
+          <div class="flex items-center gap-4 rounded-xl bg-white p-4 shadow-[var(--shadow-card)]">
+            <span class:list={['tag', `tag-${tag}`]}>{label}</span>
+            <span class="text-sm text-[var(--color-wood-soft)]">{desc}</span>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 rounded-2xl bg-[var(--color-paper-deep)] p-6 text-sm leading-7 text-[var(--color-wood-soft)]">
+        開放時間等容易變動的資訊，我們會定期核實，並在春節、清明、暑假、國慶及大型活動前額外檢查。
+        實際以官方最新公告為準，出發前請再次確認。
+      </div>
+    </div>
+  </div>
+</Layout>

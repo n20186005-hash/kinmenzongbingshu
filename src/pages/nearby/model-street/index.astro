@@ -1,0 +1,105 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import ResponsiveImage from '../../../components/ResponsiveImage.astro';
+import { getLocalImage } from '../../../lib/images';
+
+const seePoints = [
+  { title: '紅磚連廊', text: '兩側洋樓一樓向內退縮形成連續騎樓廊道，紅磚拱圈整齊排列，是模範街最標誌性的畫面。' },
+  { title: '對稱立面', text: '整條街的洋樓立面高度、開窗與山牆幾乎一致，走在街心一眼望去極為整齊上鏡。' },
+  { title: '光影時段', text: '清晨與傍晚斜光穿過連廊，拱圈投下節奏感的陰影，是拍照的最佳時刻。' },
+];
+const photoTips = [
+  '站在街道正中央往一端拍，讓連廊拱圈形成透視消失點。',
+  '傍晚亮燈後拍，暖色燈光配紅磚最有味道。',
+  '走進騎樓廊下，用拱圈當前景框住街景。',
+];
+const heroImage = getLocalImage('model-street.jpg');
+---
+<Layout title="模範街" description="金門模範街：後浦最具代表性的紅磚連廊式老街，距清金門鎮總兵署步行約數分鐘。含看點、拍照建議與從總兵署出發的步行路線。" active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <ResponsiveImage src={heroImage} alt="金門模範街紅磚連廊" class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/85 via-[var(--color-ink)]/45 to-[var(--color-ink)]/30"></div>
+    </div>
+    <div class="container-page relative py-16 sm:py-20">
+      <nav class="mb-3 text-xs text-white/70">
+        <a href="/" class="hover:text-white">首頁</a> / <a href="/nearby/" class="hover:text-white">周邊順遊</a> / 模範街
+      </nav>
+      <p class="eyebrow text-[var(--color-paper)]/90">周邊順遊 · 步行數分鐘</p>
+      <h1 class="mt-3 font-serif text-3xl font-black !text-white sm:text-5xl">模範街</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-8 text-white/90">
+        後浦最具代表性的紅磚連廊式老街，是金門最上鏡的街景之一。從總兵署步行數分鐘即達，
+        很適合作為參觀後的順遊與拍照點，晚上也是後浦夜遊的終點。
+      </p>
+    </div>
+  </section>
+
+  <div class="container-page py-12">
+    <div class="grid gap-10 lg:grid-cols-3">
+      <div class="lg:col-span-2 prose-cn">
+        <h2>模範街是什麼</h2>
+        <p>
+          模範街建於 1920 年代，是一條經過整體規劃的洋樓式商店街。兩排店屋一樓以連續的紅磚拱圈騎樓相連，
+          立面高度與樣式統一，因而被稱為「模範」。街屋融合閩南與南洋、西式元素，是金門近代城市建設的代表。
+        </p>
+        <p>
+          今天的模範街聚集了不少店鋪、咖啡與伴手禮店，白天可逛街拍照，傍晚亮燈後氛圍更佳，
+          也是「後浦美麗小鎮之旅」夜遊的終點。
+        </p>
+
+        <h2>重點看什麼</h2>
+        <div class="not-prose mt-4 grid gap-4 sm:grid-cols-3">
+          {seePoints.map((s) => (
+            <div class="rounded-2xl bg-white p-5 shadow-[var(--shadow-card)]">
+              <div class="font-serif text-lg font-bold text-[var(--color-ink)]">{s.title}</div>
+              <p class="mt-2 text-sm leading-6 text-[var(--color-wood-soft)]">{s.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <h2>拍照建議</h2>
+        <ul>
+          {photoTips.map((t) => <li>· {t}</li>)}
+        </ul>
+      </div>
+
+      <!-- 側欄 -->
+      <aside class="space-y-5">
+        <div class="card">
+          <div class="text-sm font-semibold text-[var(--color-ink)]">從總兵署怎麼走</div>
+          <ol class="mt-3 space-y-2 text-sm text-[var(--color-wood-soft)]">
+            <li>1. 從總兵署出發，沿浯江街／莒光路方向步行。</li>
+            <li>2. 經邱良功母節孝坊，續行數分鐘即抵模範街。</li>
+            <li>3. 全程平地，步行約 3–5 分鐘。</li>
+          </ol>
+        </div>
+        <div class="card">
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div><div class="text-xs text-[var(--color-slate)]">開放</div><div class="mt-1 font-bold text-[var(--color-ink)]">戶外老街 · 全天</div></div>
+            <div><div class="text-xs text-[var(--color-slate)]">門票</div><div class="mt-1 font-bold text-[var(--color-ink)]">免費</div></div>
+            <div><div class="text-xs text-[var(--color-slate)]">距總兵署</div><div class="mt-1 font-bold text-[var(--color-ink)]">步行 3–5 分鐘</div></div>
+            <div><div class="text-xs text-[var(--color-slate)]">建議停留</div><div class="mt-1 font-bold text-[var(--color-ink)]">20–40 分鐘</div></div>
+          </div>
+        </div>
+        <div class="overflow-hidden rounded-2xl shadow-[var(--shadow-card)]">
+          <ResponsiveImage src="food-street.jpg" alt="模範街街景" class="aspect-[3/4] w-full object-cover" sizes="(min-width: 1024px) 33vw, 100vw" maxWidth={720} />
+        </div>
+      </aside>
+    </div>
+
+    <!-- 下一步 -->
+    <div class="mt-12 grid gap-4 sm:grid-cols-3">
+      <a href="/nearby/food/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">附近美食</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">模範街上的豆花與老店</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+      <a href="/nearby/houpu-old-street/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">後浦老街深度路線</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">把老街一次走完</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+      <a href="/houpu-night-walk/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div><div class="font-bold text-[var(--color-ink)]">後浦夜遊</div><div class="mt-1 text-sm text-[var(--color-wood-soft)]">終點就是模範街</div></div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+    </div>
+  </div>
+</Layout>

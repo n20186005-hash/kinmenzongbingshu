@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import { highlights } from '../../data/site';
+---
+<Layout title="必看重點" description="清金門鎮總兵署五個不可錯過的看點：頭門與門額、前庭中軸線、大堂、戰船與兵器、後院木棉。" active="/highlights/">
+  <PageHeader eyebrow="必看重點" crumb="必看重點"
+    title="五個不可錯過的看點"
+    intro="時間有限也別錯過這五處。它們串起來，就是總兵署最精華的一條線。" />
+  <div class="container-page py-12 space-y-10">
+    {highlights.map((h, i) => (
+      <div class:list={['grid gap-6 lg:grid-cols-2 lg:items-center', i % 2 === 1 ? 'lg:[&>div:first-child]:order-2' : '']}>
+        <div class="overflow-hidden rounded-3xl shadow-[var(--shadow-card)]">
+          <ResponsiveImage src={h.image} alt={h.name} class="aspect-[4/3] w-full object-cover" sizes="(min-width: 768px) 50vw, 100vw" maxWidth={960} />
+        </div>
+        <div>
+          <span class="grid h-11 w-11 place-items-center rounded-full step-num text-lg font-bold">{i + 1}</span>
+          <h2 class="mt-4 font-serif text-3xl font-bold text-[var(--color-ink)]">{h.name}</h2>
+          <p class="mt-3 text-lg leading-8 text-[var(--color-wood-soft)]">{h.note}</p>
+          <a href="/map/" class="mt-5 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">在平面圖上找到它 →</a>
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>

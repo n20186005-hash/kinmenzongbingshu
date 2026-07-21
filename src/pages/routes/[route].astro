@@ -1,0 +1,103 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import { routes, rooms, nightWalk } from '../../data/site';
+
+export function getStaticPaths() {
+  return routes.map((r) => ({ params: { route: r.id }, props: { route: r } }));
+}
+const { route } = Astro.props;
+
+// 嘗試把每一站對應到內部空間點位（拿到圖片與說明）；對應不到的（90分鐘的主題站）用文字卡
+function findRoom(stop: string) {
+  return rooms.find((rm) => stop.includes(rm.name) || rm.name.includes(stop));
+}
+const totalMin = route.stops.length;
+---
+<Layout
+  title={route.name}
+  description={`清金門鎮總兵署${route.name}：${route.desc}逐站導覽，含每站重點與下一站方向。`}
+  active="/visit/"
+  pageType="Article"
+  breadcrumbs={[
+    { name: '首頁', path: '/' },
+    { name: '參觀與路線', path: '/visit/' },
+    { name: route.name, path: `/routes/${route.id}/` },
+  ]}
+>
+  <PageHeader eyebrow={`${route.badge} · ${route.minutes} 分鐘`} crumb="參觀與路線"
+    title={route.name} intro={route.desc}>
+    <div class="mt-5 flex flex-wrap gap-2">
+      {routes.map((r) => (
+        <a href={`/routes/${r.id}/`}
+          class:list={['rounded-full px-4 py-2 text-sm font-medium transition-colors',
+            r.id === route.id ? 'bg-[var(--color-brick)] text-white' : 'border border-[var(--color-slate-line)] bg-white text-[var(--color-wood-soft)] hover:bg-white']}>
+          {r.minutes} 分鐘
+        </a>
+      ))}
+    </div>
+  </PageHeader>
+
+  <div class="container-page py-12">
+    <div class="mb-8 flex flex-wrap items-center gap-3 text-sm text-[var(--color-wood-soft)]">
+      <span class="tag tag-onsite">共 {route.stops.length} 站</span>
+      <span>· 建議時長 {route.minutes} 分鐘</span>
+      <span>· 全程免費</span>
+    </div>
+
+    <!-- 逐站 -->
+    <ol class="relative space-y-6 border-l-2 border-[var(--color-slate-line)] pl-6 sm:pl-8">
+      {route.stops.map((stop, i) => {
+        const rm = findRoom(stop);
+        return (
+          <li class="relative">
+            <span class="absolute -left-[34px] sm:-left-[42px] grid h-8 w-8 place-items-center rounded-full step-num text-sm font-bold">{i + 1}</span>
+            <div class="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+              <div class="flex flex-col sm:flex-row">
+                {rm && (
+                  <div class="sm:w-56 shrink-0">
+                    <ResponsiveImage src={rm.image} alt={stop} class="h-40 w-full object-cover sm:h-full" sizes="(min-width: 640px) 224px, 100vw" maxWidth={640} />
+                  </div>
+                )}
+                <div class="flex-1 p-5">
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-serif text-xl font-bold text-[var(--color-ink)]">{stop}</h3>
+                    {rm && <span class="text-xs text-[var(--color-slate)]">約 {rm.minutes} 分鐘</span>}
+                  </div>
+                  <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">
+                    {rm ? rm.summary : '深度路線的講解主題，幫助你把眼前的空間放進金門海防與後浦歷史的脈絡裡。'}
+                  </p>
+                  {rm && (
+                    <div class="mt-3 flex flex-wrap gap-1.5">
+                      {rm.see.map((s) => <span class="rounded-full bg-[var(--color-paper-deep)] px-2.5 py-1 text-xs text-[var(--color-wood-soft)]">看點 · {s}</span>)}
+                    </div>
+                  )}
+                  {i < route.stops.length - 1 && (
+                    <div class="mt-3 text-xs font-medium text-[var(--color-brick)]">下一站 → {route.stops[i + 1]}</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+
+    <!-- 結尾 CTA -->
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <a href="/map/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div>
+          <div class="font-bold text-[var(--color-ink)]">配合互動平面圖</div>
+          <div class="mt-1 text-sm text-[var(--color-wood-soft)]">在地圖上看清每一站的位置</div>
+        </div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+      <a href="/houpu-night-walk/" class="card flex items-center justify-between transition-transform hover:-translate-y-0.5">
+        <div>
+          <div class="font-bold text-[var(--color-ink)]">逛完接上夜遊</div>
+          <div class="mt-1 text-sm text-[var(--color-wood-soft)]">{nightWalk.time} 現場報名後浦夜遊</div>
+        </div><span class="text-[var(--color-brick)]">→</span>
+      </a>
+    </div>
+  </div>
+</Layout>

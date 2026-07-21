@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="頁面不存在" description="找不到頁面" noindex>
+  <div class="container-page py-24 text-center">
+    <div class="font-serif text-7xl font-black text-[var(--color-brick)]">404</div>
+    <h1 class="mt-4 font-serif text-2xl font-bold text-[var(--color-ink)]">找不到這個頁面</h1>
+    <p class="mt-3 text-[var(--color-wood-soft)]">頁面可能已移動或不存在。回到首頁重新開始參觀吧。</p>
+    <div class="mt-8 flex justify-center gap-3">
+      <a href="/" class="btn btn-primary">回到首頁</a>
+      <a href="/map/" class="btn btn-secondary">開啟室內地圖</a>
+    </div>
+  </div>
+</Layout>

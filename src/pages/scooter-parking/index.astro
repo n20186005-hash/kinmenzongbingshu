@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import LocationMap from '../../components/LocationMap.astro';
+---
+<Layout title="金門總兵署停車指南" description="金門總兵署停車指南：機車、電動機車、共享車輛、微型電動二輪車與汽車停哪裡，以及後浦老街和夜遊期間的停車建議。" active="/transport/">
+  <PageHeader eyebrow="停車後步行" crumb="機車與汽車停車" title="金門總兵署停車指南：機車、電動機車與汽車停哪裡？"
+    intro="總兵署周邊是後浦老城區，街巷狹窄、行人多。不要把正門臨停當作預設方案，優先尋找有標線的合法車格或公有停車場。" />
+
+  <div class="container-page py-12">
+    <section class="grid gap-5 md:grid-cols-3">
+      <article class="card"><span class="text-2xl">🛵</span><h2 class="mt-3 font-serif text-xl font-bold text-[var(--color-ink)]">一般機車／電動機車</h2><p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">兩者都屬於機車時，可依現場標線停入普通機車格；專用、月租、充換電車格則依標示使用。</p></article>
+      <article class="card"><span class="text-2xl">⚡</span><h2 class="mt-3 font-serif text-xl font-bold text-[var(--color-ink)]">共享與微型電動車</h2><p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">共享車輛必須在 App 或業者指定站點歸還；微型電動二輪車仍須守停車標線，不可佔用共享專用格。</p></article>
+      <article id="car" class="card scroll-mt-24"><span class="text-2xl">🚗</span><h2 class="mt-3 font-serif text-xl font-bold text-[var(--color-ink)]">汽車</h2><p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">使用金城市區公有停車場或合法路邊汽車格，再步行進入後浦；不要為了靠近正門駛入狹窄巷道。</p></article>
+    </section>
+
+    <div class="mt-12 grid gap-8 lg:grid-cols-3">
+      <main class="space-y-8 lg:col-span-2">
+        <section>
+          <p class="eyebrow">目前可確認的站點</p>
+          <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">共享電動機車：金城鎮公所後方停車場</h2>
+          <p class="mt-4 text-sm leading-8 text-[var(--color-wood-soft)]">金門官方 2025 年公告的 6 處共享租還點之一位於「金城鎮公所後方停車場」。這是共享運具專用租還點，不代表所有車輛都能停入專用格。業者 2026 年頁面已列 11 個共享站點，實際可用車位應以租車 App 當下顯示為準。</p>
+          <a href="https://kinmen.travel/zh-tw/news/details/3535" target="_blank" rel="noopener" class="mt-4 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">檢視 6 處共享停車場官方公告 ↗</a>
+        </section>
+
+        <section class="rounded-2xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+          <h2 class="font-serif text-xl font-bold text-[var(--color-ink)]">現場停車四步</h2>
+          <ol class="mt-5 space-y-4 text-sm leading-7 text-[var(--color-wood-soft)]">
+            <li class="flex gap-3"><span class="font-bold text-[var(--color-brick)]">1.</span><span>先看標誌與地面標線，確認是汽車格、普通機車格或共享專用格。</span></li>
+            <li class="flex gap-3"><span class="font-bold text-[var(--color-brick)]">2.</span><span>不要擋住總兵署出入口、店家門口、消防通道與行人動線。</span></li>
+            <li class="flex gap-3"><span class="font-bold text-[var(--color-brick)]">3.</span><span>共享車輛在 App 完成還車並確認計費停止後再離開。</span></li>
+            <li class="flex gap-3"><span class="font-bold text-[var(--color-brick)]">4.</span><span>拍下停車位置；逛完模範街或參加夜遊後，較容易返回取車。</span></li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">夜遊期間車輛停哪裡</h2>
+          <p class="mt-3 text-sm leading-8 text-[var(--color-wood-soft)]">19:30 後浦夜遊從總兵署出發、在模範街結束。車輛可以繼續留在合法停車格，不必跟著路線移動；結束後從模範街步行返回取車。請留意停車場關閉時間、收費方式和活動期間臨時交通管制。</p>
+        </section>
+
+        <section class="rounded-2xl border border-[var(--color-slate-line)] bg-white p-6">
+          <h2 class="font-serif text-xl font-bold text-[var(--color-ink)]">不要依賴靜態空位資訊</h2>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">停車格和管制會隨活動調整。出發前可檢視金門縣政府連結的停車資訊服務，到現場仍以標誌、標線及管理人員指示為準。</p>
+          <a href="https://kmpark.guoyun.com.tw/" target="_blank" rel="noopener" class="mt-4 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">金門停車資訊網 ↗</a>
+        </section>
+      </main>
+
+      <aside>
+        <LocationMap compact />
+      </aside>
+    </div>
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="/transport/e-scooter/" class="btn btn-primary">機車與電動車怎麼選 →</a>
+      <a href="/nearby/" class="btn btn-secondary">停車後開始步行順遊 →</a>
+    </div>
+  </div>
+</Layout>

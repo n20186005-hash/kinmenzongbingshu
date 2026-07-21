@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getLocalImage } from '../lib/images';
+
+interface Props {
+  src: string | ImageMetadata;
+  alt: string;
+  class?: string;
+  sizes?: string;
+  widths?: number[];
+  maxWidth?: number;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  class: className,
+  sizes = '100vw',
+  widths = [320, 480, 640, 960, 1280, 1600],
+  maxWidth = 1600,
+  loading = 'lazy',
+  fetchpriority = 'auto',
+} = Astro.props;
+
+const image = typeof src === 'string' ? getLocalImage(src) : src;
+const outputWidth = Math.min(maxWidth, image.width);
+const outputHeight = Math.round((outputWidth / image.width) * image.height);
+const responsiveWidths = [...new Set(widths.filter((width) => width <= outputWidth).concat(outputWidth))]
+  .sort((a, b) => a - b);
+---
+
+<Image
+  src={image}
+  format="webp"
+  widths={responsiveWidths}
+  sizes={sizes}
+  width={outputWidth}
+  height={outputHeight}
+  quality={80}
+  alt={alt}
+  class={className}
+  loading={loading}
+  decoding="async"
+  fetchpriority={fetchpriority}
+/>

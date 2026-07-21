@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { site } from '../../data/site';
+---
+<Layout title="關於我們" description="金門總兵署遊客指南是一個獨立遊客指南網站，專注於清金門鎮總兵署的參觀決策、現場導覽與周邊順遊。" active="">
+  <PageHeader eyebrow="關於本站" crumb="關於我們" title="關於金門總兵署遊客指南" />
+  <div class="container-page py-12">
+    <div class="prose-cn mx-auto max-w-3xl">
+      <p><strong>{site.brand}</strong>是一個獨立的遊客指南網站，只專注於一件事：幫助你把<strong>清金門鎮總兵署</strong>參觀好。</p>
+      <p>我們圍繞遊客的真實流程組織內容，解決三個階段的問題：</p>
+      <ul>
+        <li>· <strong>到訪前：</strong>值得去嗎、幾點開、免費嗎、怎麼去、需要多久；</li>
+        <li>· <strong>參觀中：</strong>從哪裡開始、每間房是什麼、重點在哪裡；</li>
+        <li>· <strong>參觀後：</strong>下一站去哪裡、如何銜接模範街和後浦夜遊。</li>
+      </ul>
+      <h2>我們不是官方網站</h2>
+      <p>本站與金門縣政府、景點管理單位及官方觀光機構<strong>無隸屬關係</strong>。所有開放時間與活動資訊，以官方最新公告為準，出發前請再次確認。</p>
+      <h2>我們如何保證可信</h2>
+      <p>容易變動的資訊我們會定期核實，實際以官方最新公告為準；內容核實方式見<a href="/sources/">資料來源</a>；發現錯誤可到<a href="/corrections/">糾錯頁面</a>回報。景點照片依 CC 授權署名使用，詳見<a href="/credits/">照片版權</a>。</p>
+      <p class="text-sm text-[var(--color-slate)]">編輯：金門總兵署指南編輯組｜聯絡：hello@{site.domain}</p>
+    </div>
+  </div>
+</Layout>

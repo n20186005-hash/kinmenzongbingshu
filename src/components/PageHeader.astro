@@ -1,0 +1,26 @@
+---
+import { getLocaleFromPath, localeUi, localizedPath } from '../i18n/config';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  crumb?: string;
+}
+const { eyebrow, title, intro, crumb } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const ui = localeUi[locale];
+const homeHref = localizedPath(locale, '/');
+---
+<section class="border-b border-[var(--color-slate-line)] bg-[var(--color-paper-deep)]">
+  <div class="container-page py-10 sm:py-14">
+    <nav class="mb-3 text-xs text-[var(--color-slate)]">
+      <a href={homeHref} class="hover:text-[var(--color-brick)]">{ui.home}</a>
+      {crumb && <span> / {crumb}</span>}
+    </nav>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 class="mt-2 max-w-3xl font-serif text-3xl font-black text-[var(--color-ink)] sm:text-4xl">{title}</h1>
+    {intro && <p class="mt-4 max-w-2xl text-lg leading-8 text-[var(--color-wood-soft)]">{intro}</p>}
+    <slot />
+  </div>
+</section>

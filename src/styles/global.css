@@ -1,0 +1,103 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   金門總兵署遊客指南 — 設計系統
+   色彩取自 doc.md 第十二節：官署磚紅 / 宣紙米白 / 深木褐 …
+   ============================================================ */
+@theme {
+  --color-brick: #9a3b2e;        /* 主色 · 官署磚紅 */
+  --color-brick-dark: #7a2c22;
+  --color-brick-soft: #c15a48;
+  --color-paper: #f7f1e6;        /* 背景 · 宣紙米白 */
+  --color-paper-deep: #efe6d3;
+  --color-wood: #3a2e26;         /* 正文 · 深木褐 */
+  --color-wood-soft: #5c4a3d;
+  --color-slate: #8a8178;        /* 輔助 · 石板灰 */
+  --color-slate-line: #d8ccb8;
+  --color-kapok: #d95f34;        /* 路線強調 · 木棉紅 */
+  --color-jade: #5f8360;         /* 成功狀態 · 低飽和綠 */
+  --color-ink: #241c16;
+
+  --font-serif: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(58, 46, 38, 0.06), 0 8px 24px -12px rgba(58, 46, 38, 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-wood);
+  background-color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: 0.01em;
+}
+
+/* --- 元件類 --- */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+  .container-prose {
+    @apply mx-auto w-full max-w-3xl px-5 sm:px-6;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-medium transition-all duration-200;
+  }
+  .btn-primary {
+    background-color: var(--color-brick);
+    @apply text-white shadow-sm hover:-translate-y-0.5;
+  }
+  .btn-primary:hover { background-color: var(--color-brick-dark); }
+  .btn-secondary {
+    @apply border bg-white/70 hover:bg-white;
+    border-color: var(--color-slate-line);
+    color: var(--color-wood);
+  }
+
+  .card {
+    @apply rounded-2xl bg-white p-6;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(216, 204, 184, 0.6);
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-widest;
+    color: var(--color-brick);
+    font-family: var(--font-sans);
+    letter-spacing: 0.18em;
+  }
+
+  .prose-cn { @apply leading-8; color: var(--color-wood-soft); }
+  .prose-cn p { @apply my-4; }
+  .prose-cn h2 { @apply mt-10 mb-4 text-2xl; }
+  .prose-cn h3 { @apply mt-8 mb-3 text-xl; }
+  .prose-cn ul { @apply my-4 space-y-2 pl-1; }
+  .prose-cn li { @apply flex gap-2; }
+  .prose-cn a { color: var(--color-brick); @apply underline underline-offset-2; }
+
+  .tag {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+  }
+  .tag-official { background: #eaf1ea; color: var(--color-jade); }
+  .tag-onsite   { background: #f3e7dd; color: var(--color-kapok); }
+  .tag-check    { background: #efe6d3; color: var(--color-wood-soft); }
+}
+
+.step-num {
+  font-family: var(--font-serif);
+  background: var(--color-brick);
+  color: #fff;
+}

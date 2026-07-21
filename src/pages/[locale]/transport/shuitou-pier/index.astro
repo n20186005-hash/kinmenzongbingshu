@@ -1,0 +1,26 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import PageHeader from '../../../../components/PageHeader.astro';
+import { attraction } from '../../../../data/site';
+import { getLocalizedContent, type TranslatedLocale } from '../../../../i18n/content';
+import { getTranslatedLocalePaths } from '../../../../i18n/paths';
+
+export function getStaticPaths() {
+  return getTranslatedLocalePaths();
+}
+
+const { locale } = Astro.props as { locale: TranslatedLocale };
+const content = getLocalizedContent(locale);
+---
+<Layout title={content.transport.title} description={content.transport.intro} active="/transport/">
+  <PageHeader eyebrow={locale === 'en' ? 'Transport' : '交通'} crumb={locale === 'en' ? 'From Shuitou Pier' : '从水头码头出发'} title={content.transport.title} intro={content.transport.intro} />
+  <div class="container-page py-12">
+    <div class="grid gap-5 md:grid-cols-3">
+      {content.transport.options.map(([title, text], index) => <article class="card"><div class="text-sm font-bold text-[var(--color-brick)]">0{index + 1}</div><h2 class="mt-2 text-xl">{title}</h2><p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">{text}</p></article>)}
+    </div>
+    <section class="mt-10 grid gap-6 rounded-2xl bg-[var(--color-paper-deep)] p-6 md:grid-cols-[1fr_auto] md:items-center">
+      <div><h2 class="text-2xl">{content.transport.returnTitle}</h2><p class="mt-3 leading-7 text-[var(--color-wood-soft)]">{content.transport.returnText}</p></div>
+      <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary">{locale === 'en' ? 'Open Google Maps' : '打开 Google 地图'} ↗</a>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { attraction } from '../../data/site';
+
+const timeline = [
+  { year: '明代', title: '許獬故宅「叢青軒」', text: '總兵署的前身是明代金門文人許獬的故宅「叢青軒」。許獬為明萬曆年間進士，以文章聞名，叢青軒是當時後浦的重要宅第。' },
+  { year: '1682', title: '總兵陳龍改建為官署', text: '清康熙二十一年（1682），總兵陳龍將叢青軒改建為金門鎮總兵署，作為統轄金門水師與海防的最高軍政機構，官署自此設於後浦。' },
+  { year: '清代', title: '金門海防軍政中心', text: '有清一代，總兵署是金門鎮總兵辦公與議事之所，統領水師、管理海防，見證清代東南沿海的軍事部署與兩岸往來。' },
+  { year: '民國以後', title: '多個行政機構使用', text: '進入民國，建築先後作為縣政府等行政機構使用，長期是後浦的行政核心，也伴隨金城市街的發展。' },
+  { year: '當代', title: '修復為文化展示空間', text: '經整修後，總兵署以清代官署古蹟的面貌對外開放，設定大堂、科房、內署、戰船與兵器等展陳，成為認識金門歷史的重要視窗，免費參觀。' },
+];
+---
+<Layout title="歷史沿革" description="清金門鎮總兵署歷史：從明代許獬故宅叢青軒，到 1682 年總兵陳龍改建為官署，清代金門海防軍政中心，至今日的文化展示空間。" active="/history/">
+  <PageHeader eyebrow="歷史沿革" crumb="歷史沿革"
+    title="從叢青軒到海防中樞"
+    intro={attraction.builtNote} />
+  <div class="container-page py-12">
+    <div class="mx-auto max-w-3xl">
+      <ol class="relative border-l-2 border-[var(--color-slate-line)] pl-8">
+        {timeline.map((t) => (
+          <li class="relative mb-10">
+            <span class="absolute -left-[42px] grid h-8 w-8 place-items-center rounded-full step-num text-xs font-bold">{t.year.slice(0, 2)}</span>
+            <div class="text-sm font-semibold text-[var(--color-brick)]">{t.year}</div>
+            <h2 class="mt-1 font-serif text-2xl font-bold text-[var(--color-ink)]">{t.title}</h2>
+            <p class="mt-2 leading-8 text-[var(--color-wood-soft)]">{t.text}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="mt-4 rounded-2xl bg-[var(--color-paper-deep)] p-6">
+        <h3 class="font-serif text-xl font-bold text-[var(--color-ink)]">總兵是什麼官？</h3>
+        <p class="mt-2 leading-8 text-[var(--color-wood-soft)]">
+          總兵是清代綠營的高階武官，統轄一鎮的軍務。金門鎮總兵負責金門及周邊海域的水師與海防，
+          地位相當於地區最高軍事長官，總兵署即其辦公與統兵的官署。
+        </p>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/inside/" class="btn btn-primary">看看署內各個空間 →</a>
+        <a href="/routes/90-minute/" class="btn btn-secondary">走 90 分鐘深度路線 →</a>
+      </div>
+    </div>
+  </div>
+</Layout>

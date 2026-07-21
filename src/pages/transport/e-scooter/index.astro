@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+
+const vehicles = [
+  { type: '微型電動二輪車', passenger: '不可載人', use: '金城附近短程', license: '免機車駕照；須年滿 14 歲' },
+  { type: '一般電動機車', passenger: '依核定座位', use: '跨鄉鎮、環島', license: '通常需相應機車駕照' },
+  { type: '燃油機車', passenger: '依核定座位', use: '長距離最穩妥', license: '需相應機車駕照' },
+];
+
+const rules = ['車輛須完成審驗、掛牌並投保強制險', '騎乘者須年滿 14 歲', '全程佩戴合格安全帽', '最高時速 25 公里，不得擅自改裝', '不得載人，也不得酒駕或毒駕'];
+---
+<Layout title="金門機車與電動車指南" description="金門自由行租機車與電動車指南：區分微型電動二輪車、一般電動機車和燃油機車，說明駕照、載人、共享租還、換電與前往總兵署停車方式。" active="/transport/">
+  <PageHeader eyebrow="租車與騎行" crumb="機車與電動車" title="金門租機車、電動車怎麼選"
+    intro="機車是金門自由行最靈活的交通方式，但「電動車」不是同一種車輛。先確認能否載人、駕照要求和行程距離，再決定車型。" />
+
+  <div class="container-page py-12">
+    <section>
+      <p class="eyebrow">先分清車型</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">三種車輛不能混為一談</h2>
+      <div class="mt-5 overflow-x-auto rounded-2xl bg-white shadow-[var(--shadow-card)]">
+        <table class="w-full min-w-[680px] text-sm">
+          <thead><tr class="bg-[var(--color-paper-deep)] text-left"><th class="p-4">車輛</th><th class="p-4">載人</th><th class="p-4">適合用途</th><th class="p-4">駕照提示</th></tr></thead>
+          <tbody>{vehicles.map((v) => <tr class="border-t border-[var(--color-slate-line)]"><th class="p-4 text-left text-[var(--color-ink)]">{v.type}</th><td class="p-4 text-[var(--color-wood-soft)]">{v.passenger}</td><td class="p-4 text-[var(--color-wood-soft)]">{v.use}</td><td class="p-4 text-[var(--color-wood-soft)]">{v.license}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs leading-6 text-[var(--color-slate)]">一般電動或燃油機車應依車輛級別與租賃業者要求出示有效駕照；境外駕照資格請在預訂前向業者確認。</p>
+    </section>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-2">
+      <section class="card">
+        <p class="eyebrow">微型電動二輪車</p>
+        <h2 class="mt-2 font-serif text-xl font-bold text-[var(--color-ink)]">免機車駕照，不等於沒有規則</h2>
+        <ul class="mt-5 space-y-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+          {rules.map((rule) => <li class="flex gap-3"><span class="text-[var(--color-brick)]">●</span><span>{rule}</span></li>)}
+        </ul>
+        <a href="https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=DA9DD89A686C770D&sms=BF7D6D478B935644" target="_blank" rel="noopener" class="mt-5 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">金門縣政府法規說明 ↗</a>
+      </section>
+      <section class="rounded-2xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+        <p class="eyebrow">誰適合租</p>
+        <h2 class="mt-2 font-serif text-xl font-bold text-[var(--color-ink)]">按同行人數和天氣決定</h2>
+        <div class="mt-5 space-y-4 text-sm leading-7 text-[var(--color-wood-soft)]">
+          <p><strong class="text-[var(--color-ink)]">一個人短程：</strong>共享電動機車或微型電動二輪車較輕鬆。</p>
+          <p><strong class="text-[var(--color-ink)]">兩人環島：</strong>選擇核定可雙載、且駕駛人具備相應駕照的車型。</p>
+          <p><strong class="text-[var(--color-ink)]">親子、長輩、行李多：</strong>汽車或計程車通常更安全省力。</p>
+          <p><strong class="text-[var(--color-ink)]">下雨、強風、正午高溫：</strong>不要勉強騎行，改搭汽車或公車。</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="mt-12">
+      <p class="eyebrow">在哪裡取還車</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">水頭、機場與金城市區都有租車點</h2>
+      <div class="mt-5 grid gap-5 md:grid-cols-3">
+        {[['水頭站', '金城鎮西海路一段 20 號', '下船後可步行前往'], ['機場站', '尚義 1 號大客車停車場對面', '落地後直接取車'], ['金城站', '環島北路一段 38 號', '適合市區取還車']].map(([name, address, note]) => (
+          <article class="card"><h3 class="font-serif text-lg font-bold text-[var(--color-ink)]">{name}</h3><p class="mt-2 text-sm text-[var(--color-wood-soft)]">{address}</p><p class="mt-3 text-xs text-[var(--color-slate)]">{note}</p></article>
+        ))}
+      </div>
+      <div class="mt-5 rounded-2xl border border-[var(--color-slate-line)] bg-white p-6 text-sm leading-7 text-[var(--color-wood-soft)]">
+        業者資料列有電動與燃油機車、甲地租乙地還、行李接送、電池更換站及共享車輛。2025 年官方公告首批 6 處共享租還點、42 輛車；2026 年業者頁面已列出全金門 11 個共享站點。共享車輛須在業者允許的站點歸還，並建議至少提前 3 天完成 App 註冊。
+      </div>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="https://kinmen.travel/zh-tw/shop/details/2889" target="_blank" rel="noopener" class="btn btn-primary">檢視租車業者官方資料 ↗</a>
+        <a href="https://kinmen.travel/zh-tw/news/details/3535" target="_blank" rel="noopener" class="btn btn-secondary">檢視共享站點公告 ↗</a>
+      </div>
+    </section>
+
+    <section class="mt-12 rounded-2xl bg-gradient-to-br from-[var(--color-brick)] to-[var(--color-brick-dark)] p-6 text-white sm:p-8">
+      <p class="text-sm font-semibold text-white/75">到總兵署後的正確動線</p>
+      <h2 class="mt-2 font-serif text-2xl font-black !text-white">騎到金城 → 合法停車 → 改用步行</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-7 text-white/85">總兵署、節孝坊、模範街與後浦小吃都很集中。車輛停好後步行參觀，晚上參加 19:30 後浦夜遊，結束後再返回取車。</p>
+      <a href="/scooter-parking/" class="mt-6 inline-flex rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-brick)]">檢視停車指南 →</a>
+    </section>
+  </div>
+</Layout>

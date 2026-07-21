@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { routes } from '../../data/site';
+---
+
+<Layout
+  title="選擇參觀路線"
+  description="按停留時間選擇金門總兵署 20、45 或 90 分鐘參觀路線。"
+  active="/visit/"
+  pageType="Article"
+>
+  <PageHeader
+    eyebrow="20／45／90 分鐘"
+    crumb="參觀路線"
+    title="選擇參觀路線"
+    intro="第一次到訪優先選擇 45 分鐘標準路線；時間緊張或希望深入理解歷史時，可改選另外兩條。"
+  />
+
+  <main class="container-page py-10 sm:py-14">
+    <div class="grid gap-5 lg:grid-cols-3">
+      {routes.map((route) => (
+        <article class="card flex flex-col p-6">
+          <p class="eyebrow">{route.badge}</p>
+          <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">{route.name}</h2>
+          <p class="mt-3 leading-7 text-[var(--color-wood-soft)]">{route.desc}</p>
+          <ol class="mt-5 flex-1 space-y-2 text-sm text-[var(--color-wood-soft)]">
+            {route.stops.map((stop, index) => <li>{index + 1}. {stop}</li>)}
+          </ol>
+          <a class="btn-primary mt-6" href={`/routes/${route.id}/`}>查看完整路線 →</a>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>

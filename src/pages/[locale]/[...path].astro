@@ -1,0 +1,37 @@
+---
+import HistoryPage from '../../components/localized/HistoryPage.astro';
+import InsidePage from '../../components/localized/InsidePage.astro';
+import RoutesIndexPage from '../../components/localized/RoutesIndexPage.astro';
+import NearbyPages from '../../components/localized/NearbyPages.astro';
+import TransportPages from '../../components/localized/TransportPages.astro';
+import SimplePage from '../../components/localized/SimplePage.astro';
+import { fullPagesByLocale, type LocalizedFullPage } from '../../i18n/full-pages';
+import type { TranslatedLocale } from '../../i18n/content';
+
+interface Props {
+  locale: TranslatedLocale;
+  page: LocalizedFullPage;
+}
+
+export function getStaticPaths() {
+  return (Object.entries(fullPagesByLocale) as [TranslatedLocale, LocalizedFullPage[]][])
+    .flatMap(([locale, pages]) => pages.map((page) => ({
+      params: {
+        locale: locale === 'zh-Hans' ? 'zh-cn' : 'en',
+        path: page.path.slice(1, -1),
+      },
+      props: { locale, page },
+    })));
+}
+
+const { locale, page } = Astro.props;
+const isNearby = page.path === '/nearby/' || page.path.startsWith('/nearby/');
+const isTransport = page.path === '/transport/' || page.path.startsWith('/transport/') || page.path === '/scooter-parking/';
+---
+
+{page.path === '/history/' ? <HistoryPage locale={locale} />
+  : page.path === '/inside/' ? <InsidePage locale={locale} />
+  : page.path === '/routes/' ? <RoutesIndexPage locale={locale} />
+  : isNearby ? <NearbyPages locale={locale} page={page} />
+  : isTransport ? <TransportPages locale={locale} page={page} />
+  : <SimplePage locale={locale} page={page} />}
