@@ -210,6 +210,14 @@ const jsonLd = {
     )}
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%239a3b2e'/%3E%3Cpath d='M6 22h20M8 22V13l8-5 8 5v9M16 22v-6' stroke='%23f7f1e6' stroke-width='1.6' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)}></script>
+    <!-- Google Analytics -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HXM22WWPKP');
+    </script>
   </head>
   <body class="pb-16 md:pb-0">
     <!-- 頂部導航 -->
