@@ -1,6 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
+import RatingBadge from '../components/RatingBadge.astro';
+import EntitySection from '../components/EntitySection.astro';
+import WeatherModule from '../components/WeatherModule.astro';
+import SeasonalStrategy from '../components/SeasonalStrategy.astro';
+import DayRoutes from '../components/DayRoutes.astro';
+import AudiencePlans from '../components/AudiencePlans.astro';
+import VisitorServices from '../components/VisitorServices.astro';
+import ScienceResponsibility from '../components/ScienceResponsibility.astro';
 import heroImage from '../assets/images/hero-exterior.jpg';
 import { attraction, quickFacts, routes, highlights, nightWalk, faqs } from '../data/site';
 
@@ -34,7 +42,7 @@ const faqLd = {
   <!-- 第一屏 -->
   <section class="relative overflow-hidden">
     <div class="absolute inset-0">
-      <ResponsiveImage src={heroImage} alt="清金門鎮總兵署外觀" class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
+      <ResponsiveImage src={heroImage} alt={`${attraction.nameFull} — 金門縣金城鎮主要景觀（Main view in Jincheng, Taiwan）`} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
       <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/60 to-[var(--color-ink)]/40"></div>
     </div>
     <div class="container-page relative py-16 sm:py-24 lg:py-28">
@@ -43,7 +51,8 @@ const faqLd = {
         清金門鎮總兵署<br />遊客指南
       </h1>
       <p class="mt-5 max-w-2xl text-lg leading-8 text-white/90">
-        開放時間、門票、參觀地圖與後浦夜遊安排。免費參觀，位於金城後浦核心區，
+        <strong>清金門鎮總兵署（浯江新莊）</strong>位於金門縣金城鎮後浦核心區，是金城最核心的清代官署地標。
+        這裡整理了開放時間、門票、參觀地圖與後浦夜遊安排，免費參觀，
         普通遊客建議安排 30–60 分鐘，晚上可銜接後浦步行導覽。
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
@@ -55,6 +64,9 @@ const faqLd = {
         <a class="hover:text-white" href={attraction.googleMapsUrl} target="_blank" rel="noopener">↗ 導航到總兵署</a>
         <a class="hover:text-white" href="/visit/">檢視今日資訊</a>
         <a class="hover:text-white" href="/houpu-night-walk/">夜遊後浦</a>
+      </div>
+      <div class="mt-6">
+        <RatingBadge variant="hero" />
       </div>
     </div>
   </section>
@@ -73,6 +85,15 @@ const faqLd = {
       資訊可能因維修、天氣或活動臨時調整，出發前請再次確認。
     </p>
   </section>
+
+  <!-- 即時天氣、多日預報與可執行建議 -->
+  <WeatherModule class="mt-16" />
+
+  <!-- 四季遊覽策略 -->
+  <SeasonalStrategy class="mt-16" />
+
+  <!-- 單景點 SEO 實體綁定：關於 / 位置 / 周邊 / 歷史 -->
+  <EntitySection />
 
   <!-- 值得去嗎 -->
   <section class="container-page mt-16">
@@ -125,6 +146,9 @@ const faqLd = {
     </div>
   </section>
 
+  <!-- 推薦通用遊覽路線（半日／全日） -->
+  <DayRoutes class="mt-16" />
+
   <!-- 五個看點 -->
   <section class="container-page mt-16">
     <p class="eyebrow">五個不可錯過的看點</p>
@@ -172,6 +196,9 @@ const faqLd = {
     </div>
   </section>
 
+  <!-- 科普與訪客責任 -->
+  <ScienceResponsibility variant="compact" class="mt-16" />
+
   <!-- 晚上怎麼安排 -->
   <section class="container-page mt-16">
     <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
@@ -191,10 +218,13 @@ const faqLd = {
         <a href="/houpu-night-walk/" class="btn btn-primary mt-7">後浦夜遊怎麼參加 →</a>
       </div>
       <div class="overflow-hidden rounded-3xl shadow-[var(--shadow-card)]">
-        <ResponsiveImage src="exterior-day.jpg" alt="總兵署外觀" class="aspect-[4/3] w-full object-cover" sizes="(min-width: 1024px) 50vw, 100vw" maxWidth={960} />
+        <ResponsiveImage src="exterior-day.jpg" alt="清金門鎮總兵署建築外觀（金門縣金城鎮）" class="aspect-[4/3] w-full object-cover" sizes="(min-width: 1024px) 50vw, 100vw" maxWidth={960} />
       </div>
     </div>
   </section>
+
+  <!-- 按人群定制的遊覽方案 -->
+  <AudiencePlans class="mt-16" />
 
   <!-- 逛完下一站 -->
   <section class="container-page mt-16">
@@ -226,6 +256,9 @@ const faqLd = {
       <a href="/transport/" class="btn btn-primary shrink-0">檢視交通指南 →</a>
     </div>
   </section>
+
+  <!-- 訪客服務與周邊設施（類型中立） -->
+  <VisitorServices variant="compact" class="mt-16" />
 
   <!-- 完整 FAQ -->
   <section id="faq" class="container-page mt-16 scroll-mt-24">

@@ -1,0 +1,220 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+  /** 頁面本身已呈現時間軸時設為 false，避免重複。 */
+  showTimeline?: boolean;
+}
+
+const { variant = 'full', class: className = '', id = 'history-deep', showTimeline = true } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+interface TimelineEntry {
+  year: string;
+  title: string;
+  body: string;
+}
+
+const timeline: TimelineEntry[] = [
+  {
+    year: t('明 · 隆慶四年（1570）', '明 · 隆庆四年（1570）', '1570'),
+    title: t('許獬出生於金門', '许獬出生于金门', 'Xu Xie is born on Kinmen'),
+    body: t(
+      '許獬，字子遜，號鍾斗，金門后湖人，初名行周。其後成為明代金門科舉成就最高的文人之一，故里與宅園在地方記憶中長期被保存下來。',
+      '许獬，字子逊，号钟斗，金门后湖人，初名行周。其后成为明代金门科举成就最高的文人之一，故里与宅园在地方记忆中长期被保存下来。',
+      'Xu Xie, courtesy name Zixun, style name Zhongdou, was born at Houhu on Kinmen and was originally named Xingzhou. He became one of the most accomplished scholars the island produced in the Ming dynasty, and his family seat stayed in local memory.',
+    ),
+  },
+  {
+    year: t('明 · 萬曆二十九年（1601）', '明 · 万历二十九年（1601）', '1601'),
+    title: t('高中會元，「金門第一才子」', '高中会元，「金门第一才子」', 'He passes first in the metropolitan examination'),
+    body: t(
+      '許獬於萬曆辛丑科會試奪魁，中會元，一時有「金門第一才子」之譽。後浦的宅園相傳即為他的讀書處，命名「叢青軒」——「叢青」取草木叢生、青翠之意。',
+      '许獬于万历辛丑科会试夺魁，中会元，一时有「金门第一才子」之誉。后浦的宅园相传即为他的读书处，命名「丛青轩」——「丛青」取草木丛生、青翠之意。',
+      'Xu Xie took first place in the 1601 metropolitan examination, earning him the reputation of Kinmen’s finest talent. The garden in Houpu traditionally identified as his study was named Congqing Xuan — “the pavilion among the green”.',
+    ),
+  },
+  {
+    year: t('明 · 萬曆三十四年（1606）', '明 · 万历三十四年（1606）', '1606'),
+    title: t('歸鄉病逝，留下《叢青軒集》', '归乡病逝，留下《丛青轩集》',
+      'He returns home and dies, leaving the Congqing Xuan collection'),
+    body: t(
+      '許獬以孝聞名，因思親成疾而告假返鄉，同年病逝，年僅三十餘歲。其著作結集為《叢青軒集》，也讓「叢青軒」這個名字從書齋走進了地方文史。',
+      '许獬以孝闻名，因思亲成疾而告假返乡，同年病逝，年仅三十余岁。其著作结集为《丛青轩集》，也让「丛青轩」这个名字从书斋走进了地方文史。',
+      'Known for his filial devotion, he fell ill from longing for his family, took leave and returned home, dying the same year in his mid-thirties. His writings were collected as the Congqing Xuan anthology, carrying the name of the studio into local history.',
+    ),
+  },
+  {
+    year: t('清 · 康熙十九年（1680）', '清 · 康熙十九年（1680）', '1680'),
+    title: t('設金門鎮，總兵署遷治後浦', '设金门镇，总兵署迁治后浦', 'The Kinmen garrison is established and moves to Houpu'),
+    body: t(
+      '清廷設金門鎮總兵官，總鎮署由舊金門城遷至後浦。隨官署而來的還有城隍信仰——地方說法認為後浦城隍即由此分靈，形成「官署與城隍同城」的格局。',
+      '清廷设金门镇总兵官，总镇署由旧金门城迁至后浦。随官署而来的还有城隍信仰——地方说法认为后浦城隍即由此分灵，形成「官署与城隍同城」的格局。',
+      'The Qing established the Kinmen garrison command and moved its headquarters from the old Kinmen City to Houpu. The City God cult travelled with the office — local tradition holds that Houpu’s City God was transferred from there, creating the pattern of government office and City God in one town.',
+    ),
+  },
+  {
+    year: t('清 · 康熙二十一年（1682）', '清 · 康熙二十一年（1682）', '1682'),
+    title: t('首任總兵陳龍改建官署', '首任总兵陈龙改建官署', 'The first garrison commander rebuilds the compound'),
+    body: t(
+      '首任金門鎮總兵官陳龍於叢青軒舊址改建官署，自此這裡成為金門最高的軍政機關，統轄海防、水師與地方事務，時間長達兩百餘年。',
+      '首任金门镇总兵官陈龙于丛青轩旧址改建官署，自此这里成为金门最高的军政机关，统辖海防、水师与地方事务，时间长达两百余年。',
+      'Chen Long, the first garrison commander, rebuilt the compound on the Congqing Xuan site. From then on it was Kinmen’s highest military and civil authority, overseeing coastal defence, the naval forces and local administration for more than two centuries.',
+    ),
+  },
+  {
+    year: t('民國以降', '民国以降', 'Twentieth century onwards'),
+    title: t('從軍政機關到文化展示空間', '从军政机关到文化展示空间', 'From government office to exhibition space'),
+    body: t(
+      '進入近代後，建築群先後作為軍政與公共用途；其後經指定為古蹟並分期修復，轉為文化展示與觀光節點。今天的開放空間，是「保存」與「再利用」兩條線交會後的結果。',
+      '进入近代后，建筑群先后作为军政与公共用途；其后经指定为古迹并分期修复，转为文化展示与观光节点。今天的开放空间，是「保存」与「再利用」两条线交会后的结果。',
+      'In the modern era the complex served military and public functions, before being designated as heritage and repaired in phases to become an exhibition and tourism site. What you walk through today is where preservation and reuse meet.',
+    ),
+  },
+];
+
+const people = [
+  {
+    name: t('許獬（1570–1606）', '许獬（1570–1606）', 'Xu Xie (1570–1606)'),
+    role: t('明代文人 · 會元', '明代文人 · 会元', 'Ming scholar, first in the metropolitan examination'),
+    body: t(
+      '字子遜，號鍾斗，金門后湖人。萬曆二十九年會試第一，以文名與孝行著稱。相傳其讀書處即今址前身「叢青軒」，著作有《叢青軒集》。他的存在讓這塊基地在成為官署之前，先是一處文人宅園。',
+      '字子逊，号钟斗，金门后湖人。万历二十九年会试第一，以文名与孝行著称。相传其读书处即今址前身「丛青轩」，著作有《丛青轩集》。他的存在让这块基地在成为官署之前，先是一处文人宅园。',
+      'Courtesy name Zixun, style name Zhongdou, a native of Houhu on Kinmen. He placed first in the 1601 metropolitan examination and was known for both his writing and his filial piety. The study traditionally identified as the forerunner of today’s site was Congqing Xuan, and his works were gathered as its anthology. Before this plot became a government office, it was a scholar’s garden — because of him.',
+    ),
+  },
+  {
+    name: t('陳龍（清代）', '陈龙（清代）', 'Chen Long (Qing dynasty)'),
+    role: t('首任金門鎮總兵官', '首任金门镇总兵官', 'First garrison commander of Kinmen'),
+    body: t(
+      '號鱗長，福建漳州龍溪人，清代首任金門鎮總兵官。康熙二十一年，他在叢青軒舊址興建官署，奠定此後兩百餘年的官署格局，也讓後浦從聚落進一步發展為區域行政與商業中心。',
+      '号鳞长，福建漳州龙溪人，清代首任金门镇总兵官。康熙二十一年，他在丛青轩旧址兴建官署，奠定此后两百余年的官署格局，也让后浦从聚落进一步发展成为区域行政与商业中心。',
+      'Styled Linzhang, a native of Longxi in Zhangzhou, Fujian, and the first Qing garrison commander of Kinmen. In 1682 he built the official compound on the Congqing Xuan site, fixing the layout for the next two centuries and helping Houpu grow from a village into a regional administrative and commercial centre.',
+    ),
+  },
+];
+
+const legends = [
+  {
+    title: t('夢中揭榜，改名許獬', '梦中揭榜，改名许獬', 'The dream that gave him a new name'),
+    body: t(
+      '相傳許獬原名行周，某夜夢見科舉榜單揭曉，榜首題名為「獬」，於是改名。次年他果然高中會元。傳說未必可考，卻反映了地方對「一舉成名」的集體記憶。',
+      '相传许獬原名行周，某夜梦见科举榜单揭晓，榜首题名为「獬」，于是改名。次年他果然高中会元。传说未必可考，却反映了地方对「一举成名」的集体记忆。',
+      'Tradition says Xu Xie was originally named Xingzhou; one night he dreamt the examination results were posted and the top name read “Xie”, so he changed his name. The following year he did place first. The tale cannot be verified, but it captures how the island remembers a sudden rise to fame.',
+    ),
+  },
+  {
+    title: t('「叢青」之名與宅園想像', '「丛青」之名与宅园想像', 'The name “Congqing” and the garden it evokes'),
+    body: t(
+      '「叢青軒」意為草木叢生、滿目青翠的軒舍。這個名字讓後人得以想像一處臨水近樹的文人園林——它並不在宏偉的官署格局裡，而是官署建成之前、這塊土地更早的樣子。',
+      '「丛青轩」意为草木丛生、满目青翠的轩舍。这个名字让后人得以想像一处临水近树的文人园林——它并不在宏伟的官署格局里，而是官署建成之前、这块土地更早的样子。',
+      'Congqing Xuan means roughly “the pavilion where green gathers”. The name lets later generations picture a scholar’s garden among trees and water — not the grand official layout, but what this plot looked like before the compound existed.',
+    ),
+  },
+  {
+    title: t('後浦石獅仙姑的信仰', '后浦石狮仙姑的信仰', 'The Stone Lion Goddess of Houpu'),
+    body: t(
+      '後浦街區的一處清代牌坊，柱腳石獅中有一尊被漆上彩繪、披掛彩帶，地方居民尊稱為「石獅仙姑」，相傳是牌坊所表彰的節婦化身，被視為守護幼童的存在。這是後浦少數仍「有求必應」的民間信仰節點，也提醒我們：官方表彰與民間信仰往往在同一座建築上並存。',
+      '后浦街区的一处清代牌坊，柱脚石狮中有一尊被漆上彩绘、披挂彩带，地方居民尊称为「石狮仙姑」，相传是牌坊所表彰的节妇化身，被视为守护幼童的存在。这是后浦少数仍「有求必应」的民间信仰节点，也提醒我们：官方表彰与民间信仰往往在同一座建筑上并存。',
+      'At a Qing-dynasty arch in the Houpu quarter, one of the stone lions at its base is painted and draped with ribbons. Locals honour it as the “Stone Lion Goddess”, said to be the incarnation of the chaste widow the arch commemorates and regarded as a guardian of small children. It is one of the few folk devotion points in Houpu still actively petitioned — a reminder that official commemoration and popular belief often share the same structure.',
+    ),
+  },
+  {
+    title: t('官署與城隍：權力與信仰同城', '官署与城隍：权力与信仰同城',
+      'Office and City God: power and belief in one town'),
+    body: t(
+      '清代設鎮後，官方祭祀的城隍與地方行政同駐後浦，形成「陽間官署、陰間衙門」相對應的空間想像。這種搭配在華南地方社會十分常見，也是理解後浦街區為何依官署而繁榮的關鍵。',
+      '清代设镇后，官方祭祀的城隍与地方行政同驻后浦，形成「阳间官署、阴间衙门」相对应的空间想像。这种搭配在华南地方社会十分常见，也是理解后浦街区为何依官署而繁荣的关键。',
+      'After the garrison was established, the officially worshipped City God and the civil administration shared Houpu, creating the familiar pairing of a worldly office and an otherworldly tribunal. This pairing is common across south China and is key to understanding why the Houpu quarter flourished around the government compound.',
+    ),
+  },
+];
+
+const shownLegends = variant === 'compact' ? legends.slice(0, 2) : legends;
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <p class="eyebrow">{t('歷史縱深', '历史纵深', 'Historical depth')}</p>
+  <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+    {t('歷史脈絡、人物故事與民間傳說', '历史脉络、人物故事与民间传说', 'History, people and local legends')}
+  </h2>
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '這塊基地在成為官署之前，先是一處文人宅園。把時間軸拉長來看，你會發現建築群其實疊著三層身分：書齋、衙門、古蹟。',
+      '这块基地在成为官署之前，先是一处文人宅园。把时间轴拉长来看，你会发现建筑群其实叠着三层身分：书斋、衙门、古迹。',
+      'Before it became a government office, this plot was a scholar’s garden. Stretched across time, the complex carries three identities stacked on one site: a study, a yamen, a monument.',
+    )}
+  </p>
+
+  {showTimeline && (
+    <ol class="mt-8 space-y-0 border-l-2 border-[var(--color-slate-line)] pl-6">
+      {timeline.map((entry) => (
+        <li class="relative pb-8 last:pb-0">
+          <span
+            class="absolute -left-[1.9rem] top-1.5 h-3 w-3 rounded-full border-2 border-[var(--color-brick)] bg-[var(--color-paper)]"
+            aria-hidden="true"
+          />
+          <p class="font-serif text-sm font-semibold text-[var(--color-brick)]">{entry.year}</p>
+          <h3 class="mt-1 font-serif text-lg text-[var(--color-wood)]">{entry.title}</h3>
+          <p class="mt-1 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">{entry.body}</p>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  <div class="mt-10 grid gap-5 md:grid-cols-2">
+    {people.map((person) => (
+      <article class="card h-full">
+        <p class="eyebrow">{person.role}</p>
+        <h3 class="mt-1 font-serif text-xl text-[var(--color-wood)]">{person.name}</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">{person.body}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-10">
+    <h3 class="font-serif text-lg text-[var(--color-wood)]">
+      {t('民間傳說與地方記憶', '民间传说与地方记忆', 'Legends and local memory')}
+    </h3>
+    <p class="mt-2 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+      {t(
+        '以下屬地方口述傳統與民間信仰，性質是「人們如何記得這塊土地」，而非史實斷定。閱讀時不妨把它們當成另一種地方史料。',
+        '以下属地方口述传统与民间信仰，性质是「人们如何记得这块土地」，而非史实断定。阅读时不妨把它们当成另一种地方史料。',
+        'What follows are oral traditions and folk beliefs — evidence of how people remember this ground rather than settled historical fact. Read them as another kind of local archive.',
+      )}
+    </p>
+    <div class="mt-5 grid gap-5 md:grid-cols-2">
+      {shownLegends.map((legend) => (
+        <article class="card h-full bg-[var(--color-paper-deep)]">
+          <h4 class="font-serif text-base text-[var(--color-wood)]">{legend.title}</h4>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">{legend.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-[var(--color-slate-line)] px-5 py-4">
+    <p class="text-xs leading-6 text-[var(--color-wood-soft)]">
+      <strong class="text-[var(--color-wood)]">{t('考證說明', '考证说明', 'On sourcing')}</strong>
+      {' '}
+      {t(
+        '人物生平與年代依地方文獻、官方觀光資料與公開報導整理，部分細節各家記載略有出入；民間傳說段落已明確標示為口述傳統，不作史實主張。完整資料來源請見頁尾來源區。',
+        '人物生平与年代依地方文献、官方观光资料与公开报导整理，部分细节各家记载略有出入；民间传说段落已明确标示为口述传统，不作史实主张。完整资料来源请见页尾来源区。',
+        'Biographical details and dates are compiled from local literature, official tourism material and published reports; some details differ between accounts. Legend passages are explicitly marked as oral tradition and make no historical claim. See the sources listed at the foot of the page.',
+      )}
+    </p>
+    <p class="mt-2 text-xs">
+      <a class="underline underline-offset-2 text-[var(--color-brick)]" href={localizedPath(locale, '/sources/')}>
+        {t('查看完整資料來源', '查看完整资料来源', 'See the full list of sources')}
+      </a>
+    </p>
+  </div>
+</section>

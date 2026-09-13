@@ -1,6 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import RatingBadge from '../../components/RatingBadge.astro';
+import EntitySection from '../../components/EntitySection.astro';
+import WeatherModule from '../../components/WeatherModule.astro';
+import SeasonalStrategy from '../../components/SeasonalStrategy.astro';
+import DayRoutes from '../../components/DayRoutes.astro';
+import AudiencePlans from '../../components/AudiencePlans.astro';
+import VisitorServices from '../../components/VisitorServices.astro';
+import ScienceResponsibility from '../../components/ScienceResponsibility.astro';
 import heroImage from '../../assets/images/hero-exterior.jpg';
 import { attraction } from '../../data/site';
 import { localizedPath, type Locale } from '../../i18n/config';
@@ -17,7 +25,7 @@ const href = (path: string) => localizedPath(locale as Locale, path);
 const en = locale === 'en';
 const copy = en ? {
   title: 'Home', eyebrow: 'Independent Visitor Guide', heroTitle: 'Kinmen Military Headquarters\nVisitor Guide',
-  heroIntro: 'Opening hours, free admission, an indoor map and the Houpu night tour. Allow 30–60 minutes for a typical visit in central Jincheng.',
+  heroIntro: 'Kinmen Military Headquarters of the Qing Dynasty (Wujiang Xinzhuang) is the landmark Qing government compound in Jincheng Township, Kinmen County. Opening hours, free admission, an indoor map and the Houpu night tour — allow 30–60 minutes for a typical visit in central Jincheng.',
   navigate: 'Directions to the headquarters', today: 'Today’s visitor information', nightLink: 'Houpu night tour', factsNote: 'Hours and activities may change because of maintenance, weather or events. Check current official notices before departure.',
   worthEyebrow: 'Is it worth visiting?', worthTitle: 'A Qing government compound you can walk through',
   suitable: 'Best suited to', suitableItems: ['Travellers interested in Kinmen history and coastal defence','Visitors who enjoy historic architecture and cultural spaces','Families or older visitors who prefer a compact, largely level route','Independent travellers planning a half-day walk in Jincheng'],
@@ -32,7 +40,7 @@ const copy = en ? {
   faqEyebrow: 'Frequently asked questions', faqTitle: 'Check these before departure',
 } : {
   title: '首页', eyebrow: 'Kinmen Zong Bing Shu', heroTitle: '清金门镇总兵署\n游客指南',
-  heroIntro: '开放时间、门票、参观地图与后浦夜游安排。免费参观，位于金城后浦核心区，普通游客建议安排 30–60 分钟。',
+  heroIntro: '清金门镇总兵署（浯江新庄）位于金门县金城镇后浦核心区，是金城最核心的清代官署地标。开放时间、门票、参观地图与后浦夜游安排，免费参观，普通游客建议安排 30–60 分钟。',
   navigate: '导航到总兵署', today: '查看今日信息', nightLink: '夜游后浦', factsNote: '信息可能因维修、天气或活动临时调整，出发前请再次确认。',
   worthEyebrow: '这个景点值得去吗？', worthTitle: '一座能“走进去”的清代官署',
   suitable: '适合这些游客', suitableItems: ['想了解金门历史与海防的人','喜欢古建筑与人文空间的游客','带孩子或长辈、需要平地短动线','想在金城安排半日步行的自由行游客'],
@@ -68,23 +76,37 @@ const faqLd = {
 };
 ---
 <Layout title={copy.title} active="/" preloadImage={heroImage} preloadSizes="100vw" structuredData={faqLd}>
-  <section class="relative overflow-hidden"><div class="absolute inset-0"><ResponsiveImage src={heroImage} alt={content.attractionName} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high"/><div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/60 to-[var(--color-ink)]/40"></div></div><div class="container-page relative py-16 sm:py-24 lg:py-28"><p class="eyebrow !text-white/85">{copy.eyebrow}</p><h1 class="mt-4 max-w-4xl whitespace-pre-line font-serif text-4xl font-black leading-tight !text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.65)] sm:text-5xl lg:text-6xl">{copy.heroTitle}</h1><p class="mt-5 max-w-2xl text-lg leading-8 text-white/90">{copy.heroIntro}</p><div class="mt-8 flex flex-wrap gap-3"><a href={href('/visit/#routes')} class="btn btn-primary">{content.home.start}</a><a href={href('/visit/#routes')} class="btn btn-secondary">{content.home.chooseRoute}</a><a href={href('/map/')} class="btn btn-secondary">{content.home.openMap}</a></div><div class="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-white/80"><a href={attraction.googleMapsUrl} target="_blank" rel="noopener">↗ {copy.navigate}</a><a href={href('/visit/')}>{copy.today}</a><a href={href('/houpu-night-walk/')}>{copy.nightLink}</a></div></div></section>
+  <section class="relative overflow-hidden"><div class="absolute inset-0"><ResponsiveImage src={heroImage} alt={content.attractionName} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high"/><div class="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)]/90 via-[var(--color-ink)]/60 to-[var(--color-ink)]/40"></div></div><div class="container-page relative py-16 sm:py-24 lg:py-28"><p class="eyebrow !text-white/85">{copy.eyebrow}</p><h1 class="mt-4 max-w-4xl whitespace-pre-line font-serif text-4xl font-black leading-tight !text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.65)] sm:text-5xl lg:text-6xl">{copy.heroTitle}</h1><p class="mt-5 max-w-2xl text-lg leading-8 text-white/90">{copy.heroIntro}</p><div class="mt-8 flex flex-wrap gap-3"><a href={href('/visit/#routes')} class="btn btn-primary">{content.home.start}</a><a href={href('/visit/#routes')} class="btn btn-secondary">{content.home.chooseRoute}</a><a href={href('/map/')} class="btn btn-secondary">{content.home.openMap}</a></div><div class="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-white/80"><a href={attraction.googleMapsUrl} target="_blank" rel="noopener">↗ {copy.navigate}</a><a href={href('/visit/')}>{copy.today}</a><a href={href('/houpu-night-walk/')}>{copy.nightLink}</a></div><div class="mt-6"><RatingBadge variant="hero" /></div></div></section>
 
   <section class="container-page relative z-10 -mt-10"><div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">{content.facts.map(([label,value])=><div class="card p-4"><div class="text-xs text-[var(--color-slate)]">{label}</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">{value}</div></div>)}</div><p class="mt-3 text-xs text-[var(--color-slate)]">{copy.factsNote}</p></section>
+
+  <WeatherModule class="mt-16" />
+  <SeasonalStrategy class="mt-16" />
+
+  <!-- 單景點 SEO 實體綁定：關於 / 位置 / 周邊 / 歷史 -->
+  <EntitySection />
 
   <section class="container-page mt-16"><p class="eyebrow">{copy.worthEyebrow}</p><h2 class="mt-2 text-3xl">{copy.worthTitle}</h2><div class="mt-6 grid gap-5 md:grid-cols-3"><div class="card"><div class="text-lg font-bold text-[var(--color-jade)]">{copy.suitable}</div><ul class="mt-3 space-y-2 text-sm leading-7">{copy.suitableItems.map((item)=><li>· {item}</li>)}</ul></div><div class="card"><div class="text-lg font-bold text-[var(--color-kapok)]">{copy.less}</div><ul class="mt-3 space-y-2 text-sm leading-7">{copy.lessItems.map((item)=><li>· {item}</li>)}</ul></div><div class="card"><div class="text-lg font-bold text-[var(--color-brick)]">{copy.advice}</div><p class="mt-3 text-sm leading-7">{copy.adviceText}</p></div></div></section>
 
   <section class="container-page mt-16"><p class="eyebrow">{copy.timeEyebrow}</p><h2 class="mt-2 text-3xl">{copy.timeTitle}</h2><div class="mt-6 grid gap-5 md:grid-cols-3">{content.routes.map((route)=><a href={href(`/routes/${route.id}/`)} class="card group flex flex-col transition-transform hover:-translate-y-1"><div class="flex items-center justify-between"><span class="font-serif text-4xl font-black text-[var(--color-brick)]">{route.minutes}<span class="text-lg"> {copy.minutes}</span></span><span class="tag tag-onsite">{route.badge}</span></div><div class="mt-3 text-lg font-bold">{route.name}</div><p class="mt-1 text-sm">{route.desc}</p><div class="mt-4 text-sm font-medium text-[var(--color-brick)]">{copy.viewRoute} →</div></a>)}</div></section>
 
+  <DayRoutes class="mt-16" />
+
   <section class="container-page mt-16"><p class="eyebrow">{copy.highlightEyebrow}</p><h2 class="mt-2 text-3xl">{copy.highlightTitle}</h2><div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{content.highlights.map(([name,image,note],index)=><div class="group overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]"><div class="relative aspect-[4/3] overflow-hidden"><ResponsiveImage src={image} alt={name} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" sizes="(min-width:1024px) 33vw,(min-width:640px) 50vw,100vw" maxWidth={720}/><span class="absolute left-3 top-3 grid h-8 w-8 place-items-center rounded-full step-num text-sm">{index+1}</span></div><div class="p-4"><div class="font-serif text-lg font-bold">{name}</div><p class="mt-1 text-sm leading-6">{note}</p></div></div>)}<a href={href('/map/')} class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--color-slate-line)] p-6 text-center"><span class="font-serif text-lg font-bold text-[var(--color-brick)]">{copy.openMap}</span><span class="mt-1 text-sm">{copy.mapMeta} →</span></a></div></section>
 
   <section class="mt-16 bg-[var(--color-paper-deep)] py-14"><div class="container-page"><p class="eyebrow">{copy.historyEyebrow}</p><h2 class="mt-2 text-3xl">{copy.historyTitle}</h2><ol class="mt-8">{timelineItems.map((item)=><li class="flex gap-5"><div class="flex flex-col items-center"><span class="grid h-12 w-12 place-items-center rounded-full step-num text-xs font-bold">{item.year.slice(0,2)}</span>{item.showLine&&<span class="w-px flex-1 bg-[var(--color-slate-line)]"></span>}</div><div class="pb-8"><div class="font-serif text-lg font-bold">{item.year}</div><p class="mt-1 max-w-xl text-sm leading-7">{item.text}</p></div></li>)}</ol><a href={href('/history/')} class="btn btn-secondary mt-2">{copy.historyButton} →</a></div></section>
 
+  <ScienceResponsibility variant="compact" class="mt-16" />
+
   <section class="container-page mt-16"><div class="grid gap-8 lg:grid-cols-2 lg:items-center"><div><p class="eyebrow">{copy.eveningEyebrow}</p><h2 class="mt-2 text-3xl">{copy.eveningTitle}</h2><p class="mt-4 leading-8">{copy.eveningText}</p><div class="mt-6 space-y-3">{eveningPlan.map(([time,action])=><div class="flex items-center gap-4"><span class="w-16 font-serif text-lg font-bold text-[var(--color-brick)]">{time}</span><span class="h-2 w-2 rounded-full bg-[var(--color-kapok)]"></span><span>{action}</span></div>)}</div><a href={href('/houpu-night-walk/')} class="btn btn-primary mt-7">{copy.eveningButton} →</a></div><div class="overflow-hidden rounded-3xl shadow-[var(--shadow-card)]"><ResponsiveImage src="exterior-day.jpg" alt={content.attractionName} class="aspect-[4/3] w-full object-cover" sizes="(min-width:1024px) 50vw,100vw" maxWidth={960}/></div></div></section>
+
+  <AudiencePlans class="mt-16" />
 
   <section class="container-page mt-16"><p class="eyebrow">{copy.nextEyebrow}</p><h2 class="mt-2 text-3xl">{copy.nextTitle}</h2><div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{nextStops.map(([time,place,path])=><a href={href(path)} class="card flex items-center justify-between gap-3 py-4 transition-transform hover:-translate-y-0.5"><div><div class="text-sm font-semibold text-[var(--color-brick)]">{time}</div><div class="mt-0.5">{place}</div></div><span>→</span></a>)}</div></section>
 
   <section class="container-page mt-16"><div class="card flex flex-col items-start gap-6 bg-gradient-to-br from-white to-[var(--color-paper-deep)] md:flex-row md:items-center md:justify-between"><div><p class="eyebrow">{copy.transportEyebrow}</p><h2 class="mt-2 text-2xl">{copy.transportTitle}</h2><p class="mt-2 max-w-xl text-sm">{copy.transportText}</p></div><a href={href('/transport/')} class="btn btn-primary shrink-0">{copy.transportButton} →</a></div></section>
+
+  <VisitorServices variant="compact" class="mt-16" />
 
   <section id="faq" class="container-page mt-16 scroll-mt-24"><p class="eyebrow">{copy.faqEyebrow}</p><h2 class="mt-2 text-3xl">{copy.faqTitle}</h2><div class="mt-6 divide-y divide-[var(--color-slate-line)] overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">{content.faqs.map(([question,answer])=><details class="group"><summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 font-medium">{question}<span class="text-[var(--color-brick)] transition-transform group-open:rotate-45">＋</span></summary><p class="px-5 pb-5 text-sm leading-7">{answer}</p></details>)}</div></section>
 </Layout>

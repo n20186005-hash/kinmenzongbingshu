@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import VisitorServices from '../VisitorServices.astro';
+import WeatherModule from '../WeatherModule.astro';
+import { localizedPath } from '../../i18n/config';
+import type { LocalizedFullPage } from '../../i18n/full-pages';
+import type { TranslatedLocale } from '../../i18n/content';
+
+const { locale, page } = Astro.props as { locale: TranslatedLocale; page: LocalizedFullPage };
+const en = locale === 'en';
+const lp = (path: string) => localizedPath(locale, path);
+
+const closing = page.sections.at(-1);
+const anchor = en
+  ? { weather: 'Live weather', services: 'Facilities', note: 'How to use this' }
+  : { weather: '实时天气', services: '设施类型', note: '使用方式' };
+---
+
+<Layout title={page.title} description={page.description} active="/services/" pageType="Article">
+  <PageHeader eyebrow={page.eyebrow} crumb={page.title} title={page.title} intro={page.intro}>
+    <div class="mt-5 flex flex-wrap gap-2 text-sm">
+      <a href="#weather" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">{anchor.weather}</a>
+      <a href="#services" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">{anchor.services}</a>
+      <a href="#note" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">{anchor.note}</a>
+    </div>
+    {page.facts && (
+      <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {page.facts.map(([label, value]) => (
+          <div class="card p-4">
+            <p class="text-xs text-[var(--color-slate)]">{label}</p>
+            <p class="mt-1 font-serif text-sm font-bold text-[var(--color-ink)]">{value}</p>
+          </div>
+        ))}
+      </div>
+    )}
+  </PageHeader>
+
+  <WeatherModule id="weather" variant="compact" class="pt-12" />
+
+  <VisitorServices id="services" class="pt-14" />
+
+  <section class="container-page pt-14 pb-16" id="note" aria-labelledby="services-note-title">
+    <div class="rounded-2xl border border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] px-6 py-6">
+      <h2 id="services-note-title" class="font-serif text-lg text-[var(--color-wood)]">
+        {closing?.title ?? (en ? 'How to use this' : '使用方式')}
+      </h2>
+      <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+        {closing?.text ?? page.intro}
+      </p>
+      {page.links && (
+        <ul class="mt-4 flex flex-wrap gap-3 text-sm">
+          {page.links.map(([label, path]) => (
+            <li>
+              <a class="underline underline-offset-2 text-[var(--color-brick)] hover:text-[var(--color-brick-dark)]" href={lp(path)}>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</Layout>

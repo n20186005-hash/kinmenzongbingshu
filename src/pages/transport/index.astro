@@ -2,6 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import LocationMap from '../../components/LocationMap.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { faqPageLd } from '../../lib/faq';
+import { transportFaqs } from '../../data/site';
+
+const faqLd = faqPageLd(transportFaqs);
 
 const choices = [
   { icon: '⛴', title: '我從水頭碼頭來', meta: '公車、計程車或直接取車', href: '/transport/shuitou-pier/' },
@@ -21,7 +26,7 @@ const compare = [
   ['只逛總兵署與後浦', '到金城後全程步行'],
 ];
 ---
-<Layout title="交通與停車" description="金門總兵署交通指南：從水頭碼頭、金門機場、金城車站出發，以及機車、電動機車、汽車停車和公車路線說明。" active="/transport/">
+<Layout title="金門總兵署交通指南｜金城車站步行、機場公車與電動車免駕照" description="從金城車站步行 3 分鐘就到總兵署；尚義機場搭 3 路、水頭碼頭搭 7 路公車到金城車站。含金門電動車免駕照規定、共享機車、汽車與機車停車位置整理。" active="/transport/" structuredData={faqLd}>
   <PageHeader eyebrow="交通與停車" crumb="交通"
     title="金門總兵署怎麼去"
     intro="總兵署位於金城後浦核心。無論從機場、碼頭取車，或搭公車到金城，最後都建議停車後步行遊覽後浦老城區。" />
@@ -83,4 +88,7 @@ const compare = [
       <LocationMap />
     </div>
   </div>
+
+  <!-- 交通長尾問答：對應「金城車站到機場公車」「金門電動車免駕照」等實際搜尋 -->
+  <FaqBlock items={transportFaqs} eyebrow="交通常見問題" heading="公車、電動車與步行疑問" id="transport-faq" class="pb-16" />
 </Layout>

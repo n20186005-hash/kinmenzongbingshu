@@ -1,0 +1,151 @@
+---
+import { attraction, googleRating } from '../data/site';
+import { getLocaleFromPath, localizedAttraction, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const place = localizedAttraction[locale];
+const lp = (path: string) => localizedPath(locale as Locale, path);
+
+const copy = locale === 'en'
+  ? {
+      eyebrow: 'Entity guide',
+      aboutTitle: 'About Kinmen Military Headquarters of the Qing Dynasty',
+      aboutText: 'Kinmen Military Headquarters of the Qing Dynasty (Wujiang Xinzhuang) is the landmark Qing government compound in Jincheng Township, Kinmen County. It began as the Ming scholar Xu Xie’s residence, Congqing Xuan, and was rebuilt as a military headquarters by General Chen Long in 1682. Admission is free, and the site is the clearest starting point for understanding Kinmen’s coastal defence and the growth of Houpu.',
+      locationTitle: 'Location & how to visit Kinmen Military Headquarters in Jincheng Township',
+      locationText: 'The address is No. 53, Wujiang Street, Beimen Village, Jincheng Township, Kinmen County 893, Taiwan (Plus Code C8J9+W9). Jincheng Bus Station is about 195 metres away, a walk of roughly three minutes. Drivers and riders should park legally in central Jincheng and continue into the Houpu old town on foot.',
+      nearbyTitle: 'Landmarks & attractions around the headquarters',
+      nearbyText: 'When visiting Kinmen Military Headquarters of the Qing Dynasty, travellers can easily explore surrounding historical landmarks and points of interest on foot, including Mofan Street and Qiu Liang-gong’s Mother Chastity Arch.',
+      historyTitle: 'History & significance of Kinmen Military Headquarters',
+      historyText: 'From a Ming scholar’s residence and its 1682 conversion into an official compound, through its role as a Qing coastal defence centre, to today’s free heritage and exhibition site, the headquarters records how Houpu developed from a military administration into a market town.',
+      crumbHome: 'Taiwan',
+      mapTitle: 'Location map',
+      mapCaption: 'Google Maps location for Kinmen Military Headquarters of the Qing Dynasty',
+      officialLabel: 'Kinmen County Official Tourism Portal',
+      officialText: 'For official updates and regional tourism information, visit',
+      reviewLabel: 'Google Maps listing',
+      nearbyLinks: [['Mofan Street', '/nearby/model-street/'], ['Memorial arch', '/nearby/memorial-arch/'], ['All nearby sights', '/nearby/']],
+    }
+  : locale === 'zh-Hans'
+    ? {
+        eyebrow: '景点实体绑定',
+        aboutTitle: '关于清金门镇总兵署（浯江新庄）',
+        aboutText: '清金门镇总兵署（浯江新庄）是金门县金城镇最具代表性的清代官署建筑，前身为明代许獬故宅“丛青轩”，清康熙二十一年（1682）由总兵陈龙改建为官署。现今免费开放，是理解金门海防、后浦城市发展与清代官署空间秩序的核心入口。',
+        locationTitle: '位置与前往方式：金城镇的清金门镇总兵署',
+        locationText: '地址为金门县金城镇北门里浯江街53号（邮政编码 893，Plus Code C8J9+W9）。从金城车站步行约 195 米、约 3 分钟即可抵达；自驾或骑车请停放金城市区合法停车空间后步行进入后浦老街区。',
+        nearbyTitle: '清金门镇总兵署周边地标与顺游景点',
+        nearbyText: '造访清金门镇总兵署时，游客可以轻松步行探索周边的历史地标与景点，包括模范街与邱良功母节孝坊。',
+        historyTitle: '清金门镇总兵署的历史与意义',
+        historyText: '从明代文人宅园、1682 年改建官署，到清代金门海防军政中心，再到今日的古迹与文化展示空间，总兵署见证了后浦从军事设治走向商业街区的完整脉络。',
+        crumbHome: '台湾',
+        mapTitle: '位置地图',
+        mapCaption: '清金门镇总兵署（浯江新庄）Google 地图位置',
+        officialLabel: '金门县官方观光旅游网',
+        officialText: '如需官方最新消息与区域旅游资讯，请访问',
+        reviewLabel: 'Google 地图页面',
+        nearbyLinks: [['模范街', '/nearby/model-street/'], ['邱良功母节孝坊', '/nearby/memorial-arch/'], ['全部附近景点', '/nearby/']],
+      }
+    : {
+        eyebrow: '景點實體綁定',
+        aboutTitle: '關於清金門鎮總兵署（浯江新莊）',
+        aboutText: '清金門鎮總兵署（浯江新莊）是金門縣金城鎮最具代表性的清代官署建築，前身為明代許獬故宅「叢青軒」，清康熙二十一年（1682）由總兵陳龍改建為官署。現今免費開放，是理解金門海防、後浦城市發展與清代官署空間秩序的核心入口。',
+        locationTitle: '位置與前往方式：金城鎮的清金門鎮總兵署',
+        locationText: '地址為金門縣金城鎮北門里浯江街53號（郵遞區號 893，Plus Code C8J9+W9）。從金城車站步行約 195 公尺、約 3 分鐘即可抵達；自駕或騎車請停放金城市區合法停車空間後步行進入後浦老街區。',
+        nearbyTitle: '清金門鎮總兵署周邊地標與順遊景點',
+        nearbyText: '造訪清金門鎮總兵署時，旅客可以輕鬆步行探索周邊的歷史地標與景點，包括模範街與邱良功母節孝坊。',
+        historyTitle: '清金門鎮總兵署的歷史與意義',
+        historyText: '從明代文人宅園、1682 年改建官署，到清代金門海防軍政中心，再到今日的古蹟與文化展示空間，總兵署見證了後浦從軍事設治走向商業街區的完整脈絡。',
+        crumbHome: '台灣',
+        mapTitle: '位置地圖',
+        mapCaption: '清金門鎮總兵署（浯江新莊）Google 地圖位置',
+        officialLabel: '金門縣官方觀光旅遊網',
+        officialText: '如需官方最新消息與區域旅遊資訊，請前往',
+        reviewLabel: 'Google 地圖頁面',
+        nearbyLinks: [['模範街', '/nearby/model-street/'], ['邱良功母節孝坊', '/nearby/memorial-arch/'], ['全部附近景點', '/nearby/']],
+      };
+
+const embedUrl = locale === 'en'
+  ? attraction.googleMapsEmbedUrl.replaceAll('!1szh-CN', '!1sen')
+  : locale === 'zh-Hant-TW'
+    ? attraction.googleMapsEmbedUrl.replaceAll('!1szh-CN', '!1szh-TW')
+    : attraction.googleMapsEmbedUrl;
+const govtUrl = locale === 'en' ? attraction.govtTourismUrlEn : attraction.govtTourismUrl;
+const nearbyLinks = copy.nearbyLinks as [string, string][];
+---
+
+<section class:list={['container-page mt-16', className]}>
+  <p class="eyebrow">{copy.eyebrow}</p>
+
+  <!-- 地理麵包屑與歸屬層級 -->
+  <nav aria-label={copy.mapTitle} class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-[var(--color-slate)]">
+    <span>{copy.crumbHome}</span><span aria-hidden="true">›</span>
+    <span>{place.addressRegion}</span><span aria-hidden="true">›</span>
+    <span>{place.addressLocality}</span><span aria-hidden="true">›</span>
+    <span class="text-[var(--color-wood-soft)]">{place.name}</span>
+  </nav>
+
+  <div class="mt-8 grid gap-10 lg:grid-cols-3">
+    <div class="lg:col-span-2">
+      <h2 class="text-2xl">{copy.aboutTitle}</h2>
+      <p class="mt-3 leading-8 text-[var(--color-wood-soft)]">{copy.aboutText}</p>
+
+      <h2 class="mt-10 text-2xl">{copy.locationTitle}</h2>
+      <p class="mt-3 leading-8 text-[var(--color-wood-soft)]">{copy.locationText}</p>
+      <dl class="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+        <div class="flex gap-2"><dt class="font-semibold text-[var(--color-ink)]">地址</dt><dd class="text-[var(--color-wood-soft)]">{place.address}</dd></div>
+        <div class="flex gap-2"><dt class="font-semibold text-[var(--color-ink)]">郵遞區號</dt><dd class="text-[var(--color-wood-soft)]">{place.postalCode}</dd></div>
+        <div class="flex gap-2"><dt class="font-semibold text-[var(--color-ink)]">Plus Code</dt><dd class="text-[var(--color-wood-soft)]">{attraction.plusCode}</dd></div>
+        <div class="flex gap-2"><dt class="font-semibold text-[var(--color-ink)]">電話</dt><dd class="text-[var(--color-wood-soft)]"><a href={`tel:${attraction.phoneInternational.replace(/\s/g, '')}`} class="hover:text-[var(--color-brick)] hover:underline">{attraction.phone}</a></dd></div>
+      </dl>
+
+      <h2 class="mt-10 text-2xl">{copy.nearbyTitle}</h2>
+      <p class="mt-3 leading-8 text-[var(--color-wood-soft)]">{copy.nearbyText}</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {nearbyLinks.map(([label, path]) => (
+          <a href={lp(path)} class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-sm text-[var(--color-wood-soft)] transition-colors hover:border-[var(--color-brick)] hover:text-[var(--color-brick)]">{label} →</a>
+        ))}
+      </div>
+
+      <h2 class="mt-10 text-2xl">{copy.historyTitle}</h2>
+      <p class="mt-3 leading-8 text-[var(--color-wood-soft)]">{copy.historyText}</p>
+    </div>
+
+    <aside class="space-y-4">
+      <div class="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)]">
+        <div class="p-4">
+          <h3 class="font-serif text-base font-bold text-[var(--color-ink)]">{copy.mapTitle}</h3>
+          <p class="mt-1 text-xs text-[var(--color-slate)]">{copy.mapCaption}</p>
+        </div>
+        <iframe
+          src={embedUrl}
+          title={copy.mapCaption}
+          width="100%"
+          height="320"
+          style="border:0;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          class="block w-full border-y border-[var(--color-slate-line)]"
+        ></iframe>
+        <div class="p-4">
+          <a href={attraction.mapsShareUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary w-full text-sm">↗ {copy.reviewLabel}</a>
+          <p class="mt-2 text-center text-xs text-[var(--color-slate)]">{attraction.coordinates.lat}, {attraction.coordinates.lng}</p>
+        </div>
+      </div>
+
+      <p class="rounded-2xl bg-[var(--color-paper-deep)] p-4 text-xs leading-6 text-[var(--color-wood-soft)]">
+        {copy.officialText}
+        <a href={govtUrl} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-brick)] underline underline-offset-2">{copy.officialLabel}</a>
+        。
+        <span class="mt-1 block text-[var(--color-slate)]">
+          {locale === 'en' ? 'Current Google rating: ' : '目前 Google 評分：'}
+          <strong>{googleRating.value}</strong> / 5（{googleRating.count.toLocaleString('en-US')} {locale === 'en' ? 'reviews' : '則評論'}）
+        </span>
+      </p>
+    </aside>
+  </div>
+</section>

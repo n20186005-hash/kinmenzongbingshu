@@ -1,0 +1,172 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'full', class: className = '', id = 'science' } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+const science = [
+  {
+    title: t('前衙後宅：官署的通用形制', '前衙后宅：官署的通用形制', 'Yamen in front, residence behind'),
+    body: t(
+      '清代地方官署多採「前衙後宅」格局：前段為辦公與審案的頭門、儀門、大堂、科房，後段為官員與家眷居住的內宅。這種安排同時服務行政效率與身分秩序——外人止於大堂，家眷居於後進。理解這條軸線，就能讀懂整個建築群的房間配置。',
+      '清代地方官署多采「前衙后宅」格局：前段为办公与审案的头门、仪门、大堂、科房，后段为官员与家眷居住的内宅。这种安排同时服务行政效率与身分秩序——外人止于大堂，家眷居于后进。理解这条轴线，就能读懂整个建筑群的房间配置。',
+      'Qing local government compounds generally followed a “office in front, residence behind” plan: the front held the main gate, ceremonial gate, main hall and clerks’ rooms for administration and hearings, while the rear was the private quarters of the official and family. The layout served both administrative efficiency and social order — outsiders stopped at the main hall. Once you can read that axis, the room arrangement of the whole complex makes sense.',
+    ),
+  },
+  {
+    title: t('閩南建築工法：紅磚、花崗石與木構', '闽南建筑工法：红砖、花岗石与木构',
+      'Minnan building craft: red brick, granite, timber'),
+    body: t(
+      '金門傳統官署與民居共用一套閩南建築語彙：以花崗石條砌築牆基與門框，紅磚砌牆並留出磚縫圖案，屋架則以抬樑與穿斗混合的木構造撐起。屋脊兩端的翹起曲線（燕尾脊）除了視覺象徵，也有導引雨水與減輕風壓的實際作用；剪黏與彩繪則標示了建築的等級。',
+      '金门传统官署与民居共用一套闽南建筑语汇：以花岗石条砌筑墙基与门框，红砖砌墙并留出砖缝图案，屋架则以抬梁与穿斗混合的木构造撑起。屋脊两端的翘起曲线（燕尾脊）除了视觉象征，也有导引雨水与减轻风压的实际作用；剪黏与彩绘则标示了建筑的等级。',
+      'Traditional official compounds and houses in Kinmen share one Minnan vocabulary: granite blocks for wall bases and door frames, red brick walls with patterned joints, and hybrid post-and-lintel timber frames. The upswept ridge ends (swallowtail ridges) are more than a symbol — they shed rainwater and reduce wind load — while decorative tilework and painting marked the building’s rank.',
+    ),
+  },
+  {
+    title: t('離島氣候下的建築適應', '离岛气候下的建筑适应', 'Building for an island climate'),
+    body: t(
+      '金門冬季東北季風強勁、鹽害明顯，建築因此發展出低矮量體、厚實牆體、抬高基座與深出簷等做法：厚牆與窄窗減少熱輻射與風壓，抬高基座避免潮氣上返，深簷與廊道提供遮陽避雨的過渡空間。這些設計多半不是為了美觀，而是長期與風、鹽、濕度協商後的結果。',
+      '金门冬季东北季风强劲、盐害明显，建筑因此发展出低矮量体、厚实墙体、抬高基座与深出檐等做法：厚墙与窄窗减少热辐射与风压，抬高基座避免潮气上返，深檐与廊道提供遮阳避雨的过渡空间。这些设计多半不是为了美观，而是长期与风、盐、湿度协商后的结果。',
+      'Kinmen’s fierce winter monsoon and salt-laden air shaped a low, thick-walled architecture on raised plinths with deep eaves: heavy walls and narrow openings cut heat gain and wind load, the raised base keeps damp out, and the deep eaves and corridors create shaded, rain-sheltered transition space. Most of this was negotiated with wind, salt and humidity long before it was about beauty.',
+    ),
+  },
+  {
+    title: t('文化資產保存：修舊如舊的原則', '文化遗产保存：修旧如旧的原则',
+      'Heritage conservation: repair, not remake'),
+    body: t(
+      '古蹟修復的核心原則是「最小干預」與「可識別性」：能修的構件不整件換新，新增的補強必須可辨識，藉此保留不同年代的痕跡。這也是為什麼你在園區裡會看到顏色略異的磚、補接的木料或顏色較新的彩繪——那不是施工瑕疵，而是修復倫理的呈現。',
+      '古迹修复的核心原则是「最小干预」与「可识别性」：能修的构件不整件换新，新增的补强必须可辨识，借此保留不同年代的痕迹。这也是为什么你在园区里会看到颜色略异的砖、补接的木料或颜色较新的彩绘——那不是施工瑕疵，而是修复伦理的呈现。',
+      'Conservation follows minimal intervention and reversibility: components that can be repaired are not replaced wholesale, and new reinforcement must remain identifiable, so traces of different eras survive. That is why you will see bricks of slightly different tones, spliced timber or fresher paint — not sloppy work, but conservation ethics made visible.',
+    ),
+  },
+  {
+    title: t('空間的再利用：從官署到展館', '空间的再利用：从官署到展馆',
+      'Adaptive reuse: from government office to museum'),
+    body: t(
+      '古蹟保存不只是「不拆」，還包括找到當代用途。此地由清代官署轉為文化展示與觀光節點後，必須在開放參觀、文物保護與建築負荷之間取得平衡：人流管制、展間溫濕度控制、動線與消防避難，都是再利用過程中新增的專業課題。',
+      '古迹保存不只是「不拆」，还包括找到当代用途。此地由清代官署转为文化展示与观光节点后，必须在开放参观、文物保护与建筑负荷之间取得平衡：人流管制、展间温湿度控制、动线与消防避难，都是再利用过程中新增的专业课题。',
+      'Preservation is not only about not demolishing; it means finding a contemporary use. Turning a Qing government office into an exhibition and tourism site requires balancing public access, artefact protection and structural load — crowd management, climate control in display rooms, circulation and fire evacuation are all new professional problems introduced by reuse.',
+    ),
+  },
+];
+
+const duties = [
+  {
+    title: t('文物保護', '文物保护', 'Protecting the artefacts'),
+    body: t(
+      '不觸摸、不倚靠、不攀爬文物與構件；展間內不飲食、不攜帶飲料；不使用閃光燈與自拍桿，避免光照與碰撞造成不可逆損傷。',
+      '不触摸、不倚靠、不攀爬文物与构件；展间内不饮食、不携带饮料；不使用闪光灯与自拍杆，避免光照与碰撞造成不可逆损伤。',
+      'Do not touch, lean on or climb artefacts or building components. No food or drinks in display rooms, and no flash or selfie sticks — light and impact cause irreversible damage.',
+    ),
+  },
+  {
+    title: t('古蹟禮儀', '古迹礼仪', 'Heritage etiquette'),
+    body: t(
+      '降低音量、不奔跑嬉戲；遇團體導覽請禮讓動線；拍照請留意是否擋住他人視線與通道。',
+      '降低音量、不奔跑嬉戏；遇团体导览请礼让动线；拍照请留意是否挡住他人视线与通道。',
+      'Keep your voice down, do not run, yield to guided groups and check that your photos are not blocking sightlines or passageways.',
+    ),
+  },
+  {
+    title: t('環境責任', '环境责任', 'Environmental responsibility'),
+    body: t(
+      '垃圾自行帶走並依分類投放；離島水資源珍貴，請節約用水；不餵食、不追逐野生動物與鳥類。',
+      '垃圾自行带走并依分类投放；离岛水资源珍贵，请节约用水；不喂食、不追逐野生动物与鸟类。',
+      'Take your litter with you and sort it properly. Fresh water is scarce on the island, so use it sparingly, and never feed or chase wildlife or birds.',
+    ),
+  },
+  {
+    title: t('安全須知', '安全须知', 'Safety'),
+    body: t(
+      '留意門檻與台階高低差；雨後石板濕滑請放慢腳步；颱風、濃霧與強風期間聽從現場人員引導，並避免前往海岸與空曠處。',
+      '留意门槛与台阶高低差；雨后石板湿滑请放慢脚步；台风、浓雾与强风期间听从现场人员引导，并避免前往海岸与空旷处。',
+      'Watch for thresholds and level changes; stone floors get slippery after rain, so slow down. During typhoons, dense fog or strong wind, follow staff instructions and stay away from the coast and open ground.',
+    ),
+  },
+  {
+    title: t('兒少、長輩與寵物', '儿少、长辈与宠物', 'Children, elders and pets'),
+    body: t(
+      '幼童請由成人陪同，避免在廊道追逐；長輩與行動不便者可優先使用主要平緩動線；除導盲犬等協助犬外，寵物請勿進入室內展間。',
+      '幼童请由成人陪同，避免在廊道追逐；长辈与行动不便者可优先使用主要平缓动线；除导盲犬等协助犬外，宠物请勿进入室内展间。',
+      'Children should stay with an adult and avoid running in the corridors. Older visitors and those with limited mobility should use the main, level route. Except for assistance dogs, pets are not allowed in indoor display rooms.',
+    ),
+  },
+  {
+    title: t('緊急狀況', '紧急状况', 'In an emergency'),
+    body: t(
+      '請記住最近出口位置；發生事故或身體不適，立即告知現場工作人員；緊急電話 119（消防救護）、110（警察）、112（行動電話緊急號碼）。',
+      '请记住最近出口位置；发生事故或身体不适，立即告知现场工作人员；紧急电话 119（消防救护）、110（警察）、112（行动电话紧急号码）。',
+      'Note where the nearest exits are. Report accidents or feeling unwell to staff immediately. Emergency numbers: 119 (fire and ambulance), 110 (police), 112 (from a mobile phone).',
+    ),
+  },
+];
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <p class="eyebrow">{t('科普與責任', '科普与责任', 'Science and responsibility')}</p>
+  <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+    {t('科普與訪客責任', '科普与访客责任', 'Understanding the site and visiting responsibly')}
+  </h2>
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '看古蹟不只要「看過」，還要理解它在解決什麼問題。以下先說明官署格局、建築工法與保存觀念，再整理每位訪客都能做到的責任事項。',
+      '看古迹不只要「看过」，还要知道它在解决什么问题。以下先说明官署格局、建筑工法与保存观念，再整理每位访客都能做到的责任事项。',
+      'Seeing a monument is not just about having been there — it helps to know what problems it was built to solve. Below is the layout, craft and conservation thinking, followed by the responsibilities every visitor can meet.',
+    )}
+  </p>
+
+  <div class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr]">
+    <div>
+      <h3 class="font-serif text-lg text-[var(--color-wood)]">
+        {t('建築與文化資產科普', '建筑与文化遗产科普', 'Architecture and heritage science')}
+      </h3>
+      <div class="mt-4 space-y-4">
+        {science.map((block) => (
+          <article class="card">
+            <h4 class="font-serif text-base text-[var(--color-wood)]">{block.title}</h4>
+            <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">{block.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <h3 class="font-serif text-lg text-[var(--color-wood)]">
+        {t('訪客責任清單', '访客责任清单', 'Visitor responsibilities')}
+      </h3>
+      <ul class="mt-4 space-y-4">
+        {duties.map((duty) => (
+          <li class="rounded-2xl border border-[var(--color-slate-line)] bg-white/60 px-5 py-4">
+            <p class="flex items-center gap-2 text-sm font-semibold text-[var(--color-wood)]">
+              <span class="inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--color-jade)] text-white" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none">
+                  <path d="M5 12.6l4.4 4.4L19 7.4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              {duty.title}
+            </p>
+            <p class="mt-2 text-sm leading-6 text-[var(--color-wood-soft)]">{duty.body}</p>
+          </li>
+        ))}
+      </ul>
+      {variant === 'compact' && (
+        <p class="mt-4 text-xs text-[var(--color-slate)]">
+          <a class="underline underline-offset-2 hover:text-[var(--color-brick)]" href={localizedPath(locale, '/visit/')}>
+            {t('查看完整參觀規範與服務資訊', '查看完整参观规范与服务资讯', 'See the full visiting guidance and services')}
+          </a>
+        </p>
+      )}
+    </div>
+  </div>
+</section>

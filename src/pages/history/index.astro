@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import { attraction } from '../../data/site';
+import HistoryDeepDive from '../../components/HistoryDeepDive.astro';
 
 const timeline = [
   { year: '明代', title: '許獬故宅「叢青軒」', text: '總兵署的前身是明代金門文人許獬的故宅「叢青軒」。許獬為明萬曆年間進士，以文章聞名，叢青軒是當時後浦的重要宅第。' },
@@ -42,4 +43,7 @@ const timeline = [
       </div>
     </div>
   </div>
+
+  <!-- 人物故事與民間傳說（時間軸已於上方呈現） -->
+  <HistoryDeepDive showTimeline={false} class="pb-16" />
 </Layout>

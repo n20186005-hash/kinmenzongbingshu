@@ -1,7 +1,9 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
 import PageHeader from '../../../../components/PageHeader.astro';
+import FaqBlock from '../../../../components/FaqBlock.astro';
 import { attraction } from '../../../../data/site';
+import { faqPageLd } from '../../../../lib/faq';
 import { getLocalizedContent, type TranslatedLocale } from '../../../../i18n/content';
 import { getTranslatedLocalePaths } from '../../../../i18n/paths';
 
@@ -11,16 +13,44 @@ export function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: TranslatedLocale };
 const content = getLocalizedContent(locale);
+const en = locale === 'en';
+
+// 搜尋結果標題直接對應「水頭碼頭到金城車站公車」與英文 ferry terminal 查詢
+const seo = en
+  ? {
+      title: 'Shuitou Pier to Jincheng: Bus 7, Taxi & Walking Guide',
+      description: 'Arriving at Shuitou Pier via the mini three links? Take bus 7 towards Jincheng Bus Station (about 12–15 minutes), then walk three minutes to Kinmen Military Headquarters (Troops Headquarters). Includes taxi, scooter-rental and ferry-departure timing tips.',
+    }
+  : {
+      title: '水头码头到金城车站公车怎么搭｜7 路公车约 12–15 分钟',
+      description: '水头码头到金城车站可搭 7 路公车，车程约 12–15 分钟，下车步行 3 分钟到清金门镇总兵署（浯江新庄）。含出租车、租车与赶船时间预留提醒。',
+    };
+
+const faqs = en
+  ? [
+      { q: 'Which bus goes from Shuitou Pier to Jincheng Bus Station?', a: 'Bus 7 towards Jincheng Bus Station, about 12–15 minutes. From the bus station the headquarters is roughly a three-minute walk.' },
+      { q: 'How long should I allow before my ferry departs?', a: 'Allow extra time for the terminal and immigration procedures. Services are limited and can be affected by weather, so never work backwards from driving time alone.' },
+      { q: 'Can I rent a scooter at the pier?', a: 'Rental points for electric and petrol scooters operate near the Shuitou terminal. Confirm licence eligibility, return stations and the last ferry time before collecting a vehicle.' },
+      { q: 'Can I visit the headquarters on the same day?', a: 'Yes. It is open daily until 22:00, so an afternoon arrival at the pier still leaves time for the site and the free 19:30 Houpu night tour.' },
+    ]
+  : [
+      { q: '水头码头到金城车站公车几号？要多久？', a: '搭 7 路公车往金城车站，车程约 12–15 分钟，下车后再步行约 3 分钟到总兵署。' },
+      { q: '赶船要预留多少时间？', a: '请预留候船与通关时间；班次有限且可能受天候影响，不要只按地图车程倒推。' },
+      { q: '码头可以直接租车吗？', a: '水头旅运中心附近有电动与燃油机车租赁点。取车前先确认驾照资格、还车站点与末班船时间。' },
+      { q: '同一天还来得及参观总兵署吗？', a: '可以。总兵署每日开放至 22:00，下午抵达码头仍够安排参观，并可衔接 19:30 的免费后浦夜间导览。' },
+    ];
 ---
-<Layout title={content.transport.title} description={content.transport.intro} active="/transport/">
-  <PageHeader eyebrow={locale === 'en' ? 'Transport' : '交通'} crumb={locale === 'en' ? 'From Shuitou Pier' : '从水头码头出发'} title={content.transport.title} intro={content.transport.intro} />
+<Layout title={seo.title} description={seo.description} active="/transport/" structuredData={faqPageLd(faqs)}>
+  <PageHeader eyebrow={en ? 'Transport' : '交通'} crumb={en ? 'From Shuitou Pier' : '从水头码头出发'} title={content.transport.title} intro={content.transport.intro} />
   <div class="container-page py-12">
     <div class="grid gap-5 md:grid-cols-3">
       {content.transport.options.map(([title, text], index) => <article class="card"><div class="text-sm font-bold text-[var(--color-brick)]">0{index + 1}</div><h2 class="mt-2 text-xl">{title}</h2><p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">{text}</p></article>)}
     </div>
     <section class="mt-10 grid gap-6 rounded-2xl bg-[var(--color-paper-deep)] p-6 md:grid-cols-[1fr_auto] md:items-center">
       <div><h2 class="text-2xl">{content.transport.returnTitle}</h2><p class="mt-3 leading-7 text-[var(--color-wood-soft)]">{content.transport.returnText}</p></div>
-      <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary">{locale === 'en' ? 'Open Google Maps' : '打开 Google 地图'} ↗</a>
+      <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary">{en ? 'Open Google Maps' : '打开 Google 地图'} ↗</a>
     </section>
   </div>
+
+  <FaqBlock items={faqs} eyebrow={en ? 'Route FAQ' : '路线常见问题'} heading={en ? 'Arriving from Shuitou Pier' : '从水头码头出发的常见疑问'} id="route-faq" class="pb-16" />
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import { attraction } from '../data/site';
+import RatingBadge from './RatingBadge.astro';
 import { getLocaleFromPath, localizedAttraction } from '../i18n/config';
 
 interface Props {
@@ -26,6 +27,8 @@ const embedUrl = locale === 'en'
     <h2 class="mt-2 font-serif text-xl font-bold text-[var(--color-ink)]">{place.name}</h2>
     <p class="mt-2 text-sm text-[var(--color-wood-soft)]">{place.address}</p>
     <p class="mt-1 text-xs text-[var(--color-slate)]">{copy.mapName}</p>
+    <p class="mt-1 text-xs text-[var(--color-slate)]">Plus Code: {attraction.plusCode}</p>
+    <RatingBadge variant="inline" class="mt-3" />
   </div>
   <div class:list={['overflow-hidden border-y border-[var(--color-slate-line)] bg-[var(--color-paper-deep)]', compact ? 'aspect-square' : 'aspect-[16/9] min-h-72']}>
     <iframe
@@ -39,6 +42,10 @@ const embedUrl = locale === 'en'
   </div>
   <div class="p-5 sm:p-6">
     <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary w-full">↗ {copy.open}</a>
-    <p class="mt-3 text-center text-xs leading-5 text-[var(--color-slate)]">{copy.coordinates} {attraction.coordinates.lat}, {attraction.coordinates.lng}</p>
+    <p class="mt-3 text-center text-xs leading-5 text-[var(--color-slate)]">
+      {copy.coordinates} {attraction.coordinates.lat}, {attraction.coordinates.lng}
+      <span class="mx-1">·</span>
+      <a href={attraction.mapsShareUrl} target="_blank" rel="noopener" class="hover:text-[var(--color-brick)] hover:underline">{locale === 'en' ? 'Share link' : '分享短連結'} ↗</a>
+    </p>
   </div>
 </section>

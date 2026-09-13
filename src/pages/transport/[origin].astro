@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { faqPageLd } from '../../lib/faq';
 import { transport, attraction, nightWalk } from '../../data/site';
 
 export function getStaticPaths() {
@@ -38,8 +40,46 @@ const detail: Record<string, { steps: string[]; back: string; rental?: string }>
   },
 };
 const d = detail[t.id];
+
+// 標題直接對應實際搜尋字詞（金城車站到機場公車、金門機場到金城車站公車、水頭碼頭公車）
+const seo: Record<string, { title: string; description: string }> = {
+  'jincheng-bus-station': {
+    title: '金城車站到總兵署怎麼走｜步行 195 米約 3 分鐘',
+    description: '金城車站到清金門鎮總兵署步行約 195 米、3 分鐘，出站沿浯江街方向直走就到。含返程搭車、後浦老街順遊與 19:30 夜間導覽銜接方式。',
+  },
+  'kinmen-airport': {
+    title: '金門機場到金城車站公車怎麼搭｜3 路公車約 15–20 分鐘',
+    description: '從尚義機場到金城車站搭 3 路公車約 15–20 分鐘，下車後步行 3 分鐘到總兵署；自駕約 15 分鐘。含返程預留時間與機場租車提醒。',
+  },
+  'shuitou-pier': {
+    title: '水頭碼頭到金城車站公車怎麼搭｜7 路公車約 12–15 分鐘',
+    description: '水頭碼頭入境後搭 7 路公車約 12–15 分鐘到金城車站，再步行 3 分鐘到總兵署。含趕船時間預留、碼頭租車與末班船提醒。',
+  },
+};
+
+const faqs: Record<string, { q: string; a: string }[]> = {
+  'jincheng-bus-station': [
+    { q: '金城車站到總兵署要走多久？', a: '約 195 米、3 分鐘以內。出站沿浯江街方向走，很快就會看到總兵署的磚紅門樓。' },
+    { q: '金城車站可以搭車去機場和水頭碼頭嗎？', a: '可以。金城車站是金門西半島的公車樞紐，往尚義機場與水頭碼頭都在這裡轉乘。' },
+    { q: '晚上從金城車站還能回得了住處嗎？', a: '總兵署開放至 22:00，回程請先確認末班公車時間；夜間建議改搭計程車或自駕，並預留步行回站時間。' },
+  ],
+  'kinmen-airport': [
+    { q: '金門機場到金城車站公車幾號？要多久？', a: '搭 3 路公車往金城，車程約 15–20 分鐘；抵達金城車站後步行約 3 分鐘就是總兵署。班距依平假日與時段不同，出發前請查公車動態。' },
+    { q: '從金門機場到總兵署搭計程車要多久？', a: '車程約 15 分鐘（約 8 公里），是最省時的選擇；行李較多或帶長輩同行時建議直接搭車進金城市區。' },
+    { q: '回機場要預留多少時間？', a: '建議至少 40–60 分鐘，含還車、加油、候車與報到。不要只用地圖上的行車時間倒推，尖峰時段或假日請再多留緩衝。' },
+  ],
+  'shuitou-pier': [
+    { q: '水頭碼頭到金城車站公車幾號？要多久？', a: '搭 7 路公車往金城車站，車程約 12–15 分鐘，抵達後再步行約 3 分鐘到總兵署。' },
+    { q: '趕船要預留多少時間？', a: '請預留候車與通關時間，班次有限且會受天候影響；行程不要只按地圖車程倒推。' },
+    { q: '碼頭可以直接租車嗎？', a: '水頭旅運中心附近有電動與燃油機車租賃點，部分業者提供甲租乙還與行李接送。取車前先確認駕照資格、還車站點與末班船時間。' },
+  ],
+};
+
+const copy = seo[t.id];
+const faqItems = faqs[t.id] ?? [];
+const faqLd = faqItems.length ? faqPageLd(faqItems) : undefined;
 ---
-<Layout title={`從${t.from}出發`} description={`從${t.from}前往清金門鎮總兵署的交通路線：${t.desc}`} active="/transport/">
+<Layout title={copy.title} description={copy.description} active="/transport/" structuredData={faqLd}>
   <PageHeader eyebrow="交通路線" crumb="交通"
     title={`從${t.from}到總兵署`}
     intro={t.desc}>
@@ -87,4 +127,6 @@ const d = detail[t.id];
       </div>
     </div>
   </div>
+
+  <FaqBlock items={faqItems} eyebrow="路線常見問題" heading={`從${t.from}出發的常見疑問`} id="route-faq" class="pb-16" />
 </Layout>

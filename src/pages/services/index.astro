@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import VisitorServices from '../../components/VisitorServices.astro';
+import WeatherModule from '../../components/WeatherModule.astro';
+import { attraction } from '../../data/site';
+
+const faqs = [
+  {
+    q: '清金門鎮總兵署裡面有洗手間嗎？無障礙廁所呢？',
+    a: '有的。園區內設有公共廁所，並包含無障礙廁所，開放時間與園區相同（每日 09:00–22:00）。深夜時段請改往金城車站或 24 小時便利商店。',
+  },
+  {
+    q: '開車去總兵署要停哪裡？',
+    a: '後浦老街核心區是徒步街區，車輛無法進入。建議停在金城市區的公共平面或立體停車場、合法路邊收費車格，再步行約 3–10 分鐘入內。假日與連續假期車位容易客滿，建議提早停在外圍。',
+  },
+  {
+    q: '附近有哪些類型的餐飲與住宿？',
+    a: '餐飲類型包含中式早餐（廣東粥、鹹粥、燒餅油條）、麵食與小吃、金門風味合菜與海產、素食、豆花甜品與茶飲，以及便利商店輕食；住宿類型包含閩南古厝民宿、洋樓民宿、現代民宿、商務旅館、觀光飯店與青年旅館。本站僅描述類型，不推薦特定店家。',
+  },
+  {
+    q: '金城有加油站和充電設施嗎？',
+    a: '加油站分布於主要幹道，部分設有自助加油；電動機車可換電或充電，電動汽車充電樁多設於公有停車場。環島或前往離島前建議先加滿油；租借電動機車請先確認換電站分布與續航里程。',
+  },
+  {
+    q: '園區適合輪椅或嬰兒車嗎？',
+    a: '園區設有無障礙坡道與無障礙廁所，庭院與廊道地面大致平坦。由於是歷史建築，部分門檻與地面有高低差，輪椅與嬰兒車建議由正門主要動線進入，並由同行者協助通過門檻。',
+  },
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Layout
+  title="訪客服務與周邊設施"
+  description="清金門鎮總兵署周邊設施類型說明：洗手間與無障礙廁所、飲水、停車、餐飲、住宿、便利商店與超市、加油與充電、寄物上網、醫療與無障礙動線。非營利科普網站，僅描述類型、不推薦特定商家。"
+  active="/services/"
+  canonicalPath="/services/"
+  structuredData={structuredData}
+  breadcrumbs={[
+    { name: '首頁', path: '/' },
+    { name: '訪客服務', path: '/services/' },
+  ]}
+>
+  <PageHeader
+    eyebrow="訪客服務"
+    crumb="訪客服務"
+    title="訪客服務與周邊設施"
+    intro="抵達前最常被問到的實務問題，一次整理：洗手間、飲水、停車、餐飲、住宿、便利商店與超市、加油與充電、寄物與上網、醫療協助，以及無障礙與親子動線。"
+  >
+    <div class="mt-5 flex flex-wrap gap-2 text-sm">
+      <a href="#weather" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">即時天氣</a>
+      <a href="#services" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">設施類型總覽</a>
+      <a href="#faq" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">常見問題</a>
+    </div>
+    <p class="mt-4 max-w-3xl text-xs leading-6 text-[var(--color-slate)]">
+      本站為非營利景點科普網站。以下僅描述設施與服務「類型」與通行動線，不對任何特定店家、品牌或業者作出推薦、排名、代言或導購。
+    </p>
+  </PageHeader>
+
+  <WeatherModule
+    id="weather"
+    variant="compact"
+    class="pt-12"
+    heading="出門前先看天氣：金城後浦即時狀況"
+  />
+
+  <VisitorServices id="services" class="pt-14" />
+
+  <section class="container-page pt-14" aria-labelledby="services-faq-title">
+    <p class="eyebrow">常見問題</p>
+    <h2 id="services-faq-title" class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+      訪客服務常見問題
+    </h2>
+    <div class="mt-6 max-w-3xl divide-y divide-[var(--color-slate-line)]">
+      {faqs.map((item) => (
+        <details class="group py-4" open={false}>
+          <summary class="cursor-pointer list-none font-semibold text-[var(--color-wood)] marker:content-none">
+            <span class="flex items-start gap-3">
+              <span class="mt-0.5 text-[var(--color-brick)]" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-open:rotate-90" />
+                </svg>
+              </span>
+              <span>{item.q}</span>
+            </span>
+          </summary>
+          <p class="mt-2 pl-7 text-sm leading-7 text-[var(--color-wood-soft)]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page pt-14" aria-labelledby="services-note-title">
+    <div class="rounded-2xl border border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] px-6 py-6">
+      <h2 id="services-note-title" class="font-serif text-lg text-[var(--color-wood)]">
+        設施資訊的使用方式
+      </h2>
+      <ul class="mt-3 space-y-2 text-sm leading-7 text-[var(--color-wood-soft)]">
+        <li>· 以上為通則性描述，實際營業時間、價格與服務內容由各場所自行決定，可能隨時調整。</li>
+        <li>· 緊急狀況請優先聯繫現場服務人員；緊急電話 119（消防救護）、110（警察）、112（行動電話緊急號碼）。</li>
+        <li>· 景點本身免費參觀，開放時間為每日 {attraction.openingHours.opens}–{attraction.openingHours.closes}，地址：{attraction.address}。</li>
+        <li>· 若你發現設施資訊已變更，歡迎透過<a class="underline underline-offset-2 text-[var(--color-brick)]" href="/corrections/">糾錯頁</a>回報，我們會重新核實。</li>
+      </ul>
+    </div>
+  </section>
+</Layout>

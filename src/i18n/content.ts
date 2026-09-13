@@ -28,6 +28,7 @@ export const localizedContent = {
     facts: [
       ['开放时间', shared.hours], ['门票', '免费'], ['建议停留', '30–60 分钟'],
       ['最近交通', '金城站步行约 3 分钟'], ['夜间导览', '19:30 现场报名'],
+      ['Google 评分', '4.4 ★（6,212 则）'],
     ],
     rooms: [
       { id: 'main-gate', num: '01', name: '头门', minutes: 3, image: 'main-gate.jpg', summary: '总兵署正面门楼，是参观起点与第一处定位地标。', see: ['门楼轮廓', '门额', '砖红外墙'] },
@@ -93,6 +94,7 @@ export const localizedContent = {
     facts: [
       ['Opening hours', shared.hours], ['Admission', shared.admission], ['Suggested visit', '30–60 minutes'],
       ['Nearest transport', '3-minute walk from Jincheng Bus Station'], ['Evening walk', 'Register at 19:30'],
+      ['Google rating', '4.4 ★ (6,212)'],
     ],
     rooms: [
       { id: 'main-gate', num: '01', name: 'Main Gate', minutes: 3, image: 'main-gate.jpg', summary: 'The front gate and the clearest landmark for starting your visit.', see: ['Gate façade', 'Name plaque', 'Brick-red walls'] },

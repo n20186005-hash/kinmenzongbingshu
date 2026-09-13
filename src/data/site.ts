@@ -10,21 +10,56 @@ export const site = {
   domain: 'kinmenzongbingshu.com',
   tagline: '到訪前知道怎麼安排，進入後知道怎麼看。',
   verifiedAt: '2026-07-20',
+  googleReviewedAt: '2026-09-13',
 };
 
+// 單景點 SEO 實體綁定配置（對應需求中的變數表）
+// DOMAIN_NAME / ATTRACTION_FULL_NAME / CITY_NAME / STATE_PROVINCE / COUNTRY_NAME /
+// COUNTRY_CODE_2LETTER / POSTAL_CODE / LATITUDE / LONGITUDE / MAPS_SHARE_URL /
+// MAPS_EMBED_SRC / NEARBY_LANDMARK_1 / NEARBY_LANDMARK_2 / GOVT_TOURISM_URL
 export const attraction = {
+  domainName: 'kinmenzongbingshu.com',
   name: '清金門鎮總兵署',
+  nameFull: '清金門鎮總兵署（浯江新莊）',
   nameEn: 'Kinmen Military Headquarters of the Qing Dynasty',
-  aliases: ['金門總兵署', '金門鎮總兵署', '浯江新莊'],
-  address: '金門縣金城鎮浯江街53號',
+  googleNameEn: 'Troops Headquarters',
+  aliases: ['金門總兵署', '金門鎮總兵署', '浯江新莊', '浯江新庄', 'Kinmen Zong Bing Shu', 'Troops Headquarters'],
+  address: '金門縣金城鎮北門里浯江街53號',
+  addressLocality: '金城鎮',
+  addressRegion: '金門縣',
+  addressCountry: 'TW',
+  postalCode: '893',
+  plusCode: 'C8J9+W9 Beimen Village',
   coordinates: { lat: 24.432258, lng: 118.3183799 },
+  // Google Maps 分享短連結（MAPS_SHARE_URL）
+  mapsShareUrl: 'https://maps.app.goo.gl/tHLfKByzmUA8UU1o8',
   googleMapsUrl: 'https://www.google.com/maps/place/%E6%B8%85%E9%87%91%E9%97%A8%E9%95%87%E6%80%BB%E5%85%B5%E7%BD%B2%EF%BC%88%E6%B5%AF%E6%B1%9F%E6%96%B0%E5%BA%84%EF%BC%89/@24.432258,118.3183799,17z/data=!3m1!4b1!4m6!3m5!1s0x3414a26be6328a4b:0xac746e7a9b378777!8m2!3d24.432258!4d118.3183799!16s%2Fm%2F010prc7g?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D',
+  // Google Maps 嵌入代碼（MAPS_EMBED_SRC）
   googleMapsEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3632.5338212660386!2d118.3183799!3d24.432258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3414a26be6328a4b%3A0xac746e7a9b378777!2z5riF6YeR6Zeo6ZWH5oC75YW1572y77yI5rWv5rGf5paw5bqE77yJ!5e0!3m2!1szh-CN!2stw!4v1784544987453!5m2!1szh-CN!2stw',
+  // 附近核心地標（NEARBY_LANDMARK_1 / NEARBY_LANDMARK_2）
+  nearbyLandmarks: ['模範街', '邱良功母節孝坊'],
+  nearbyLandmarksEn: ['Mofan Street', 'Qiu Liang-gong’s Mother Chastity Arch'],
+  // 官方旅遊局連結（GOVT_TOURISM_URL）
+  govtTourismUrl: 'https://kinmen.travel/zh-tw/Travel/Attraction/393',
+  govtTourismUrlEn: 'https://kinmen.travel/en/travel/attraction/1271',
   admission: '免費',
   openingHours: { opens: '09:00', closes: '22:00' },
   suggestedMinutes: '30–60 分鐘',
   phone: '082-371717',
+  phoneInternational: '+886 82 371 717',
   builtNote: '明代許獬故宅「叢青軒」，清康熙二十一年（1682）由總兵陳龍改建為官署。',
+};
+
+// Google 評分／評論（最新一次核實，頁面須註明來源）
+export const googleRating = {
+  value: 4.4,
+  count: 6212,
+  best: 5,
+  worst: 1,
+  source: 'Google 地圖',
+  sourceEn: 'Google Maps',
+  sourceUrl: 'https://maps.app.goo.gl/tHLfKByzmUA8UU1o8',
+  reviewedAt: '2026-09-13',
 };
 
 // 現場夜遊（後浦美麗小鎮之旅）
@@ -41,6 +76,7 @@ export const quickFacts = [
   { label: '建議停留', value: '30–60 分鐘', tag: 'onsite' },
   { label: '最近交通', value: '金城站步行約 195 米', tag: 'official' },
   { label: '夜間導覽', value: '19:30 現場報名', tag: 'check' },
+  { label: 'Google 評分', value: '4.4 ★（6,212 則）', tag: 'check' },
 ] as const;
 
 // 主導航
@@ -139,6 +175,17 @@ export const faqs = [
   { q: '木棉花什麼時候開？', a: '後院木棉一般在春季（約 3–4 月）開花，花期時是全署最上鏡的角落。' },
   { q: '有廁所和無障礙設施嗎？', a: '署內設有公共廁所；主要庭院為平地，多數區域可無障礙通行，部分老建築門檻請留意。' },
   { q: '總兵署和模範街怎麼一起安排？', a: '兩地步行約幾分鐘即達。可先參觀總兵署，再步行經浯江書院、邱良功母節孝坊前往模範街，構成金城後浦半日遊。' },
+];
+
+// 交通類長尾問題（對應「金城車站到機場公車」「金門機場到金城車站公車」「金門電動車免駕照」等搜尋）
+export const transportFaqs = [
+  { q: '金城車站到總兵署要走多久？', a: '出站後步行約 195 米、3 分鐘以內。沿浯江街方向走，很快就能看到總兵署的磚紅門樓。' },
+  { q: '金城車站到機場公車怎麼搭？', a: '在金城車站搭乘往尚義機場方向的公車（3 路），車程約 15–20 分鐘。趕飛機請另外加上候車、還車與報到時間。' },
+  { q: '金門機場到金城車站公車幾號？要多久？', a: '從尚義機場搭 3 路公車往金城，車程約 15–20 分鐘；抵達金城車站後步行約 3 分鐘就是總兵署。班距依平假日與時段不同，出發前請查金門公車動態。' },
+  { q: '水頭碼頭到金城車站怎麼走？', a: '搭 7 路公車往金城車站，車程約 12–15 分鐘，再步行約 3 分鐘到總兵署；也可在碼頭搭計程車直達金城市區。' },
+  { q: '金門電動車免駕照嗎？', a: '只有「微型電動二輪車」免機車駕照，但仍須年滿 14 歲、完成實名登記與強制險、全程配戴合格安全帽、最高時速 25 公里且不得載人。一般電動機車與燃油機車仍需要相應駕照。' },
+  { q: '可以騎車直接騎到總兵署門口嗎？', a: '建議不要。後浦老城區巷弄狹窄，請把車輛停在金城市區的合法車格或公有停車場，再步行進入。' },
+  { q: '公車時刻表要去哪裡查？', a: '班次與時刻會因平假日、季節與臨時調整而變動，請以金門縣公車動態資訊的即時資料為準，本站不提供固定時刻表。' },
 ];
 
 // 總兵署附近美食（後浦老城區，步行約 1–6 分鐘）

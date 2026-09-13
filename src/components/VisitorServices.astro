@@ -1,0 +1,260 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'full', class: className = '', id = 'services' } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+/** 設施類型圖示（線性 SVG，不使用表情符號） */
+const ICONS: Record<string, string> = {
+  wc: '<path d="M7 4.5a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM16.6 4.5a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2z" fill="currentColor"/><path d="M7 9v4.4M7 13.4 5.4 20M7 13.4 8.6 20M7 9h0M16.6 9v11M14.8 9h3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>',
+  water:
+    '<path d="M12 3.2s5.4 6.1 5.4 9.8A5.4 5.4 0 0 1 12 18.4a5.4 5.4 0 0 1-5.4-5.4C6.6 9.3 12 3.2 12 3.2z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M9.4 13.2a2.6 2.6 0 0 0 2.6 2.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
+  parking:
+    '<rect x="3.4" y="3.4" width="17.2" height="17.2" rx="4" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M9.6 16.6V7.8h3.2a2.7 2.7 0 0 1 0 5.4H9.6" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  food:
+    '<path d="M6.4 3.6v7.2a2 2 0 0 0 4 0V3.6M8.4 10.8v9.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none"/><path d="M16.4 3.6c-1.4 1.6-2 3.2-2 5s.6 3.2 2 4.4v7.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none"/>',
+  bed:
+    '<path d="M3.6 18.4v-8.2h13.2a3.6 3.6 0 0 1 3.6 3.6v4.6M3.6 14.4h16.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M7 10.2V7.4a1.6 1.6 0 0 1 1.6-1.6h2a1.6 1.6 0 0 1 1.6 1.6v2.8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/>',
+  store:
+    '<path d="M4.2 9.4 5.4 4.6h13.2l1.2 4.8M4.2 9.4h15.6v9.8H4.2z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M9.4 19.2v-5.4h5.2v5.4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/>',
+  fuel:
+    '<path d="M5.4 19.6V5.4A1.8 1.8 0 0 1 7.2 3.6h5.2a1.8 1.8 0 0 1 1.8 1.8v14.2M4 19.6h11.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M7 7h5.6v4H7z" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M14.2 7.6h2.2l2 2v6.6a1.6 1.6 0 0 1-3.2 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/>',
+  luggage:
+    '<rect x="4.6" y="7.6" width="14.8" height="11.2" rx="2.4" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M9.4 7.6V5.4a1.4 1.4 0 0 1 1.4-1.4h2.4a1.4 1.4 0 0 1 1.4 1.4v2.2M10 11.4v4M14 11.4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
+  medical:
+    '<rect x="3.6" y="6.4" width="16.8" height="12.4" rx="2.6" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M12 9.6v6M9 12.6h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>',
+  access:
+    '<circle cx="12" cy="4.8" r="2" fill="currentColor"/><path d="M6.4 8.6h11.2M12 8.6v5.2M12 13.8l-3 6.2M12 13.8l3 6.2M9 11.4h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>',
+};
+
+interface ServiceItem {
+  key: string;
+  title: string;
+  types: string[];
+  note: string;
+}
+
+const items: ServiceItem[] = [
+  {
+    key: 'wc',
+    title: t('洗手間與無障礙廁所', '洗手间与无障碍厕所', 'Toilets and accessible WCs'),
+    types: [
+      t('古蹟園區內附設公共廁所（含無障礙廁所）', '古迹园区内附设公共厕所（含无障碍厕所）', 'Public toilets inside the heritage compound, including an accessible one'),
+      t('金城車站、遊客服務中心、便利商店', '金城车站、游客服务中心、便利商店', 'Jincheng bus station, visitor service centres, convenience stores'),
+      t('連鎖速食與百貨商場內廁所', '连锁速食与百货商场内厕所', 'Restaurants and shopping arcades with public facilities'),
+    ],
+    note: t(
+      '古蹟內廁所通常配合開放時間 09:00–22:00，深夜時段請改往便利商店或車站。',
+      '古迹内厕所通常配合开放时间 09:00–22:00，深夜请改往便利商店或车站。',
+      'On-site toilets follow the 09:00–22:00 opening hours; late at night use a convenience store or the bus station.',
+    ),
+  },
+  {
+    key: 'water',
+    title: t('飲水與休息', '饮水与休息', 'Drinking water and rest'),
+    types: [
+      t('園區飲水機與公共開飲設備', '园区饮水机与公共开水设备', 'Water dispensers in the compound and public buildings'),
+      t('廊道、庭院與樹蔭下的座椅', '廊道、庭院与树荫下的座椅', 'Seating along the corridors, courtyards and shade trees'),
+      t('車站、圖書館等公共空間的休息區', '车站、图书馆等公共空间的休息区', 'Rest areas in the bus station, library and other public buildings'),
+    ],
+    note: t(
+      '金門夏季日照強、體感悶熱，建議自備水壺並每小時補水；冬季東北季風強，庭院風大請留意保暖。',
+      '金门夏季日照强、体感闷热，建议自备水壶并每小时补水；冬季东北季风强，庭院风大请留意保暖。',
+      'Summers are hot and humid — carry a bottle and drink hourly. Winter brings a strong northeast monsoon, so keep a windproof layer for the courtyards.',
+    ),
+  },
+  {
+    key: 'parking',
+    title: t('停車與交通接駁', '停车与交通接驳', 'Parking and transfers'),
+    types: [
+      t('路邊收費汽車停車格', '路边收费汽车停车格', 'On-street metered car spaces'),
+      t('公共平面／立體停車場（步行約 3–10 分鐘）', '公共平面／立体停车场（步行约 3–10 分钟）', 'Public surface or multi-storey car parks, a 3–10 minute walk away'),
+      t('機車停車格、遊覽車臨停下客區', '机车停车格、游览车临停下客区', 'Scooter bays and coach drop-off areas'),
+      t('公車路線與計程車招呼站', '公车路线与计程车招呼站', 'Bus routes and taxi ranks'),
+    ],
+    note: t(
+      '後浦老街核心區為徒步街區，車輛無法進入；假日與連續假期車位易滿，建議停外圍停車場再步行入內。',
+      '后浦老街核心区为徒步街区，车辆无法进入；假日与连续假期车位易满，建议停外围停车场再步行入内。',
+      'The historic core is pedestrianised and closed to vehicles. Spaces fill up on weekends and public holidays — park on the edge of town and walk in.',
+    ),
+  },
+  {
+    key: 'food',
+    title: t('餐飲', '餐饮', 'Where to eat'),
+    types: [
+      t('中式早餐類型：廣東粥、鹹粥、燒餅油條', '中式早餐类型：广东粥、咸粥、烧饼油条', 'Chinese breakfast types: congee, savoury rice porridge, flatbread with fried dough'),
+      t('麵食與小吃類型：麵店、蚵仔煎、炸物小吃', '面食与小吃类型：面店、蚵仔煎、炸物小吃', 'Noodle shops, oyster omelette and fried snack stalls'),
+      t('金門風味合菜與海產餐廳', '金门风味合菜与海产餐厅', 'Kinmen-style shared-plate restaurants and seafood dining'),
+      t('素食、豆花甜品、冰品與茶飲店', '素食、豆花甜品、冰品与茶饮店', 'Vegetarian kitchens, tofu-pudding dessert, shaved ice and tea shops'),
+      t('便利商店輕食與超市熟食', '便利商店轻食与超市熟食', 'Convenience-store light meals and supermarket deli counters'),
+    ],
+    note: t(
+      '老街店家多為小型家族經營，營業時段集中在中午與傍晚，部分店家每週固定公休。本頁僅描述餐飲類型，不推薦特定店家。',
+      '老街店家多为小型家族经营，营业时段集中在中午与傍晚，部分店家每周固定公休。本页仅描述餐饮类型，不推荐特定店家。',
+      'Most places are small family businesses open around midday and early evening, with a weekly rest day. We describe categories only and never endorse a particular shop.',
+    ),
+  },
+  {
+    key: 'bed',
+    title: t('住宿', '住宿', 'Where to stay'),
+    types: [
+      t('閩南古厝民宿（傳統合院改建）', '闽南古厝民宿（传统合院改建）', 'Minnan courtyard homestays in restored traditional houses'),
+      t('洋樓與現代民宿', '洋楼与现代民宿', 'Western-style arcade houses and modern homestays'),
+      t('商務旅館與觀光飯店', '商务旅馆与观光饭店', 'Business hotels and tourist hotels'),
+      t('青年旅館與背包客棧床位', '青年旅馆与背包客栈床位', 'Hostels and backpacker dorm beds'),
+    ],
+    note: t(
+      '金門住宿以民宿為大宗，多位於聚落內且房間數少。旺季（4–6 月、10 月）與連續假期建議提前數週預訂。',
+      '金门住宿以民宿为大宗，多位于聚落内且房间数少。旺季（4–6 月、10 月）与连续假期建议提前数周预订。',
+      'Small-scale homestays dominate, many inside historic villages with only a few rooms. Book weeks ahead for peak season (April–June, October) and long weekends.',
+    ),
+  },
+  {
+    key: 'store',
+    title: t('便利商店與超市', '便利商店与超市', 'Convenience stores and supermarkets'),
+    types: [
+      t('連鎖便利商店（24 小時）', '连锁便利商店（24 小时）', 'Chain convenience stores, many open 24 hours'),
+      t('地區超市與生鮮超市', '地区超市与生鲜超市', 'Local and fresh-produce supermarkets'),
+      t('伴手禮專賣店（貢糖、麵線、高粱酒類）', '伴手礼专卖店（贡糖、面线、高粱酒类）', 'Souvenir shops for peanut brittle, thin noodles and kaoliang liquor'),
+      t('藥局、生活用品五金行', '药局、生活用品五金行', 'Pharmacies and household hardware stores'),
+    ],
+    note: t(
+      '老街內多為小型商店，大型超市與量販店集中於主要聯外道路沿線。',
+      '老街内多为小型商店，大型超市与量贩店集中于主要联外道路沿线。',
+      'Shops inside the old street are small; larger supermarkets sit along the main roads out of town.',
+    ),
+  },
+  {
+    key: 'fuel',
+    title: t('加油與充電', '加油与充电', 'Fuel and charging'),
+    types: [
+      t('加油站（汽油、柴油，部分為自助加油）', '加油站（汽油、柴油，部分为自助加油）', 'Petrol and diesel stations, some with self-service pumps'),
+      t('電動機車換電站與充電樁', '电动机车换电站与充电桩', 'Battery-swap stations and charging posts for electric scooters'),
+      t('電動汽車充電樁（公有停車場內）', '电动汽车充电桩（公有停车场内）', 'EV chargers inside public car parks'),
+      t('機車租借行（含電動機車）', '机车租借行（含电动机车）', 'Scooter rental shops, including electric models'),
+    ],
+    note: t(
+      '加油站分布於主要幹道，環島或前往離島前請先加滿油。租借電動機車時，請先確認換電站分布與續航里程。',
+      '加油站分布于主要干道，环岛或前往离岛前请先加满油。租借电动机车时，请先确认换电站分布与续航里程。',
+      'Fuel stations sit on the main highways — fill up before circling the island. If you rent an electric scooter, check the swap-station map and range first.',
+    ),
+  },
+  {
+    key: 'luggage',
+    title: t('寄物、上網與充電', '寄物、上网与充电', 'Luggage, Wi-Fi and power'),
+    types: [
+      t('車站與遊客服務中心寄物櫃／人工寄物', '车站与游客服务中心寄物柜／人工寄物', 'Lockers or staffed left luggage at the bus station and visitor centre'),
+      t('公共免費 Wi-Fi（公部門熱點）', '公共免费 Wi-Fi（公部门热点）', 'Public free Wi-Fi hotspots run by government venues'),
+      t('行動網路覆蓋（市區與主要景點良好）', '行动网路覆盖（市区与主要景点良好）', 'Mobile coverage is good in town and at major sights'),
+      t('插座與行動電源租借服務', '插座与行动电源租借服务', 'Power sockets and power-bank rental services'),
+    ],
+    note: t(
+      '園區插座以工作人員使用為主，遊客充電請以車站、便利商店或咖啡店等公共空間為優先。',
+      '园区插座以工作人员使用为主，游客充电请以车站、便利商店或咖啡店等公共空间为优先。',
+      'On-site sockets are for staff use; charge devices at the bus station, convenience stores or cafés instead.',
+    ),
+  },
+  {
+    key: 'medical',
+    title: t('醫療與緊急協助', '医疗与紧急协助', 'Medical care and emergencies'),
+    types: [
+      t('基層診所與藥局', '基层诊所与药局', 'Local clinics and pharmacies'),
+      t('衛生所與地區醫院（急診 24 小時）', '卫生所与地区医院（急诊 24 小时）', 'Public health centres and the regional hospital with 24-hour emergency care'),
+      t('緊急電話：119 消防救護、110 警察、112 行動電話緊急號碼', '紧急电话：119 消防救护、110 警察、112 行动电话紧急号码', 'Emergency numbers: 119 ambulance/fire, 110 police, 112 from a mobile phone'),
+    ],
+    note: t(
+      '離島醫療資源有限，慢性病用藥與個人常備藥請自備；突發重症可能需要後送台灣本島。',
+      '离岛医疗资源有限，慢性病用药与个人常备药请自备；突发重症可能需要后送台湾本岛。',
+      'Island medical resources are limited — bring your own medication. Serious cases may require transfer to mainland Taiwan.',
+    ),
+  },
+  {
+    key: 'access',
+    title: t('無障礙與親子設施', '无障碍与亲子设施', 'Accessibility and family facilities'),
+    types: [
+      t('無障礙坡道與無障礙廁所', '无障碍坡道与无障碍厕所', 'Access ramps and accessible toilets'),
+      t('平坦可推車的庭院與廊道動線', '平坦可推车的庭院与廊道动线', 'Level courtyards and corridors suitable for strollers'),
+      t('遊客中心哺乳室與親子休息空間', '游客中心哺乳室与亲子休息空间', 'Nursing rooms and family rest areas at the visitor centre'),
+    ],
+    note: t(
+      '古蹟為歷史建築，部分門檻與地面高低差不平；輪椅與嬰兒車建議由正門主要動線進入，並請同行者協助。',
+      '古迹为历史建筑，部分门槛与地面高低差不平；轮椅与婴儿车建议由正门主动线进入，并请同行者协助。',
+      'As a historic building, some thresholds and floors are uneven. Wheelchairs and strollers should use the main entrance route with a companion’s help.',
+    ),
+  },
+];
+
+const shown = variant === 'compact' ? items.slice(0, 6) : items;
+const servicesHref = localizedPath(locale, '/services/');
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <div class="flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="eyebrow">{t('訪客服務', '访客服务', 'Visitor services')}</p>
+      <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+        {t('訪客服務與周邊設施', '访客服务与周边设施', 'Visitor services and nearby facilities')}
+      </h2>
+    </div>
+    {variant === 'compact' && (
+      <a class="btn btn-secondary text-sm" href={servicesHref}>
+        {t('查看完整設施說明', '查看完整设施说明', 'See all facility details')}
+      </a>
+    )}
+  </div>
+
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '以下依「設施類型」整理遊客最常詢問的資訊：洗手間、飲水、停車、餐飲、住宿、便利商店與超市、加油與充電、寄物上網、醫療與無障礙設施。內容為通則描述，不涉及特定商家的推薦或排名。',
+      '以下依「设施类型」整理游客最常询问的资讯：洗手间、饮水、停车、餐饮、住宿、便利商店与超市、加油与充电、寄物上网、医疗与无障碍设施。内容为通则描述，不涉及特定商家的推荐或排名。',
+      'The information below is organised by facility type and covers what visitors ask about most: toilets, drinking water, parking, food, lodging, shops, fuel and charging, luggage and connectivity, medical care and accessibility. It describes categories only — no specific business is recommended or ranked.',
+    )}
+  </p>
+
+  <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    {shown.map((item) => (
+      <article class="card flex h-full flex-col">
+        <div class="flex items-center gap-3">
+          <span class="inline-grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-paper-deep)] text-[var(--color-brick)]" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" set:html={ICONS[item.key]} />
+          </span>
+          <h3 class="font-serif text-lg leading-6 text-[var(--color-wood)]">{item.title}</h3>
+        </div>
+        <ul class="mt-4 space-y-2 text-sm leading-6 text-[var(--color-wood-soft)]">
+          {item.types.map((type) => (
+            <li class="flex gap-2">
+              <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-kapok)]" aria-hidden="true" />
+              <span>{type}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-4 rounded-xl bg-[var(--color-paper-deep)] px-4 py-3 text-xs leading-6 text-[var(--color-wood-soft)]">
+          {item.note}
+        </p>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] px-5 py-4">
+    <p class="text-xs leading-6 text-[var(--color-wood-soft)]">
+      <strong class="text-[var(--color-wood)]">{t('編輯中立聲明', '编辑中立声明', 'Editorial neutrality')}</strong>
+      {' '}
+      {t(
+        '本站為非營利景點科普網站，僅描述設施與服務「類型」與通則動線，不對任何特定店家、品牌或業者作出推薦、排名、代言或導購。營業時間、價格、庫存與服務內容可能變動，請以現場公告與官方資訊為準。',
+        '本站为非营利景点科普网站，仅描述设施与服务「类型」与通则动线，不对任何特定店家、品牌或业者作出推荐、排名、代言或导购。营业时间、价格、库存与服务内容可能变动，请以现场公告与官方资讯为准。',
+        'This is a non-profit educational site. It describes facility and service categories and general wayfinding only, and does not recommend, rank, endorse or sell on behalf of any specific business or brand. Hours, prices, stock and service details change — always check on-site notices and official information.',
+      )}
+    </p>
+  </div>
+</section>

@@ -259,6 +259,26 @@ const zhHans: LocalizedFullPage[] = [
       { title: '到总兵署后', text: '在金城市区合法停车，再改用步行游览后浦，避免骑入狭窄巷道寻找最近位置。' },
     ], links: [['停车指南', '/scooter-parking/'], ['交通总览', '/transport/']],
   },
+  {
+    path: '/services/', title: '访客服务与周边设施', eyebrow: '访客服务', image: 'courtyard.jpg',
+    description: '金门总兵署周边的洗手间、饮水、停车、餐饮、住宿、便利商店与超市、加油与充电、寄物上网、医疗与无障碍设施类型说明，保持中立、不推荐特定商家。',
+    intro: '按「设施类型」整理游客最常询问的资讯。本站为非营利景点科普网站，只描述类型与通行动线，不推荐、不排名、不代言任何特定商家。',
+    facts: [['园区洗手间', '公共厕所与无障碍厕所'], ['停车', '市区公共停车场，步行 3–10 分钟'], ['饮水', '园区饮水机与公共开水设备'], ['紧急电话', '119 消防救护、110 警察、112']],
+    sections: [
+      { title: '洗手间与无障碍厕所', text: '园区内设有公共厕所（含无障碍厕所），开放时间与园区一致，为每日 09:00–22:00。深夜时段请改用便利商店或金城车站等 24 小时空间。' },
+      { title: '饮水与休息', text: '园区饮水机与公共开水设备可补充水壶；庭院与廊道周边有座椅与树荫。金门夏季闷热、冬季东北季风强，建议夏季每小时补水、冬季备防风外套。' },
+      { title: '停车与接驳（类型说明）', text: '后浦老街核心为徒步街区，车辆无法进入。市区公共停车场与合法路边车格步行约 3–10 分钟可达。假日与连续假期车位易满，建议停外围再步行入内。', bullets: ['汽车：公共平面或立体停车场、合法路边收费车格', '机车：合法机车停车格', '游览车：指定临停下客区', '公共交通：公车路线与计程车招呼站'] },
+      { title: '餐饮类型（不指定店家）', text: '老街店家多为小型家族经营，类型包括中式早餐（广东粥、咸粥、烧饼油条）、面食与小吃、金门风味合菜与海产、素食、豆花甜品与茶饮，以及便利商店轻食。营业时段集中在中午与傍晚，部分店家每周固定公休。' },
+      { title: '住宿类型', text: '金门住宿以民宿为大宗，包括闽南古厝民宿、洋楼民宿与现代民宿，另有商务旅馆、观光饭店与青年旅馆床位。聚落内民宿房间数少，旺季（4–6 月、10 月）与连续假期建议提前数周预订。' },
+      { title: '便利商店、超市与伴手礼', text: '连锁便利商店多 24 小时营业；地区超市与生鲜超市集中在主要联外道路沿线；伴手礼类型以贡糖、面线、高粱酒类为主；另有药局与生活五金行。' },
+      { title: '加油、充电与车辆租借', text: '加油站分布于主要干道，部分为自助加油；电动机车可换电或充电，电动汽车充电桩多设于公有停车场；市区另有汽机车租借行。环岛或前往离岛前请先加满油，租借电动机车请先确认换电站分布与续航。' },
+      { title: '寄物、上网与充电', text: '金城车站与游客服务中心提供寄物柜或人工寄物；公共空间有免费 Wi-Fi 热点；行动网路在市区与主要景点覆盖良好。园区插座以工作人员使用为主，游客充电请以车站、便利商店或咖啡店等公共空间为主。' },
+      { title: '医疗与紧急协助', text: '市区有基层诊所与药局，另有卫生所与地区医院提供 24 小时急诊。离岛医疗资源有限，慢性病用药与个人常备药请自备。紧急电话：119（消防救护）、110（警察）、112（行动电话紧急号码）。' },
+      { title: '无障碍与亲子设施', text: '园区设有无障碍坡道与无障碍厕所，庭院与廊道地面大致平坦；游客中心有哺乳室与亲子休息空间。古蹟部分门槛与地面有高低差，轮椅与婴儿车建议由正门主要动线进入，并由同行者协助通过门槛。' },
+      { title: '编辑中立声明', text: '本站为非营利景点科普网站，仅描述设施与服务「类型」与通行动线，不对任何特定店家、品牌或业者作出推荐、排名、代言或导购。营业时间、价格、库存与服务内容可能变动，请以现场公告与官方资讯为准。' },
+    ],
+    links: [['参观资讯与路线', '/visit/'], ['交通总览', '/transport/'], ['停车指南', '/scooter-parking/']],
+  },
 ];
 
 const en: LocalizedFullPage[] = [
@@ -495,6 +515,26 @@ const en: LocalizedFullPage[] = [
       { title: 'Shared vehicles', text: 'Rent and return only within the operator’s service area or stations. Check parking zones, battery level and pricing in the app.' },
       { title: 'At the headquarters', text: 'Park legally in central Jincheng and explore Houpu on foot instead of riding through narrow lanes.' },
     ], links: [['Parking guide', '/scooter-parking/'], ['Transport overview', '/transport/']],
+  },
+  {
+    path: '/services/', title: 'Visitor services and nearby facilities', eyebrow: 'Visitor services', image: 'courtyard.jpg',
+    description: 'Facility types near the Kinmen Military Headquarters: toilets, drinking water, parking, food, lodging, shops and supermarkets, fuel and charging, luggage and connectivity, medical care and accessibility — described neutrally.',
+    intro: 'Information is organised by facility type and covers what visitors ask about most. This is a non-profit educational site: we describe categories and general wayfinding only, and never recommend, rank or endorse a specific business.',
+    facts: [['On-site toilets', 'Public and accessible WCs'], ['Parking', 'Public car parks, 3–10 min on foot'], ['Drinking water', 'Dispensers in the compound'], ['Emergency', '119 fire/ambulance, 110 police, 112']],
+    sections: [
+      { title: 'Toilets and accessible WCs', text: 'Public toilets, including an accessible WC, are located inside the compound and follow the 09:00–22:00 opening hours. Late at night use a convenience store or Jincheng bus station, which stay open around the clock.' },
+      { title: 'Drinking water and rest', text: 'Water dispensers and public drinking-water equipment let you refill a bottle, and there is seating and shade around the courtyards and corridors. Summers are hot and humid while winters bring a strong northeast monsoon — drink hourly in summer and pack a windproof layer for winter.' },
+      { title: 'Parking and transfers (by type)', text: 'The historic core of Houpu is pedestrianised and closed to vehicles. Public car parks and legal roadside bays are a 3–10 minute walk away. Spaces fill quickly at weekends and on long weekends, so park on the edge of town and walk in.', bullets: ['Cars: public surface or multi-storey car parks, legal metered roadside bays', 'Scooters: legal scooter bays only', 'Coaches: designated drop-off areas', 'Public transport: bus routes and taxi ranks'] },
+      { title: 'Food by category (no specific shops)', text: 'Old-street kitchens are mostly small family businesses: Chinese breakfast types such as congee and flatbread with fried dough, noodle and snack shops, Kinmen-style shared-plate and seafood restaurants, vegetarian kitchens, tofu-pudding desserts and tea shops, plus convenience-store light meals. Trading concentrates around midday and early evening, and many places take a weekly rest day.' },
+      { title: 'Lodging by category', text: 'Homestays dominate: Minnan courtyard houses, arcade houses and modern homestays, alongside business hotels, tourist hotels and hostel dorm beds. Village homestays have only a few rooms, so book weeks ahead for peak season (April–June, October) and long weekends.' },
+      { title: 'Convenience stores, supermarkets and souvenirs', text: 'Chain convenience stores mostly run 24 hours; local and fresh-produce supermarkets sit along the main roads out of town; souvenir categories are peanut brittle, thin noodles and kaoliang liquor, with pharmacies and household hardware stores also available.' },
+      { title: 'Fuel, charging and vehicle rental', text: 'Petrol stations sit on the main highways, some with self-service pumps. Electric scooters can swap batteries or charge, and EV chargers are mostly inside public car parks; car and scooter rental shops operate in central Jincheng. Fill up before circling the island, and check battery-swap coverage and range before renting electric.' },
+      { title: 'Luggage, connectivity and power', text: 'Jincheng bus station and the visitor centre offer lockers or staffed left luggage; free public Wi-Fi hotspots are available; mobile coverage is good in town and at major sights. On-site sockets are for staff, so charge devices at the bus station, convenience stores or cafés.' },
+      { title: 'Medical care and emergencies', text: 'Local clinics and pharmacies serve central Jincheng, with public health centres and the regional hospital providing 24-hour emergency care. Island medical resources are limited, so bring your own medication. Emergency numbers: 119 (fire and ambulance), 110 (police), 112 (from a mobile phone).' },
+      { title: 'Accessibility and family facilities', text: 'The compound has access ramps and an accessible WC, and the courtyards and corridors are broadly level; the visitor centre offers a nursing room and family rest area. As a historic building, some thresholds and floors are uneven — wheelchairs and strollers should use the main entrance route with a companion’s help.' },
+      { title: 'Editorial neutrality', text: 'This is a non-profit educational site. It describes facility and service categories and general wayfinding only, and does not recommend, rank, endorse or sell on behalf of any specific business or brand. Hours, prices, stock and service details change — always check on-site notices and official information.' },
+    ],
+    links: [['Visit information and routes', '/visit/'], ['Transport overview', '/transport/'], ['Parking guide', '/scooter-parking/']],
   },
 ];
 

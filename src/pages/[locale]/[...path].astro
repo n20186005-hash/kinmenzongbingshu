@@ -2,6 +2,7 @@
 import HistoryPage from '../../components/localized/HistoryPage.astro';
 import InsidePage from '../../components/localized/InsidePage.astro';
 import RoutesIndexPage from '../../components/localized/RoutesIndexPage.astro';
+import ServicesPage from '../../components/localized/ServicesPage.astro';
 import NearbyPages from '../../components/localized/NearbyPages.astro';
 import TransportPages from '../../components/localized/TransportPages.astro';
 import SimplePage from '../../components/localized/SimplePage.astro';
@@ -32,6 +33,7 @@ const isTransport = page.path === '/transport/' || page.path.startsWith('/transp
 {page.path === '/history/' ? <HistoryPage locale={locale} />
   : page.path === '/inside/' ? <InsidePage locale={locale} />
   : page.path === '/routes/' ? <RoutesIndexPage locale={locale} />
+  : page.path === '/services/' ? <ServicesPage locale={locale} page={page} />
   : isNearby ? <NearbyPages locale={locale} page={page} />
   : isTransport ? <TransportPages locale={locale} page={page} />
   : <SimplePage locale={locale} page={page} />}

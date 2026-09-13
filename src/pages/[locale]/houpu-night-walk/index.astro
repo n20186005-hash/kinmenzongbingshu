@@ -140,8 +140,19 @@ const faqLd = {
     acceptedAnswer: { '@type': 'Answer', text: answer },
   })),
 };
+
+// 搜尋結果標題補上 19:30 與免費，對應「金門總兵署夜間導覽」等查詢
+const seo = en
+  ? {
+      title: 'Houpu Night Tour: Free 19:30 Guided Walk',
+      description: 'Join the free Houpu night tour that leaves from Kinmen Military Headquarters (Troops Headquarters) at 19:30. On-site registration, walking route, evening schedule and visitor FAQs.',
+    }
+  : {
+      title: '后浦夜游怎么参加｜19:30 免费现场报名',
+      description: '后浦夜游：每天 19:30 在清金门镇总兵署集合、现场报名、免费解说，从总兵署走到模范街。含集合位置、电话、路线、参加提醒与常见问题。',
+    };
 ---
-<Layout title={copy.title} description={copy.description} active="/houpu-night-walk/" pageType="Article" structuredData={faqLd}>
+<Layout title={seo.title} description={seo.description} active="/houpu-night-walk/" pageType="Article" structuredData={faqLd}>
   <PageHeader eyebrow={copy.eyebrow} crumb={copy.crumb} title={copy.title} intro={copy.intro} />
 
   <main class="container-page py-12">
@@ -153,6 +164,12 @@ const faqLd = {
               <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">{label}</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">{value}</div></div>
             ))}
           </div>
+        </section>
+
+        <section class="rounded-2xl border border-[var(--color-slate-line)] bg-white p-5 shadow-[var(--shadow-card)]">
+          <p class="text-sm leading-7 text-[var(--color-wood-soft)]">
+            {en ? 'On-site confirmation: ' : '现场确认：'}<a href={`tel:${attraction.phone.replace(/[^0-9+]/g, '')}`} class="font-semibold text-[var(--color-brick)] underline">{attraction.phone}</a>{en ? ' (Kinmen Military Headquarters). Ask staff for that evening’s exact meeting point.' : '（清金门镇总兵署）。集合位置请以现场公告为准。'}
+          </p>
         </section>
 
         <section>

@@ -1,0 +1,188 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'full', class: className = '', id = 'audience' } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+interface Plan {
+  key: string;
+  tag: string;
+  title: string;
+  duration: string;
+  best: string;
+  icon: string;
+  steps: string[];
+  focus: string;
+  cautions: string[];
+}
+
+const focusIcon =
+  '<circle cx="12" cy="12" r="3.4" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M12 3.4v3M12 17.6v3M3.4 12h3M17.6 12h3M6.2 6.2l2.1 2.1M15.7 15.7l2.1 2.1M17.8 6.2l-2.1 2.1M8.3 15.7l-2.1 2.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>';
+const familyIcon =
+  '<circle cx="8" cy="6.6" r="2.6" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="16.4" cy="8.4" r="1.9" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M4.2 19.4v-4a3.8 3.8 0 0 1 7.6 0v4M14 19.4v-3a2.6 2.6 0 0 1 5.2 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none"/>';
+const accessIcon =
+  '<circle cx="12" cy="4.8" r="2" fill="currentColor"/><path d="M6.4 8.6h11.2M12 8.6v5.2M12 13.8l-3 6.2M12 13.8l3 6.2M9 11.4h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>';
+
+const plans: Plan[] = [
+  {
+    key: 'family',
+    tag: t('親子家庭', '亲子家庭', 'Families with children'),
+    title: t('親子家庭方案', '亲子家庭方案', 'Family plan'),
+    duration: t('約 50–70 分鐘（可拆成兩段）', '约 50–70 分钟（可拆成两段）', 'About 50–70 minutes, easily split in two'),
+    best: t('上午 09:30–11:30 或傍晚 16:30–18:00', '上午 09:30–11:30 或傍晚 16:30–18:00', '09:30–11:30 or 16:30–18:00'),
+    icon: familyIcon,
+    steps: [
+      t('從正門進入內埕，先看燕尾脊與紅磚牆，讓孩子找「屋頂有幾隻翹起來的尾巴」。', '从正门进入内埕，先看燕尾脊与红砖墙，让孩子找「屋顶有几只翘起来的尾巴」。', 'Enter the front courtyard and count the swallowtail roof ridges — a quick game that gets children looking up.'),
+      t('穿過儀門到大堂，說明這裡是古代官員辦公與升堂的地方，可對照電視劇場景。', '穿过仪门到大堂，说明这里是古代官员办公与升堂的地方，可对照电视剧场景。', 'Pass through the ceremonial gate into the main hall where officials once held court.'),
+      t('在後院與庭園休息、喝水、上洗手間，讓體力回充。', '在后院与庭园休息、喝水、上洗手间，让体力回充。', 'Rest in the rear garden, refill water and use the toilets.'),
+      t('最後走到後浦老街吃點心（豆花、冰品、麵食等類型），把古蹟與生活連結起來。', '最后走到后浦老街吃点心（豆花、冰品、面食等类型），把古迹与生活连结起来。', 'Finish with a snack on Houpu old street, linking the monument to daily life.'),
+    ],
+    focus: t(
+      '屋脊裝飾、石雕與木構細節、庭院空間感；用「找一找」的方式讓孩子主動觀察。',
+      '屋脊装饰、石雕与木构细节、庭院空间感；用「找一找」的方式让孩子主动观察。',
+      'Roof ornaments, stone carvings and timber details, and the sense of courtyard space — use treasure-hunt prompts to keep children observing.',
+    ),
+    cautions: [
+      t('園區有門檻與台階，嬰兒車建議走兩側坡道或由同行者協助。', '园区有门槛与台阶，婴儿车建议走两侧坡道或由同行者协助。', 'There are thresholds and steps; use the side ramps or ask a companion to help with a stroller.'),
+      t('室內展間請勿奔跑、勿觸摸文物，並降低音量。', '室内展间请勿奔跑、勿触摸文物，并降低音量。', 'No running or touching exhibits indoors, and keep voices low.'),
+      t('夏季高溫請避開正午時段，並注意補水。', '夏季高温请避开正午时段，并注意补水。', 'In summer avoid midday heat and keep everyone hydrated.'),
+    ],
+  },
+  {
+    key: 'photo',
+    tag: t('攝影與自然觀察', '摄影与自然观察', 'Photography and nature'),
+    title: t('攝影與自然觀察方案', '摄影与自然观察方案', 'Photography and nature plan'),
+    duration: t('約 90–120 分鐘（含老街與外圍）', '约 90–120 分钟（含老街与外围）', 'About 90–120 minutes including the old street'),
+    best: t('清晨 07:00–09:00 或日落前 16:00–18:00（光線最柔）', '清晨 07:00–09:00 或日落前 16:00–18:00（光线最柔）', 'Early morning 07:00–09:00 or pre-sunset 16:00–18:00 for softer light'),
+    icon: focusIcon,
+    steps: [
+      t('先繞外圍一圈觀察立面比例與後浦街屋天際線，決定主視角。', '先绕外围一圈观察立面比例与后浦街屋天际线，决定主视角。', 'Walk the perimeter first to read the façade proportions and the Houpu roofline, then choose your main angle.'),
+      t('內埕中央以對稱構圖拍攝大堂正面，注意避開人群與遮陽傘。', '内埕中央以对称构图拍摄大堂正面，注意避开人群与遮阳伞。', 'Shoot the main hall head-on from the centre of the courtyard for symmetry, avoiding crowds and umbrellas.'),
+      t('側廊與轉角適合拍木構、石雕與光影細節，可使用長焦壓縮層次。', '侧廊与转角适合拍木构、石雕与光影细节，可使用长焦压缩层次。', 'Side corridors and corners suit timber, stone and light-and-shadow details — a longer lens compresses the layers.'),
+      t('入夜後（18:00 後）燈光點亮，可拍夜景與老街燈籠串。', '入夜后（18:00 后）灯光点亮，可拍夜景与老街灯笼串。', 'After dark (18:00 onwards) the lighting comes on for night shots and the old street’s lantern strings.'),
+    ],
+    focus: t(
+      '燕尾脊剪影、紅磚與花崗石質感、門楣與窗櫺的幾何線條；秋冬季節空氣通透度最佳。',
+      '燕尾脊剪影、红砖与花岗石质感、门楣与窗棂的几何线条；秋冬季节空气通透度最佳。',
+      'Swallowtail ridge silhouettes, the texture of red brick and granite, and the geometry of lintels and lattice windows — air clarity peaks in autumn and winter.',
+    ),
+    cautions: [
+      t('室內展間多禁止閃光燈與腳架，拍攝前請先確認現場告示。', '室内展间多禁止闪光灯与脚架，拍摄前请先确认现场告示。', 'Flashes and tripods are usually banned indoors — check the notices first.'),
+      t('避免長時間占用主要動線，團體遊客抵達時請禮讓。', '避免长时间占用主要动线，团体游客抵达时请礼让。', 'Do not block the main route for long; yield when tour groups arrive.'),
+      t('空拍機受法規與機場周邊限制，請先查詢相關規定再使用。', '空拍机受法规与机场周边限制，请先查询相关规定再使用。', 'Drone use is restricted by law and by the nearby airport — check the rules before flying.'),
+    ],
+  },
+  {
+    key: 'access',
+    tag: t('低體力與無障礙', '低体力与无障碍', 'Low mobility and accessibility'),
+    title: t('低體力與無障礙方案', '低体力与无障碍方案', 'Low-mobility and accessible plan'),
+    duration: t('約 30–40 分鐘（可隨時休息）', '约 30–40 分钟（可随时休息）', 'About 30–40 minutes, with rest stops as needed'),
+    best: t('平日上午人潮較少，或傍晚氣溫較涼時', '平日上午人潮较少，或傍晚气温较凉时', 'Weekday mornings are quietest; late afternoon is cooler'),
+    icon: accessIcon,
+    steps: [
+      t('由正門主要動線進入，避開側邊台階；輪椅與助行器建議由同行者協助通過門檻。', '由正门主动线进入，避开侧边台阶；轮椅与助行器建议由同行者协助通过门槛。', 'Use the main entrance to avoid side steps; a companion should help wheelchairs and walkers over the thresholds.'),
+      t('沿廊道邊緣前進，可坐下休息的座椅與長凳分布於庭院周邊。', '沿廊道边缘前进，可坐下休息的座椅与长凳分布于庭院周边。', 'Keep to the edge of the corridors; benches are distributed around the courtyards.'),
+      t('重點放在大堂與單一展間，不必走完全部空間，以「少而深入」為原則。', '重点放在大堂与单一展间，不必走完全部空间，以「少而深入」为原则。', 'Focus on the main hall and a single exhibition room rather than covering everything.'),
+      t('結束後可至鄰近有座位的室內餐飲空間休息，避免長時間站立。', '结束后可至邻近有座位的室内餐饮空间休息，避免长时间站立。', 'Finish at a nearby indoor café or restaurant with seating to avoid standing for long.'),
+    ],
+    focus: t(
+      '大堂的空間尺度、匾額與家具陳設；以坐姿即可觀察的水平視角為主。',
+      '大堂的空间尺度、匾额与家具陈设；以坐姿即可观察的水平视角为主。',
+      'The scale of the main hall, its plaques and furniture — everything is readable from a seated eye level.',
+    ),
+    cautions: [
+      t('古蹟地面為石板與紅磚，雨後濕滑，請穿止滑鞋並放慢步伐。', '古迹地面为石板与红砖，雨后湿滑，请穿防滑鞋并放慢步伐。', 'Stone and brick floors become slippery after rain — wear non-slip shoes and slow down.'),
+      t('無障礙廁所位於園區公共廁所旁，夜間隨開放時間關閉。', '无障碍厕所位于园区公共厕所旁，夜间随开放时间关闭。', 'The accessible toilet sits beside the main toilets and closes with the site at night.'),
+      t('如有特殊需求，可先於服務台詢問替代動線與協助。', '如有特殊需求，可先于服务台询问替代动线与协助。', 'Ask at the service desk about alternative routes and assistance.'),
+    ],
+  },
+];
+
+const shown = variant === 'compact' ? plans.slice(0, 3) : plans;
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <p class="eyebrow">{t('按人群安排', '按人群安排', 'Plan by traveller type')}</p>
+  <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+    {t('按人群定制的遊覽方案', '按人群定制的游览方案', 'Tailored plans by traveller type')}
+  </h2>
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '同一座古蹟，帶孩子、帶相機、或需要減少步行，看到的重點並不一樣。以下三條方案依出行組成與節奏設計，可與半日／全日路線互相搭配。',
+      '同一座古迹，带孩子、带相机、或需要减少步行，看到的重点并不一样。以下三条方案依出行组成与节奏设计，可与半日／全日路线互相搭配。',
+      'The same monument reads differently depending on whether you are with children, carrying a camera or limiting how far you walk. These three plans are built around group composition and pace, and pair with the half-day and full-day routes.',
+    )}
+  </p>
+
+  <div class="mt-8 grid gap-5 lg:grid-cols-3">
+    {shown.map((plan) => (
+      <article class="card flex h-full flex-col">
+        <div class="flex items-center gap-3">
+          <span class="inline-grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-paper-deep)] text-[var(--color-brick)]" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" set:html={plan.icon} />
+          </span>
+          <div>
+            <p class="text-xs uppercase tracking-wide text-[var(--color-slate)]">{plan.tag}</p>
+            <h3 class="font-serif text-lg leading-6 text-[var(--color-wood)]">{plan.title}</h3>
+          </div>
+        </div>
+
+        <dl class="mt-4 space-y-1 text-sm text-[var(--color-wood-soft)]">
+          <div class="flex gap-2">
+            <dt class="shrink-0 font-semibold text-[var(--color-wood)]">{t('建議時長', '建议时长', 'Duration')}</dt>
+            <dd>{plan.duration}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="shrink-0 font-semibold text-[var(--color-wood)]">{t('建議時段', '建议时段', 'Best time')}</dt>
+            <dd>{plan.best}</dd>
+          </div>
+        </dl>
+
+        <ol class="mt-4 space-y-3 text-sm leading-6 text-[var(--color-wood-soft)]">
+          {plan.steps.map((step, index) => (
+            <li class="flex gap-3">
+              <span class="step-num shrink-0 text-[var(--color-kapok)]">{index + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+
+        <p class="mt-4 rounded-xl bg-[var(--color-paper-deep)] px-4 py-3 text-xs leading-6 text-[var(--color-wood-soft)]">
+          <strong class="text-[var(--color-wood)]">{t('觀察重點', '观察重点', 'Look for')}</strong>
+          {' '}{plan.focus}
+        </p>
+
+        <div class="mt-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-[var(--color-slate)]">
+            {t('留意事項', '留意事项', 'Keep in mind')}
+          </p>
+          <ul class="mt-2 space-y-2 text-xs leading-6 text-[var(--color-wood-soft)]">
+            {plan.cautions.map((caution) => (
+              <li class="flex gap-2">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-slate)]" aria-hidden="true" />
+                <span>{caution}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <p class="mt-6 text-xs text-[var(--color-slate)]">
+    <a class="underline underline-offset-2 hover:text-[var(--color-brick)]" href={localizedPath(locale, '/visit/')}>
+      {t('搭配參觀時間與路線規劃一起看', '搭配参观时间与路线规划一起看', 'Pair these with the timed visiting routes')}
+    </a>
+  </p>
+</section>

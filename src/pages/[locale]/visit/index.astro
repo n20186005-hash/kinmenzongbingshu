@@ -1,7 +1,14 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import PageHeader from '../../../components/PageHeader.astro';
-import { attraction } from '../../../data/site';
+import RatingBadge from '../../../components/RatingBadge.astro';
+import WeatherModule from '../../../components/WeatherModule.astro';
+import SeasonalStrategy from '../../../components/SeasonalStrategy.astro';
+import DayRoutes from '../../../components/DayRoutes.astro';
+import AudiencePlans from '../../../components/AudiencePlans.astro';
+import VisitorServices from '../../../components/VisitorServices.astro';
+import ScienceResponsibility from '../../../components/ScienceResponsibility.astro';
+import { attraction, googleRating } from '../../../data/site';
 import { localizedAttraction, localizedPath, type Locale } from '../../../i18n/config';
 import { getLocalizedContent, type TranslatedLocale } from '../../../i18n/content';
 import { getTranslatedLocalePaths } from '../../../i18n/paths';
@@ -14,9 +21,23 @@ const { locale } = Astro.props as { locale: TranslatedLocale };
 const content = getLocalizedContent(locale);
 const localAttraction = localizedAttraction[locale];
 const href = (path: string) => localizedPath(locale as Locale, path);
+
+// 搜尋結果標題需帶入品牌關鍵字（Google 地圖英文名 Troops Headquarters 一併納入）
+const seo = locale === 'en'
+  ? {
+      title: 'Kinmen Military Headquarters: Opening Hours, Free Admission & Visit Routes',
+      description: 'Kinmen Military Headquarters (Troops Headquarters) in Jincheng: free admission, open daily 09:00–22:00, plus 20/45/90-minute visit routes, live weather advice and the free 19:30 Houpu night tour.',
+    }
+  : {
+      title: '清金门镇总兵署开放时间、门票与参观路线',
+      description: '清金门镇总兵署（浯江新庄）门票免费、每日 09:00–22:00 开放，是金门少数开放到夜间的古迹。含地址、电话、20／45／90 分钟参观路线、即时天气建议与 19:30 免费后浦夜间导览。',
+    };
 ---
-<Layout title={content.visit.title} description={content.visit.intro} active="/visit/">
+<Layout title={seo.title} description={seo.description} active="/visit/">
   <PageHeader eyebrow={locale === 'en' ? 'Plan your visit' : '参观信息'} crumb={locale === 'en' ? 'Plan your visit' : '参观信息'} title={content.visit.title} intro={content.visit.intro} />
+  <WeatherModule class="pt-12" />
+  <SeasonalStrategy class="pt-16" />
+
   <div class="container-page py-12">
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {content.facts.map(([label, value]) => <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">{label}</div><div class="mt-1 font-bold text-[var(--color-ink)]">{value}</div></div>)}
@@ -29,7 +50,11 @@ const href = (path: string) => localizedPath(locale as Locale, path);
           <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">{locale === 'en' ? 'Address' : '地址'}</dt><dd>{localAttraction.address}</dd></div>
           <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">{locale === 'en' ? 'Hours' : '开放时间'}</dt><dd>{attraction.openingHours.opens}–{attraction.openingHours.closes}</dd></div>
           <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">{locale === 'en' ? 'Admission' : '门票'}</dt><dd>{locale === 'en' ? 'Free' : '免费'}</dd></div>
+          <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">{locale === 'en' ? 'Phone' : '电话'}</dt><dd>{attraction.phone}</dd></div>
+          <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">{locale === 'en' ? 'Postal code' : '邮政编码'}</dt><dd>{attraction.postalCode}</dd></div>
+          <div class="grid grid-cols-[9rem_1fr] gap-4 py-4"><dt class="font-semibold">Google rating</dt><dd>{googleRating.value} / 5 · {googleRating.count.toLocaleString('en-US')} {locale === 'en' ? 'reviews' : '则评论'}（{locale === 'en' ? 'source: Google Maps' : '资料来源：Google 地图'}）</dd></div>
         </dl>
+        <RatingBadge class="mt-5" />
       </section>
       <section>
         <h2 class="text-2xl">{content.visit.today}</h2>
@@ -50,4 +75,9 @@ const href = (path: string) => localizedPath(locale as Locale, path);
       </div>
     </div>
   </section>
+
+  <DayRoutes class="pt-16" />
+  <AudiencePlans class="pt-16" />
+  <VisitorServices class="pt-16" />
+  <ScienceResponsibility class="pb-16 pt-16" />
 </Layout>

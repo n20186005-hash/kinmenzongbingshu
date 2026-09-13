@@ -1,0 +1,210 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'full', class: className = '', id = 'seasons' } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+interface SeasonRow {
+  season: string;
+  months: string;
+  temp: string;
+  weather: string;
+  highlight: string;
+  wear: string;
+  fit: string;
+}
+
+const rows: SeasonRow[] = [
+  {
+    season: t('春季', '春季', 'Spring'),
+    months: t('3–5 月', '3–5 月', 'Mar–May'),
+    temp: t('約 15–25°C，早晚偏涼', '约 15–25°C，早晚偏凉', 'About 15–25°C, cool mornings and evenings'),
+    weather: t(
+      '3–4 月為金門霧季，海霧常使能見度驟降；5 月起轉為梅雨鋒面，短時強降雨增加',
+      '3–4 月为金门雾季，海雾常使能见度骤降；5 月起转为梅雨锋面，短时强降雨增加',
+      'March–April is the island’s fog season, when sea fog can cut visibility fast. From May the Meiyu front brings short, intense downpours.',
+    ),
+    highlight: t(
+      '木棉花期、古厝聚落外觀最清爽；候鳥北返過境',
+      '木棉花期、古厝聚落外观最清爽；候鸟北返过境',
+      'Kapok blossom, clear views of the historic courtyards, and northbound migratory birds passing through',
+    ),
+    wear: t('薄長袖＋防風外套、折傘；霧季備口罩', '薄长袖＋防风外套、折叠伞；雾季备口罩', 'Light long sleeves plus a windproof layer and a compact umbrella; a mask helps in fog season'),
+    fit: t('攝影、聚落散步、賞鳥', '摄影、聚落散步、赏鸟', 'Photography, village walks, birdwatching'),
+  },
+  {
+    season: t('夏季', '夏季', 'Summer'),
+    months: t('6–8 月', '6–8 月', 'Jun–Aug'),
+    temp: t('約 27–33°C，體感悶熱', '约 27–33°C，体感闷热', 'About 27–33°C, hot and humid'),
+    weather: t(
+      '梅雨尾聲與颱風季；午後雷陣雨頻繁，紫外線指數常達過量級',
+      '梅雨尾声与台风季；午后雷阵雨频繁，紫外线指数常达过量级',
+      'End of the Meiyu season and the typhoon period. Afternoon thunderstorms are frequent and UV levels are often very high.',
+    ),
+    highlight: t(
+      '夜間開放至 22:00，最適合安排後浦夜間散步與室內展覽',
+      '夜间开放至 22:00，最适合安排后浦夜间散步与室内展览',
+      'The site stays open until 22:00 — ideal for evening walks and indoor exhibitions',
+    ),
+    wear: t('透氣淺色衣物、防曬帽、雨具；攜帶水壺', '透气浅色衣物、防晒帽、雨具；携带水壶', 'Breathable light clothing, sun hat, rain gear and a water bottle'),
+    fit: t('室內參觀、夜遊、避暑行程', '室内参观、夜游、避暑行程', 'Indoor visits, night walks, heat-avoiding itineraries'),
+  },
+  {
+    season: t('秋季', '秋季', 'Autumn'),
+    months: t('9–11 月', '9–11 月', 'Sep–Nov'),
+    temp: t('約 22–30°C，日夜溫差加大', '约 22–30°C，日夜温差加大', 'About 22–30°C with a widening day–night gap'),
+    weather: t(
+      '天氣最穩定、能見度最佳；10 月起東北季風漸強，風力逐週增加',
+      '天气最稳定、能见度最佳；10 月起东北季风渐强，风力逐周增加',
+      'The most stable weather and best visibility of the year; from October the northeast monsoon builds week by week.',
+    ),
+    highlight: t(
+      '秋季藍天與紅磚古厝對比最強；候鳥南遷，度冬水鳥陸續抵達',
+      '秋季蓝天与红砖古厝对比最强；候鸟南迁，度冬水鸟陆续抵达',
+      'Deep blue skies against red-brick architecture; southbound migration begins and wintering waterbirds arrive',
+    ),
+    wear: t('薄長袖＋可收納外套，晚間加件', '薄长袖＋可收纳外套，晚间加件', 'Light long sleeves plus a packable jacket for the evening'),
+    fit: t('攝影、生態觀察、聚落長程步行', '摄影、生态观察、聚落长程步行', 'Photography, nature observation, long village walks'),
+  },
+  {
+    season: t('冬季', '冬季', 'Winter'),
+    months: t('12–2 月', '12–2 月', 'Dec–Feb'),
+    temp: t('約 10–18°C，強風使體感更低', '约 10–18°C，强风使体感更低', 'About 10–18°C, but strong wind makes it feel colder'),
+    weather: t(
+      '東北季風強勁，沿海與空曠處風速明顯偏大；雨量少但陰冷日數多',
+      '东北季风强劲，沿海与空旷处风速明显偏大；雨量少但阴冷日数多',
+      'The northeast monsoon is at its strongest, especially near the coast and in open areas. Rain is scarce but overcast, chilly days are common.',
+    ),
+    highlight: t(
+      '室內展覽與夜間燈景；遊客較少，可安靜看建築細節',
+      '室内展览与夜间灯景；游客较少，可安静看建筑细节',
+      'Indoor exhibitions and evening lighting; fewer crowds make it easier to study architectural detail',
+    ),
+    wear: t('防風保暖外套、圍巾毛帽；騎車注意側風', '防风保暖外套、围巾毛帽；骑车注意侧风', 'Windproof insulated jacket, scarf and beanie; watch crosswinds when riding'),
+    fit: t('室內導覽、短時程參觀、避風動線', '室内导览、短时程参观、避风动线', 'Indoor guided tours, short visits, sheltered routes'),
+  },
+];
+
+const analysis = [
+  {
+    title: t('氣象', '气象', 'Climate'),
+    body: t(
+      '金門屬副熱帶季風氣候，年平均氣溫約 21°C，最熱的 7–8 月月均溫接近 29°C，最冷的 1–2 月約 12–13°C。年雨量約 1,000–1,100 毫米，明顯少於台灣本島，且集中於 4–8 月；10 月至翌年 3 月受東北季風控制，風速長時偏高。3–4 月的平流霧與 7–9 月的颱風，是影響航班與船班最關鍵的兩個因子。',
+      '金门属副热带季风气候，年平均气温约 21°C，最热的 7–8 月月均温接近 29°C，最冷的 1–2 月约 12–13°C。年雨量约 1,000–1,100 毫米，明显少于台湾本岛，且集中于 4–8 月；10 月至翌年 3 月受东北季风控制，风速长时偏高。3–4 月的平流雾与 7–9 月的台风，是影响航班与船班最关键的两个因子。',
+      'Kinmen has a subtropical monsoon climate: the annual mean is around 21°C, July–August averages close to 29°C, and January–February about 12–13°C. Annual rainfall of roughly 1,000–1,100 mm is markedly lower than mainland Taiwan and concentrates in April–August. From October to March the northeast monsoon keeps wind speeds high. Advection fog in March–April and typhoons in July–September are the two biggest threats to flights and ferries.',
+    ),
+  },
+  {
+    title: t('水文與潮汐', '水文与潮汐', 'Water and tides'),
+    body: t(
+      '金門沒有常流大河，用水依賴湖庫與地下水，蒸發量高使水情格外敏感，旱季偶有分區供水措施。金城緊鄰海岸，後浦港與浯江溪出海口受半日潮影響，潮差約 2–4 公尺；颱風期間的暴潮與瞬間強降雨，可能造成低窪路段與地下空間短時積水，行程安排宜保留彈性。',
+      '金门没有常流大河，用水依赖湖库与地下水，蒸发量高使水情格外敏感，旱季偶有分区供水措施。金城紧邻海岸，后浦港与浯江溪出海口受半日潮影响，潮差约 2–4 公尺；台风期间的暴潮与瞬间强降雨，可能造成低洼路段与地下空间短时积水，行程安排宜保留弹性。',
+      'Kinmen has no large perennial rivers; supply depends on reservoirs and groundwater, and high evaporation makes the island water-sensitive, with occasional rationing in dry spells. Jincheng sits right on the coast, and the Houpu harbour and Wujiang Creek mouth are semidiurnal, with a tidal range of roughly 2–4 m. Storm surges and cloudbursts during typhoons can briefly flood low-lying roads, so keep itineraries flexible.',
+    ),
+  },
+  {
+    title: t('生態與季節現象', '生态与季节现象', 'Ecology and seasonal wildlife'),
+    body: t(
+      '金門位於東亞候鳥遷徙路線上，是重要的中繼與度冬地：10 月至翌年 3 月可見鸕鶿等度冬水鳥，4–5 月為過境高峰；縣鳥戴勝一年四季可見，栗喉蜂虎則在 5–8 月前來繁殖，是攝影愛好者的重點目標。後浦市區以麻雀、白頭翁、珠頸斑鳩等都市鳥種為主，清晨與黃昏較活躍。庭院與聚落栽植的木棉、苦楝等樹種，花期也是明顯的季節指標。',
+      '金门位于东亚候鸟迁徙路线上，是重要的中转与度冬地：10 月至翌年 3 月可见鸬鹚等度冬水鸟，4–5 月为过境高峰；县鸟戴胜一年四季可见，栗喉蜂虎则在 5–8 月前来繁殖，是摄影爱好者的重点目标。后浦市区以麻雀、白头翁、珠颈斑鸠等都市鸟种为主，清晨与黄昏较活跃。庭院与聚落栽植的木棉、苦楝等树种，花期也是明显的季节指标。',
+      'Kinmen sits on the East Asian migratory flyway and is an important stopover and wintering ground: cormorants and other wintering waterbirds from October to March, with a passage peak in April–May. The island bird, the hoopoe, can be seen year-round, while blue-tailed bee-eaters arrive to breed from May to August and are a favourite of photographers. In central Houpu the common birds are urban species such as tree sparrows, light-vented bulbuls and spotted doves, most active at dawn and dusk. Kapok and chinaberry trees in the courtyards mark the seasons with their flowering.',
+    ),
+  },
+];
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <p class="eyebrow">{t('季節策略', '季节策略', 'Seasonal planning')}</p>
+  <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+    {t('季節遊覽策略表', '季节游览策略表', 'Seasonal visiting strategy')}
+  </h2>
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '同一個空間，不同季節看到的東西完全不同。下表把氣溫、降雨型態、景觀重點與穿搭建議併排比較，方便你依出發月份直接挑選策略。',
+      '同一个空间，不同季节看到的东西完全不同。下表把气温、降雨型态、景观重点与穿搭建议并排比较，方便你依出发月份直接挑选策略。',
+      'The same site looks completely different through the year. The table lines up temperatures, rainfall patterns, seasonal highlights and what to wear, so you can pick a strategy straight from your travel month.',
+    )}
+  </p>
+
+  {variant === 'full' ? (
+    <div class="mt-6 overflow-x-auto rounded-2xl border border-[var(--color-slate-line)]">
+      <table class="w-full min-w-[52rem] border-collapse bg-white/60 text-left text-sm">
+        <caption class="sr-only">
+          {t('清金門鎮總兵署四季遊覽策略比較表', '清金门镇总兵署四季游览策略比较表', 'Four-season visiting strategy for the Kinmen Military Headquarters')}
+        </caption>
+        <thead>
+          <tr class="bg-[var(--color-paper-deep)] text-xs uppercase tracking-wide text-[var(--color-wood-soft)]">
+            <th scope="col" class="px-4 py-3 font-semibold">{t('季節', '季节', 'Season')}</th>
+            <th scope="col" class="px-4 py-3 font-semibold">{t('氣溫概況', '气温概况', 'Temperature')}</th>
+            <th scope="col" class="px-4 py-3 font-semibold">{t('降雨與天氣型態', '降雨与天气型态', 'Rain and weather pattern')}</th>
+            <th scope="col" class="px-4 py-3 font-semibold">{t('景觀與活動重點', '景观与活动重点', 'Highlights')}</th>
+            <th scope="col" class="px-4 py-3 font-semibold">{t('穿搭建議', '穿搭建议', 'What to wear')}</th>
+            <th scope="col" class="px-4 py-3 font-semibold">{t('適合安排', '适合安排', 'Best for')}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--color-slate-line)] align-top">
+          {rows.map((row) => (
+            <tr class="align-top">
+              <th scope="row" class="px-4 py-4 text-left font-serif text-base text-[var(--color-wood)]">
+                {row.season}
+                <span class="mt-1 block text-xs font-normal text-[var(--color-slate)]">{row.months}</span>
+              </th>
+              <td class="px-4 py-4 leading-6 text-[var(--color-wood-soft)]">{row.temp}</td>
+              <td class="px-4 py-4 leading-6 text-[var(--color-wood-soft)]">{row.weather}</td>
+              <td class="px-4 py-4 leading-6 text-[var(--color-wood-soft)]">{row.highlight}</td>
+              <td class="px-4 py-4 leading-6 text-[var(--color-wood-soft)]">{row.wear}</td>
+              <td class="px-4 py-4 leading-6 text-[var(--color-wood-soft)]">{row.fit}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {rows.map((row) => (
+        <article class="card h-full">
+          <p class="font-serif text-base text-[var(--color-wood)]">{row.season}</p>
+          <p class="mt-1 text-xs text-[var(--color-slate)]">{row.months}</p>
+          <p class="mt-3 text-sm leading-6 text-[var(--color-wood-soft)]">{row.temp}</p>
+          <p class="mt-2 text-sm leading-6 text-[var(--color-wood-soft)]">{row.highlight}</p>
+        </article>
+      ))}
+    </div>
+  )}
+
+  <p class="mt-3 text-xs leading-6 text-[var(--color-slate)]">
+    {t(
+      '概況依 1991–2020 年氣候常年平均值與地方公開資料整理，屬區域尺度推估；實際天氣請以即時預報與中央氣象署警特報為準。',
+      '概况依 1991–2020 年气候常年平均值与地方公开资料整理，属区域尺度推估；实际天气请以即时预报与中央气象署警报为准。',
+      'Figures are regional averages compiled from 1991–2020 climate normals and local public data. Always check the live forecast and official warnings for actual conditions.',
+    )}
+  </p>
+
+  {variant === 'full' && (
+    <div class="mt-8 grid gap-5 lg:grid-cols-3">
+      {analysis.map((block) => (
+        <article class="card h-full">
+          <h3 class="font-serif text-lg text-[var(--color-wood)]">{block.title}</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">{block.body}</p>
+        </article>
+      ))}
+    </div>
+  )}
+
+  <p class="mt-6 text-xs text-[var(--color-slate)]">
+    <a class="underline underline-offset-2 hover:text-[var(--color-brick)]" href={localizedPath(locale, '/services/')}>
+      {t('查看訪客服務與周邊設施說明', '查看访客服务与周边设施说明', 'See visitor services and nearby facilities')}
+    </a>
+  </p>
+</section>

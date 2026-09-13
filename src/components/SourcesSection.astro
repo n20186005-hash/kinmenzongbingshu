@@ -1,0 +1,153 @@
+---
+import { attraction, googleRating, site } from '../data/site';
+import { getLocaleFromPath, localizedAttraction, localizedPath, type Locale } from '../i18n/config';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const place = localizedAttraction[locale];
+const lp = (path: string) => localizedPath(locale as Locale, path);
+
+const sources = locale === 'en'
+  ? [
+      { title: 'Kinmen Official Tourism Website · Attraction page', url: attraction.govtTourismUrlEn, note: 'Opening hours, admission, address and contact details.', type: 'official' },
+      { title: 'Kinmen Official Tourism Website · Houpu night tour', url: 'https://kinmen.travel/zh-tw/discover/tour/22', note: 'Meeting time and the guided walking route.', type: 'official' },
+      { title: 'Google Maps listing & reviews', url: googleRating.sourceUrl, note: `Rating ${googleRating.value}/5 from ${googleRating.count.toLocaleString('en-US')} Google reviews.`, type: 'third' },
+      { title: 'Wikimedia Commons · Kinmen Military Headquarters', url: 'https://commons.wikimedia.org/wiki/Category:Kinmen_Military_Headquarters_of_Qing_Dynasty', note: 'Attraction photographs used under Creative Commons licences.', type: 'third' },
+    ]
+  : locale === 'zh-Hans'
+    ? [
+        { title: '金门观光旅游网 · 清金门镇总兵署', url: attraction.govtTourismUrl, note: '开放时间、门票、地址与联络资讯。', type: 'official' },
+        { title: '金门观光旅游网 · 后浦美丽小镇之旅', url: 'https://kinmen.travel/zh-tw/discover/tour/22', note: '后浦夜游集合时间与导览路线。', type: 'official' },
+        { title: 'Google 地图页面与评论', url: googleRating.sourceUrl, note: `Google 评分 ${googleRating.value}/5，共 ${googleRating.count.toLocaleString('en-US')} 则评论。`, type: 'third' },
+        { title: '维基共享资源 · 清金门镇总兵署', url: 'https://commons.wikimedia.org/wiki/Category:Kinmen_Military_Headquarters_of_Qing_Dynasty', note: '依 CC 授权署名使用的景点照片。', type: 'third' },
+      ]
+    : [
+        { title: '金門觀光旅遊網 · 清金門鎮總兵署', url: attraction.govtTourismUrl, note: '開放時間、門票、地址與聯絡資訊。', type: 'official' },
+        { title: '金門觀光旅遊網 · 後浦美麗小鎮之旅', url: 'https://kinmen.travel/zh-tw/discover/tour/22', note: '後浦夜遊集合時間與導覽路線。', type: 'official' },
+        { title: 'Google 地圖頁面與評論', url: googleRating.sourceUrl, note: `Google 評分 ${googleRating.value}/5，共 ${googleRating.count.toLocaleString('en-US')} 則評論。`, type: 'third' },
+        { title: '維基共享資源 · 清金門鎮總兵署', url: 'https://commons.wikimedia.org/wiki/Category:Kinmen_Military_Headquarters_of_Qing_Dynasty', note: '依 CC 授權署名使用的景點照片。', type: 'third' },
+      ];
+
+const copy = locale === 'en'
+  ? {
+      eyebrow: 'Sources & verification',
+      title: 'Where this information comes from',
+      intro: 'This page is an independent visitor guide. Facts that affect a visit are checked against the sources below and dated.',
+      tableHead: { label: 'Source', note: 'What it is used for', type: 'Type' },
+      typeOfficial: 'Official',
+      typeThird: 'Third party',
+      meta: [
+        ['Published', '2026-07-20'],
+        ['Official facts verified', site.verifiedAt],
+        ['Google rating checked', googleRating.reviewedAt],
+        ['Edited by', 'Kinmen Military Headquarters guide team'],
+      ],
+      ratingNote: 'The rating and review count are taken from the Google Maps listing for',
+      ratingNoteEnd: 'and may change over time. They are not an endorsement by this site.',
+      officialNote: 'Official updates and regional tourism information:',
+      officialLabel: 'Kinmen County Official Tourism Portal',
+      links: [['All sources', '/sources/'], ['How to report an issue', '/corrections/'], ['About the guide', '/about/'], ['Photo credits', '/credits/']],
+      notice: 'Hours, activities and facilities may change because of maintenance, weather or events. Always confirm the current official notice before departure.',
+    }
+  : locale === 'zh-Hans'
+    ? {
+        eyebrow: '资料来源与核实',
+        title: '这些资讯从哪里来',
+        intro: '本站是独立游客指南。会影响出行决策的事实，都会对照下列来源核实并标示日期。',
+        tableHead: { label: '来源', note: '用途', type: '类型' },
+        typeOfficial: '官方',
+        typeThird: '第三方',
+        meta: [
+          ['首次发布', '2026-07-20'],
+          ['官方事实核实', site.verifiedAt],
+          ['Google 评分核实', googleRating.reviewedAt],
+          ['编辑', '金门总兵署指南编辑组'],
+        ],
+        ratingNote: '评分与评论数取自 Google 地图页面',
+        ratingNoteEnd: '，数据会随时间变动，不代表本站立场。',
+        officialNote: '官方最新消息与区域旅游资讯：',
+        officialLabel: '金门县官方观光旅游网',
+        links: [['全部资料来源', '/sources/'], ['回报错误', '/corrections/'], ['关于本站', '/about/'], ['照片版权', '/credits/']],
+        notice: '开放时间、活动与设施可能因维修、天气或活动临时调整，出发前请确认官方最新公告。',
+      }
+    : {
+        eyebrow: '資料來源與核實',
+        title: '這些資訊從哪裡來',
+        intro: '本站是獨立遊客指南。會影響出行決策的事實，都會對照下列來源核實並標示日期。',
+        tableHead: { label: '來源', note: '用途', type: '類型' },
+        typeOfficial: '官方',
+        typeThird: '第三方',
+        meta: [
+          ['首次發布', '2026-07-20'],
+          ['官方事實核實', site.verifiedAt],
+          ['Google 評分核實', googleRating.reviewedAt],
+          ['編輯', '金門總兵署指南編輯組'],
+        ],
+        ratingNote: '評分與評論數取自 Google 地圖頁面',
+        ratingNoteEnd: '，數據會隨時間變動，不代表本站立場。',
+        officialNote: '官方最新消息與區域旅遊資訊：',
+        officialLabel: '金門縣官方觀光旅遊網',
+        links: [['全部資料來源', '/sources/'], ['回報錯誤', '/corrections/'], ['關於本站', '/about/'], ['照片版權', '/credits/']],
+        notice: '開放時間、活動與設施可能因維修、天氣或活動臨時調整，出發前請確認官方最新公告。',
+      };
+
+const govtUrl = locale === 'en' ? attraction.govtTourismUrlEn : attraction.govtTourismUrl;
+const metaRows = copy.meta as [string, string][];
+const linkRows = copy.links as [string, string][];
+---
+
+<section id="sources" class="mt-20 scroll-mt-24 border-t border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] py-14">
+  <div class="container-page">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h2 class="mt-2 text-2xl">{copy.title}</h2>
+    <p class="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-wood-soft)]">{copy.intro}</p>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-3">
+      <div class="lg:col-span-2">
+        <ul class="space-y-3">
+          {sources.map((source) => (
+            <li>
+              <a href={source.url} target="_blank" rel="noopener noreferrer" class="block rounded-2xl bg-white p-5 shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-medium text-[var(--color-brick)]">{source.title} ↗</span>
+                  <span class:list={['tag', source.type === 'official' ? 'tag-official' : 'tag-check']}>
+                    {source.type === 'official' ? copy.typeOfficial : copy.typeThird}
+                  </span>
+                </div>
+                <p class="mt-1 text-sm text-[var(--color-wood-soft)]">{source.note}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <aside class="space-y-4">
+        <dl class="rounded-2xl bg-white p-5 text-sm shadow-[var(--shadow-card)]">
+          {metaRows.map(([label, value]) => (
+            <div class="flex justify-between gap-4 border-b border-[var(--color-slate-line)] py-2 last:border-0">
+              <dt class="text-[var(--color-slate)]">{label}</dt>
+              <dd class="text-right font-medium text-[var(--color-ink)]">{value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <p class="rounded-2xl bg-white p-5 text-xs leading-6 text-[var(--color-wood-soft)] shadow-[var(--shadow-card)]">
+          {copy.ratingNote}
+          <a href={googleRating.sourceUrl} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-brick)] underline underline-offset-2">{place.shortName}</a>
+          {copy.ratingNoteEnd}
+          <span class="mt-2 block text-[var(--color-slate)]">
+            {copy.officialNote}
+            <a href={govtUrl} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-brick)] underline underline-offset-2">{copy.officialLabel}</a>
+          </span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 text-sm">
+          {linkRows.map(([label, path]) => (
+            <a href={lp(path)} class="rounded-full border border-[var(--color-slate-line)] bg-white px-3.5 py-1.5 text-[var(--color-wood-soft)] transition-colors hover:border-[var(--color-brick)] hover:text-[var(--color-brick)]">{label}</a>
+          ))}
+        </div>
+      </aside>
+    </div>
+
+    <p class="mt-8 max-w-3xl text-xs leading-6 text-[var(--color-slate)]">{copy.notice}</p>
+  </div>
+</section>

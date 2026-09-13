@@ -13,8 +13,12 @@ export function getStaticPaths() {
 const { spot } = Astro.props as { spot: NearbySpot };
 const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
 const heroImage = getLocalImage(spot.image);
+
+// 搜尋結果補上「文化身份 + 從總兵署步行時間」，改善有曝光但無點擊的周邊景點頁
+const seoTitle = `${spot.name}（${spot.heritage}）｜從總兵署${spot.walk}`;
+const seoDescription = `${spot.note}含歷史背景、建築看點與拍照提示；從清金門鎮總兵署${spot.walk}（${spot.distance}）即可順遊。`;
 ---
-<Layout title={spot.name} description={`${spot.name}參觀指南：${spot.note}含歷史、建築看點、拍照提示與從清金門鎮總兵署出發的步行資訊。`} active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
+<Layout title={seoTitle} description={seoDescription} active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
   <section class="relative min-h-[26rem] overflow-hidden">
     <div class="absolute inset-0">
       <ResponsiveImage src={heroImage} alt={spot.imageAlt} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />

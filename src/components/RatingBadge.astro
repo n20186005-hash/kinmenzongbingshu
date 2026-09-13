@@ -1,0 +1,54 @@
+---
+import { googleRating } from '../data/site';
+import { getLocaleFromPath } from '../i18n/config';
+
+interface Props {
+  variant?: 'card' | 'inline' | 'hero';
+  class?: string;
+}
+
+const { variant = 'card', class: className } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = locale === 'en'
+  ? { label: 'Google rating', reviews: 'Google reviews', source: 'Source: Google Maps', checked: 'verified' }
+  : locale === 'zh-Hans'
+    ? { label: 'Google 评分', reviews: '则 Google 评论', source: '资料来源：Google 地图', checked: '核实' }
+    : { label: 'Google 評分', reviews: '則 Google 評論', source: '資料來源：Google 地圖', checked: '核實' };
+
+const countLabel = googleRating.count.toLocaleString('en-US');
+const percent = Math.max(0, Math.min(100, (googleRating.value / googleRating.best) * 100));
+const starPath = 'M12 2.4l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.2l-5.8 3.1 1.1-6.5L2.6 9.2l6.5-.9z';
+
+const wrapperClass = variant === 'hero'
+  ? 'inline-flex flex-col gap-1 rounded-2xl bg-white/95 px-4 py-3 shadow-[var(--shadow-card)]'
+  : variant === 'inline'
+    ? 'flex flex-wrap items-center gap-x-2 gap-y-1'
+    : 'card flex flex-col gap-1.5';
+---
+
+<div class:list={[wrapperClass, className]}>
+  <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <span class="relative inline-block leading-none" role="img" aria-label={`${googleRating.value} / ${googleRating.best}`}>
+      <span class="flex gap-0.5 text-[var(--color-slate-line)]">
+        {Array.from({ length: googleRating.best }).map(() => (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={starPath} /></svg>
+        ))}
+      </span>
+      <span class="absolute inset-0 flex gap-0.5 overflow-hidden" style={`width:${percent}%`}>
+        {Array.from({ length: googleRating.best }).map(() => (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5a13a" aria-hidden="true" class="shrink-0"><path d={starPath} /></svg>
+        ))}
+      </span>
+    </span>
+    <span class="font-serif text-lg font-bold text-[var(--color-ink)]">{googleRating.value}</span>
+    <span class="text-sm text-[var(--color-wood-soft)]">
+      <strong class="font-semibold text-[var(--color-ink)]">{countLabel}</strong> {copy.reviews}
+    </span>
+  </div>
+  <p class="text-[11px] leading-4 text-[var(--color-slate)]">
+    <a href={googleRating.sourceUrl} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-brick)] hover:underline">
+      {copy.source} ↗
+    </a>
+    <span class="mx-1">·</span>{googleRating.reviewedAt} {copy.checked}
+  </p>
+</div>

@@ -2,7 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ResponsiveImage from '../../components/ResponsiveImage.astro';
-import { nightWalk } from '../../data/site';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { faqPageLd } from '../../lib/faq';
+import { attraction, nightWalk } from '../../data/site';
 
 const stops = ['清金門鎮總兵署（出發）', '浯江書院', '宗祠', '廟宇', '洋樓', '邱良功母節孝坊', '模範街（終點）'];
 const schedule = [
@@ -11,19 +13,35 @@ const schedule = [
   ['19:20', '返回集合點', '回到總兵署現場報名'],
   ['19:30', '夜遊出發', '跟隨解說走後浦老街'],
 ];
+
+// 對應「金門總兵署夜間導覽」「總兵署導覽」等搜尋
+const faqs = [
+  { q: '後浦夜遊需要事先預約嗎？', a: '不需要提前預約，採現場報名。建議 19:20 左右回到總兵署，向現場人員確認當晚的報名位置。' },
+  { q: '後浦夜遊要收費嗎？', a: '免費參加，並提供解說。若遇節慶或特別活動而調整，以官方與現場公告為準。' },
+  { q: '夜遊從哪裡出發？', a: `集合與報名都在清金門鎮總兵署（${attraction.address}）一帶；實際集合位置請以現場公告為準，也可先致電 ${attraction.phone} 確認。` },
+  { q: '下雨還會舉辦嗎？', a: '小雨不一定停辦，但強風或大雨可能調整路線甚至取消。出發前請再次確認當日是否舉辦，並攜帶雨具。' },
+  { q: '夜遊的終點在哪裡？回程方便嗎？', a: '終點為模範街，仍位於後浦核心區，步行即可返回總兵署或金城車站；實際停靠點與時間依當晚帶隊安排調整。' },
+  { q: '可以拍照嗎？', a: '一般路線可以拍照，但請尊重住戶與其他參加者，夜間避免使用強光直射他人與廟宇神龕。' },
+];
+const faqLd = faqPageLd(faqs);
 ---
-<Layout title="後浦夜遊怎麼參加" description="後浦美麗小鎮之旅：每日 19:30 在清金門鎮總兵署現場報名，免費解說，從總兵署走到模範街。含集合時間與路線。" active="/houpu-night-walk/">
+<Layout title="後浦夜遊怎麼參加｜19:30 免費現場報名" description="後浦美麗小鎮之旅：每日 19:30 在清金門鎮總兵署集合、現場報名、免費解說，從總兵署走到模範街。含集合地點、電話、路線與雨天備案。" active="/houpu-night-walk/" structuredData={faqLd}>
   <PageHeader eyebrow="後浦夜遊" crumb="後浦夜遊"
     title="後浦夜遊怎麼參加"
     intro={nightWalk.note} />
   <div class="container-page py-12">
     <div class="grid gap-10 lg:grid-cols-3">
       <div class="lg:col-span-2">
-        <div class="grid gap-3 sm:grid-cols-3">
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">集合時間</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">每日 {nightWalk.time}</div></div>
+          <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">集合地點</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">總兵署（現場報名）</div></div>
           <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">報名方式</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">現場報名</div></div>
           <div class="card p-4"><div class="text-xs text-[var(--color-slate)]">費用</div><div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">免費</div></div>
         </div>
+
+        <p class="mt-4 text-sm leading-7 text-[var(--color-wood-soft)]">
+          現場確認：<a href={`tel:${attraction.phone.replace(/[^0-9+]/g, '')}`} class="font-semibold text-[var(--color-brick)] underline">{attraction.phone}</a>（清金門鎮總兵署），地址 {attraction.address}。
+        </p>
 
         <h2 class="mt-10 font-serif text-2xl font-bold text-[var(--color-ink)]">路線怎麼走</h2>
         <ol class="mt-5 space-y-3 border-l-2 border-[var(--color-slate-line)] pl-6">
@@ -44,6 +62,11 @@ const schedule = [
             </div>
           ))}
         </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={attraction.googleMapsUrl} target="_blank" rel="noopener" class="btn btn-primary">導航到集合地點 ↗</a>
+          <a href="/transport/" class="btn btn-secondary">怎麼到總兵署 →</a>
+        </div>
       </div>
 
       <aside class="space-y-5">
@@ -60,4 +83,6 @@ const schedule = [
       </aside>
     </div>
   </div>
+
+  <FaqBlock items={faqs} eyebrow="夜遊常見問題" heading="報名、集合與雨天疑問" id="night-walk-faq" class="pb-16" />
 </Layout>

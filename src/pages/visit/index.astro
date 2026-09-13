@@ -2,7 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import LocationMap from '../../components/LocationMap.astro';
-import { attraction, quickFacts, nightWalk, routes } from '../../data/site';
+import RatingBadge from '../../components/RatingBadge.astro';
+import WeatherModule from '../../components/WeatherModule.astro';
+import SeasonalStrategy from '../../components/SeasonalStrategy.astro';
+import DayRoutes from '../../components/DayRoutes.astro';
+import AudiencePlans from '../../components/AudiencePlans.astro';
+import VisitorServices from '../../components/VisitorServices.astro';
+import ScienceResponsibility from '../../components/ScienceResponsibility.astro';
+import { attraction, googleRating, quickFacts, nightWalk, routes } from '../../data/site';
 
 const todayTips = [
   { range: '09:00 – 11:00', tip: '先參觀總兵署，再去金城市場或模範街，人少光線好。' },
@@ -11,15 +18,24 @@ const todayTips = [
   { range: '18:30 以後', tip: '重點安排 19:30 的後浦夜遊，署內亦開放至 22:00。' },
 ];
 ---
-<Layout title="參觀資訊與路線" description="清金門鎮總兵署開放時間 09:00–22:00，免費參觀，地址金門縣金城鎮浯江街53號。含交通、今日參觀建議、夜遊安排與 20/45/90 分鐘參觀路線。" active="/visit/">
+<Layout title="清金門鎮總兵署開放時間、門票與參觀路線" description="清金門鎮總兵署（浯江新莊）門票免費、每日 09:00–22:00 開放，是金門少數開放到夜間的古蹟。含地址、電話、20／45／90 分鐘參觀路線、即時天氣建議，以及 19:30 免費後浦夜間導覽安排。" active="/visit/">
   <PageHeader eyebrow="參觀資訊與路線" crumb="參觀資訊"
     title="開放時間、門票與參觀路線"
     intro="清金門鎮總兵署免費參觀，位於金城後浦核心區。這裡彙整了基本資訊、今日參觀建議，以及按時間選擇的三條參觀路線。">
     <div class="mt-5 flex flex-wrap gap-2 text-sm">
       <a href="#info" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">開放與基本資訊</a>
       <a href="#routes" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">參觀路線</a>
+      <a href="#weather" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">即時天氣與今日建議</a>
+      <a href="#day-routes" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">半日／全日路線</a>
+      <a href="#services" class="rounded-full border border-[var(--color-slate-line)] bg-white px-4 py-2 text-[var(--color-wood-soft)] hover:bg-[var(--color-paper)]">訪客服務</a>
     </div>
   </PageHeader>
+
+  <!-- 即時天氣、多日預報與可執行建議 -->
+  <WeatherModule class="pt-12" />
+
+  <!-- 四季遊覽策略 -->
+  <SeasonalStrategy class="pt-16" />
 
   <div id="info" class="container-page py-12">
     <!-- 核心資訊卡 -->
@@ -44,7 +60,10 @@ const todayTips = [
               ['開放時間', `每日 ${attraction.openingHours.opens} – ${attraction.openingHours.closes}`],
               ['門票', attraction.admission],
               ['建議停留', attraction.suggestedMinutes],
-              ['電話', attraction.phone],
+              ['電話', `${attraction.phone}（國際 +886 82 371 717）`],
+              ['郵遞區號', attraction.postalCode],
+              ['Plus Code', attraction.plusCode],
+              ['Google 評分', `${googleRating.value} / 5（${googleRating.count.toLocaleString('en-US')} 則評論，資料來源：Google 地圖，${googleRating.reviewedAt} 核實）`],
             ].map(([k, v]) => (
               <tr class="border-b border-[var(--color-slate-line)]">
                 <th class="w-28 py-3 text-left align-top font-semibold text-[var(--color-ink)]">{k}</th>
@@ -72,6 +91,7 @@ const todayTips = [
       <!-- 側欄 -->
       <aside class="space-y-5">
         <LocationMap compact />
+        <RatingBadge />
         <div class="card">
           <p class="text-xs leading-6 text-[var(--color-slate)]">
             資訊可能因維修、天氣或活動臨時調整，出發前請再次確認最新公告。
@@ -114,4 +134,16 @@ const todayTips = [
       </div>
     </div>
   </section>
+
+  <!-- 推薦通用遊覽路線（半日／全日） -->
+  <DayRoutes class="pt-16" />
+
+  <!-- 按人群定制的遊覽方案 -->
+  <AudiencePlans class="pt-16" />
+
+  <!-- 訪客服務與周邊設施（類型中立） -->
+  <VisitorServices class="pt-16" />
+
+  <!-- 科普與訪客責任 -->
+  <ScienceResponsibility class="pb-16 pt-16" />
 </Layout>

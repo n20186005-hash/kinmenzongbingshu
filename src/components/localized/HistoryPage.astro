@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../PageHeader.astro';
+import HistoryDeepDive from '../HistoryDeepDive.astro';
 import { localizedPath } from '../../i18n/config';
 import { toHans } from '../../i18n/detail';
 import type { TranslatedLocale } from '../../i18n/content';
@@ -47,4 +48,6 @@ const copy = locale === 'en' ? {
     <div class="mt-4 rounded-2xl bg-[var(--color-paper-deep)] p-6"><h3 class="font-serif text-xl font-bold text-[var(--color-ink)]">{copy.roleTitle}</h3><p class="mt-2 leading-8 text-[var(--color-wood-soft)]">{copy.role}</p></div>
     <div class="mt-6 flex flex-wrap gap-3"><a href={localizedPath(locale, '/inside/')} class="btn btn-primary">{copy.inside} →</a><a href={localizedPath(locale, '/routes/90-minute/')} class="btn btn-secondary">{copy.route} →</a></div>
   </div></div>
+
+  <HistoryDeepDive showTimeline={false} class="pb-16" />
 </Layout>

@@ -1,0 +1,218 @@
+---
+import { getLocaleFromPath, localizedPath, type Locale } from '../i18n/config';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+  id?: string;
+}
+
+const { variant = 'full', class: className = '', id = 'day-routes' } = Astro.props;
+
+const locale = getLocaleFromPath(Astro.url.pathname) as Locale;
+const isEn = locale === 'en';
+const isHans = locale === 'zh-Hans';
+
+const t = (zh: string, hans: string, en: string) => (isEn ? en : isHans ? hans : zh);
+
+interface Stop {
+  time: string;
+  stop: string;
+  minutes: string;
+  note: string;
+}
+
+interface Route {
+  key: string;
+  label: string;
+  title: string;
+  summary: string;
+  total: string;
+  stops: Stop[];
+}
+
+const halfDay: Route = {
+  key: 'half',
+  label: t('半日', '半日', 'Half day'),
+  title: t('半日精華路線（約 3–4 小時）', '半日精华路线（约 3–4 小时）', 'Half-day essentials (about 3–4 hours)'),
+  summary: t(
+    '以總兵署為核心，向外串接後浦老街與鄰近古蹟。全程步行，不需要交通工具，適合抵達金門的第一個半天或離開前的最後半天。',
+    '以总兵署为核心，向外串接后浦老街与邻近古迹。全程步行，不需要交通工具，适合抵达金门的第一个半天或离开前的最后半天。',
+    'Centred on the headquarters and linked outward to Houpu old street and nearby monuments. Entirely walkable with no transport needed — ideal for your first or last half day on the island.',
+  ),
+  total: t('總步行時間約 45 分鐘', '总步行时间约 45 分钟', 'About 45 minutes of walking in total'),
+  stops: [
+    {
+      time: '00:00',
+      stop: t('抵達總兵署正門與內埕', '抵达总兵署正门与内埕', 'Arrive at the main gate and front courtyard'),
+      minutes: t('20 分鐘', '20 分钟', '20 min'),
+      note: t('先看燕尾脊、紅磚牆與儀門，建立整體格局印象。', '先看燕尾脊、红砖墙与仪门，建立整体格局印象。', 'Read the swallowtail ridges, brick walls and ceremonial gate first to get the overall layout.'),
+    },
+    {
+      time: '00:20',
+      stop: t('大堂與東西廊（官方動線）', '大堂与东西廊（官方动线）', 'Main hall and side corridors'),
+      minutes: t('30 分鐘', '30 分钟', '30 min'),
+      note: t('理解「前衙後宅」的官署格局與升堂空間。', '理解「前衙后宅」的官署格局与升堂空间。', 'Understand the yamen-before-residence layout and where court was held.'),
+    },
+    {
+      time: '00:50',
+      stop: t('後院、內宅與室內展覽', '后院、内宅与室内展览', 'Rear garden, inner residence and indoor exhibitions'),
+      minutes: t('30 分鐘', '30 分钟', '30 min'),
+      note: t('室內有空調與座椅，適合休息、補水、上洗手間。', '室内有空调与座椅，适合休息、补水、上洗手间。', 'Air-conditioned rooms with seating — a good place to rest, refill water and use the toilets.'),
+    },
+    {
+      time: '01:20',
+      stop: t('步行至後浦老街（步行 3–5 分鐘）', '步行至后浦老街（步行 3–5 分钟）', 'Walk to Houpu old street (3–5 min)'),
+      minutes: t('40 分鐘', '40 分钟', '40 min'),
+      note: t('看街屋立面與亭仔腳，感受後浦從清代延續至今的商業街區。', '看街屋立面与亭仔脚，感受后浦从清代延续至今的商业街区。', 'Study the shop-house façades and arcades of the commercial street that has continued since the Qing era.'),
+    },
+    {
+      time: '02:00',
+      stop: t('鄰近牌坊與聚落節點', '邻近牌坊与聚落节点', 'Nearby arch and village node'),
+      minutes: t('25 分鐘', '25 分钟', '25 min'),
+      note: t('與總兵署同屬清代後浦的空間脈絡，可對照官方與民間兩條軸線。', '与总兵署同属清代后浦的空间脉络，可对照官方与民间两条轴线。', 'Part of the same Qing-era Houpu fabric — compare the official and folk axes of the town.'),
+    },
+    {
+      time: '02:25',
+      stop: t('老街小吃或甜品（類型自由選擇）', '老街小吃或甜品（类型自由选择）', 'Street snacks or dessert (your choice of type)'),
+      minutes: t('30 分鐘', '30 分钟', '30 min'),
+      note: t('建議選擇有座位的室內空間，順便避開正午烈日。', '建议选择有座位的室内空间，顺便避开正午烈日。', 'Choose a place with indoor seating and dodge the midday sun.'),
+    },
+  ],
+};
+
+const fullDay: Route = {
+  key: 'full',
+  label: t('全日', '全日', 'Full day'),
+  title: t('全日深度路線（約 6–8 小時）', '全日深度路线（约 6–8 小时）', 'Full-day deep route (about 6–8 hours)'),
+  summary: t(
+    '上午深入後浦，下午延伸到金城近郊的聚落與軍事史蹟，傍晚回到後浦銜接夜間散步。適合想一次理解「金門為什麼是這個樣子」的旅人。',
+    '上午深入后浦，下午延伸到金城近郊的聚落与军事史迹，傍晚回到后浦衔接夜间散步。适合想一次理解「金门为什么是这个样子」的旅人。',
+    'Spend the morning in depth in Houpu, extend into the villages and military sites just outside Jincheng in the afternoon, then return for an evening walk. Suited to travellers who want to understand why Kinmen looks the way it does.',
+  ),
+  total: t('含交通移動約 20–30 分鐘', '含交通移动约 20–30 分钟', 'About 20–30 minutes of travel between stops'),
+  stops: [
+    {
+      time: '09:00',
+      stop: t('總兵署：內埕、大堂、廊道', '总兵署：内埕、大堂、廊道', 'Headquarters: courtyard, main hall, corridors'),
+      minutes: t('60 分鐘', '60 分钟', '60 min'),
+      note: t('開園時段人潮最少，光線與拍照條件也最好。', '开园时段人潮最少，光线与拍照条件也最好。', 'Quietest hour of the day, with the best light for photographs.'),
+    },
+    {
+      time: '10:00',
+      stop: t('後院、內宅與特展', '后院、内宅与特展', 'Rear garden, inner residence and special exhibitions'),
+      minutes: t('45 分鐘', '45 分钟', '45 min'),
+      note: t('留意展間更換檔期，不同季節主題不同。', '留意展间更换档期，不同季节主题不同。', 'Exhibitions rotate, so the theme varies by season.'),
+    },
+    {
+      time: '10:45',
+      stop: t('後浦老街、亭仔腳與牌坊群', '后浦老街、亭仔脚与牌坊群', 'Houpu old street, arcades and arches'),
+      minutes: t('75 分鐘', '75 分钟', '75 min'),
+      note: t('以步行串接，順路理解清代以來的街區紋理。', '以步行串接，顺路理解清代以来的街区纹理。', 'Chain these on foot to read the street pattern laid down since the Qing era.'),
+    },
+    {
+      time: '12:00',
+      stop: t('午餐（依餐飲類型自由選擇）', '午餐（依餐饮类型自由选择）', 'Lunch (choose by food type)'),
+      minutes: t('60 分鐘', '60 分钟', '60 min'),
+      note: t('老街店家中午時段最完整，素食與麵食選項較多。', '老街店家中午时段最完整，素食与面食选项较多。', 'Old-street kitchens are fully open at midday, with plenty of vegetarian and noodle options.'),
+    },
+    {
+      time: '13:30',
+      stop: t('金城近郊聚落與洋樓建築（車程約 10 分鐘）', '金城近郊聚落与洋楼建筑（车程约 10 分钟）', 'Villages and arcade-house architecture just outside Jincheng (about 10 min by car)'),
+      minutes: t('90 分鐘', '90 分钟', '90 min'),
+      note: t('對照閩南合院與僑鄉洋樓兩種建築系統的差異。', '对照闽南合院与侨乡洋楼两种建筑系统的差异。', 'Compare the two architectural systems: Minnan courtyard houses and overseas-Chinese arcade mansions.'),
+    },
+    {
+      time: '15:15',
+      stop: t('海岸或坑道類軍事史蹟（擇一）', '海岸或坑道类军事史迹（择一）', 'Pick one coastal or tunnel military site'),
+      minutes: t('90 分鐘', '90 分钟', '90 min'),
+      note: t('金門戰地史蹟多在海岸線，風大請注意保暖與安全。', '金门战地史迹多在海岸线，风大请注意保暖与安全。', 'Most battlefield sites sit on the coast where it is windy — dress warmly and mind your footing.'),
+    },
+    {
+      time: '17:15',
+      stop: t('返回後浦，休息與晚餐', '返回后浦，休息与晚餐', 'Return to Houpu, rest and dine'),
+      minutes: t('90 分鐘', '90 分钟', '90 min'),
+      note: t('可先回住宿處整理裝備，再出門用餐。', '可先回住宿处整理装备，再出门用餐。', 'Head back to your lodging to reset, then eat out.'),
+    },
+    {
+      time: '19:30',
+      stop: t('後浦夜間散步與導覽', '后浦夜间散步与导览', 'Houpu evening walk and guided tour'),
+      minutes: t('90 分鐘', '90 分钟', '90 min'),
+      note: t('園區開放至 22:00，夜間燈光與白天是完全不同的景象。', '园区开放至 22:00，夜间灯光与白天是完全不同的景象。', 'The site stays open to 22:00, and the lighting at night shows a completely different face.'),
+    },
+  ],
+};
+
+const routes = variant === 'compact' ? [halfDay] : [halfDay, fullDay];
+const sharedNotes = [
+  t('公車：金城車站為主要轉運點，步行 3 分鐘內可達。', '公车：金城车站为主要转运点，步行 3 分钟内可达。', 'Bus: Jincheng bus station is the main interchange, within a 3-minute walk.'),
+  t('自駕：老街核心為徒步區，請停外圍停車場再步行進入。', '自驾：老街核心为徒步区，请停外围停车场再步行进入。', 'Driving: the historic core is pedestrianised — park outside and walk in.'),
+  t('機車：市區停車格有限，請勿停放於住戶出入口與消防通道。', '机车：市区停车格有限，请勿停放于住户出入口与消防通道。', 'Scooters: bays are limited — never block residents’ entrances or fire lanes.'),
+  t('時間為建議值，實際請依當日開放狀況、天候與人潮調整。', '时间为建议值，实际请依当日开放状况、天候与人潮调整。', 'Times are suggestions only — adjust for opening conditions, weather and crowds.'),
+];
+---
+
+<section class={`container-page ${className}`} id={id} aria-labelledby={`${id}-title`}>
+  <p class="eyebrow">{t('路線建議', '路线建议', 'Suggested routes')}</p>
+  <h2 id={`${id}-title`} class="mt-2 font-serif text-2xl text-[var(--color-wood)] sm:text-3xl">
+    {t('推薦通用遊覽路線（半日／全日）', '推荐通用游览路线（半日／全日）', 'Recommended general itineraries (half day / full day)')}
+  </h2>
+  <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">
+    {t(
+      '兩條路線都以總兵署為起點：半日走「一間官署＋一條老街」，全日再加上金城近郊的聚落與戰地史蹟。時間標示為相對與建議值，可依體力與天候刪減。',
+      '两条路线都以总兵署为起点：半日走「一间官署＋一条老街」，全日再加上金城近郊的聚落与战地史迹。时间标示为相对与建议值，可依体力与天候删减。',
+      'Both routes start at the headquarters: the half day covers one government compound plus one old street; the full day adds villages and battlefield sites near Jincheng. Times are relative suggestions — trim them to suit your energy and the weather.',
+    )}
+  </p>
+
+  <div class="mt-8 space-y-6">
+    {routes.map((route) => (
+      <article class="card">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p class="text-xs uppercase tracking-wide text-[var(--color-kapok)]">{route.label}</p>
+            <h3 class="mt-1 font-serif text-xl text-[var(--color-wood)]">{route.title}</h3>
+          </div>
+          <span class="tag tag-check">{route.total}</span>
+        </div>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-wood-soft)]">{route.summary}</p>
+
+        <ol class="mt-5 divide-y divide-[var(--color-slate-line)]">
+          {route.stops.map((stop, index) => (
+            <li class="grid gap-2 py-4 sm:grid-cols-[7.5rem_1fr]">
+              <div class="flex items-center gap-2 sm:flex-col sm:items-start">
+                <span class="font-serif text-sm font-semibold text-[var(--color-brick)]">{stop.time}</span>
+                <span class="text-xs text-[var(--color-slate)]">{stop.minutes}</span>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-[var(--color-wood)]">
+                  <span class="step-num mr-1 text-[var(--color-kapok)]">{index + 1}</span>
+                  {stop.stop}
+                </p>
+                <p class="mt-1 text-sm leading-6 text-[var(--color-wood-soft)]">{stop.note}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-6 grid gap-4 rounded-2xl border border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] p-5 sm:grid-cols-2">
+    <p class="text-xs font-semibold uppercase tracking-wide text-[var(--color-slate)] sm:col-span-2">
+      {t('交通與時間提醒', '交通与时间提醒', 'Transport and timing notes')}
+    </p>
+    {sharedNotes.map((note) => (
+      <p class="flex gap-2 text-xs leading-6 text-[var(--color-wood-soft)]">
+        <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-slate)]" aria-hidden="true" />
+        <span>{note}</span>
+      </p>
+    ))}
+  </div>
+
+  <p class="mt-6 text-xs text-[var(--color-slate)]">
+    <a class="underline underline-offset-2 hover:text-[var(--color-brick)]" href={localizedPath(locale, '/houpu-night-walk/')}>
+      {t('查看後浦夜間散步的完整安排', '查看后浦夜间散步的完整安排', 'See the full Houpu evening walk plan')}
+    </a>
+  </p>
+</section>

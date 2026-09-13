@@ -1,6 +1,8 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import PageHeader from '../../../components/PageHeader.astro';
+import FaqBlock from '../../../components/FaqBlock.astro';
+import { faqPageLd } from '../../../lib/faq';
 
 const vehicles = [
   { type: '微型電動二輪車', passenger: '不可載人', use: '金城附近短程', license: '免機車駕照；須年滿 14 歲' },
@@ -9,8 +11,19 @@ const vehicles = [
 ];
 
 const rules = ['車輛須完成審驗、掛牌並投保強制險', '騎乘者須年滿 14 歲', '全程佩戴合格安全帽', '最高時速 25 公里，不得擅自改裝', '不得載人，也不得酒駕或毒駕'];
+
+// 直接回答「金門電動車免駕照」「金門微型電動二輪車」等高需求搜尋
+const faqs = [
+  { q: '金門電動車免駕照嗎？', a: '只有「微型電動二輪車」免機車駕照。一般電動機車與燃油機車仍需要相應的機車駕照，租車前請先確認車型屬於哪一類。' },
+  { q: '微型電動二輪車可以載人嗎？', a: '不可以。微型電動二輪車不得載人，最高時速 25 公里，須年滿 14 歲、完成審驗掛牌並投保強制險，全程配戴合格安全帽。' },
+  { q: '一般電動機車或燃油機車需要什麼駕照？', a: '依車輛級別需要相應的機車駕照；持境外駕照是否適用，請在預訂前直接向租車業者確認，避免到場無法取車。' },
+  { q: '金門租電動車要提前預約嗎？', a: '共享車輛建議至少提前 3 天完成 App 註冊；連續假期、旺季或指定車型，建議先向業者預約，並確認還車站點與計費方式。' },
+  { q: '騎車到總兵署要停哪裡？', a: '金城後浦老城區巷弄狹窄，請停金城市區的合法機車格或公有停車場，再步行進入。必要時改用步行或公車更省事。' },
+];
+
+const faqLd = faqPageLd(faqs);
 ---
-<Layout title="金門機車與電動車指南" description="金門自由行租機車與電動車指南：區分微型電動二輪車、一般電動機車和燃油機車，說明駕照、載人、共享租還、換電與前往總兵署停車方式。" active="/transport/">
+<Layout title="金門電動車免駕照嗎？微型電動二輪車與租車規定" description="金門電動車免駕照只適用「微型電動二輪車」：須年滿 14 歲、掛牌投保、戴安全帽、時速上限 25 公里且不得載人；一般電動機車與燃油機車仍需駕照。另附水頭、機場與金城的租還車站點。" active="/transport/" structuredData={faqLd}>
   <PageHeader eyebrow="租車與騎行" crumb="機車與電動車" title="金門租機車、電動車怎麼選"
     intro="機車是金門自由行最靈活的交通方式，但「電動車」不是同一種車輛。先確認能否載人、駕照要求和行程距離，再決定車型。" />
 
@@ -72,4 +85,6 @@ const rules = ['車輛須完成審驗、掛牌並投保強制險', '騎乘者須
       <a href="/scooter-parking/" class="mt-6 inline-flex rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-brick)]">檢視停車指南 →</a>
     </section>
   </div>
+
+  <FaqBlock items={faqs} eyebrow="租車常見問題" heading="駕照、載人與租還車" id="scooter-faq" class="pb-16" />
 </Layout>
