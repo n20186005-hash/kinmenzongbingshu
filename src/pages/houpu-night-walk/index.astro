@@ -22,12 +22,13 @@ const faqs = [
   { q: '下雨還會舉辦嗎？', a: '小雨不一定停辦，但強風或大雨可能調整路線甚至取消。出發前請再次確認當日是否舉辦，並攜帶雨具。' },
   { q: '夜遊的終點在哪裡？回程方便嗎？', a: '終點為模範街，仍位於後浦核心區，步行即可返回總兵署或金城車站；實際停靠點與時間依當晚帶隊安排調整。' },
   { q: '可以拍照嗎？', a: '一般路線可以拍照，但請尊重住戶與其他參加者，夜間避免使用強光直射他人與廟宇神龕。' },
+  { q: '金門總兵署夜間導覽每天都有嗎？', a: '目前公開資訊為每日 19:30 現場報名的後浦夜間導覽；遇天候、節慶、維修或臨時活動可能調整，出發前請再次確認當日公告。' },
 ];
 const faqLd = faqPageLd(faqs);
 ---
-<Layout title="後浦夜遊怎麼參加｜19:30 免費現場報名" description="後浦美麗小鎮之旅：每日 19:30 在清金門鎮總兵署集合、現場報名、免費解說，從總兵署走到模範街。含集合地點、電話、路線與雨天備案。" active="/houpu-night-walk/" structuredData={faqLd}>
-  <PageHeader eyebrow="後浦夜遊" crumb="後浦夜遊"
-    title="後浦夜遊怎麼參加"
+<Layout title="金門總兵署夜間導覽｜後浦夜遊 19:30 免費現場報名" description="金門總兵署夜間導覽（後浦美麗小鎮之旅）：目前公開資訊為每日 19:30 在清金門鎮總兵署一帶現場報名、免費解說，路線走訪後浦並抵達模範街。含集合地點、路線、雨天與返程提醒。" active="/houpu-night-walk/" structuredData={faqLd}>
+  <PageHeader eyebrow="金門總兵署夜間導覽 · 後浦夜遊" crumb="後浦夜遊"
+    title="金門總兵署夜間導覽：後浦夜遊怎麼參加"
     intro={nightWalk.note} />
   <div class="container-page py-12">
     <div class="grid gap-10 lg:grid-cols-3">
