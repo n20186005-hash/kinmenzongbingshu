@@ -44,8 +44,8 @@ const d = detail[t.id];
 // 標題直接對應實際搜尋字詞（金城車站到機場公車、金門機場到金城車站公車、水頭碼頭公車）
 const seo: Record<string, { title: string; description: string }> = {
   'jincheng-bus-station': {
-    title: '金城車站交通｜到總兵署、金門機場與水頭碼頭公車',
-    description: '金城車站到總兵署步行約 195 米、3 分鐘；也整理金城車站到金門機場、水頭碼頭的公車轉乘方向、返程與後浦老街順遊。',
+    title: '金門金城車站交通｜到總兵署、機場與水頭碼頭公車',
+    description: '金門金城車站（常簡稱金城站）是後浦主要公車樞紐：到總兵署步行約 195 米、3 分鐘，也整理前往金門機場與水頭碼頭的公車方向、返程與轉乘。',
   },
   'kinmen-airport': {
     title: '金門機場↔金城車站公車｜3 路、時間與返程攻略',
@@ -59,6 +59,7 @@ const seo: Record<string, { title: string; description: string }> = {
 
 const faqs: Record<string, { q: string; a: string }[]> = {
   'jincheng-bus-station': [
+    { q: '金門金城車站、金城車站和金城站是同一個地方嗎？', a: '旅客搜尋時常把金門的「金城車站」簡稱為「金城站」。本站所說的金城車站，指的就是後浦一帶主要公車轉乘樞紐。' },
     { q: '金城車站到總兵署要走多久？', a: '約 195 米、3 分鐘以內。出站沿浯江街方向走，很快就會看到總兵署的磚紅門樓。' },
     { q: '金城車站可以搭車去機場和水頭碼頭嗎？', a: '可以。金城車站是金門西半島的公車樞紐，往尚義機場與水頭碼頭都在這裡轉乘；出發前請以金門公車動態資訊確認當日班次。' },
     { q: '金城車站到機場公車怎麼搭？', a: '可由金城車站搭 3 路往尚義機場方向。班距會依日期與時段調整，趕飛機時不要只按行車時間倒推，請另留候車與報到緩衝。' },
@@ -82,10 +83,13 @@ const faqs: Record<string, { q: string; a: string }[]> = {
 const copy = seo[t.id];
 const faqItems = faqs[t.id] ?? [];
 const faqLd = faqItems.length ? faqPageLd(faqItems) : undefined;
+const pageHeading = t.id === 'jincheng-bus-station'
+  ? '金門金城車站交通：到總兵署、機場與水頭碼頭'
+  : `從${t.from}到總兵署`;
 ---
 <Layout title={copy.title} description={copy.description} active="/transport/" structuredData={faqLd}>
   <PageHeader eyebrow="交通路線" crumb="交通"
-    title={`從${t.from}到總兵署`}
+    title={pageHeading}
     intro={t.desc}>
     <div class="mt-5 flex gap-4 text-sm text-[var(--color-wood)]">
       <span class="rounded-full bg-white px-4 py-2">📍 {t.dist}</span>
@@ -95,6 +99,31 @@ const faqLd = faqItems.length ? faqPageLd(faqItems) : undefined;
 
   <div class="container-page py-12">
     <div class="mx-auto max-w-3xl">
+      {t.id === 'jincheng-bus-station' && (
+        <section class="mb-10 rounded-2xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+          <p class="eyebrow">金城交通樞紐</p>
+          <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">到後浦先認識金城車站</h2>
+          <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+            金城車站是遊客在金城、後浦一帶最常使用的公車轉乘點。只逛總兵署與後浦時，下車後直接步行最省事；
+            要往尚義機場或水頭碼頭，也可從這裡轉乘對應公車。
+          </p>
+          <div class="mt-5 grid gap-3 sm:grid-cols-3">
+            <a href="/visit/" class="rounded-xl bg-white p-4 shadow-[var(--shadow-card)]">
+              <div class="text-xs text-[var(--color-slate)]">到總兵署</div>
+              <div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">步行約 3 分鐘</div>
+            </a>
+            <a href="/transport/kinmen-airport/" class="rounded-xl bg-white p-4 shadow-[var(--shadow-card)]">
+              <div class="text-xs text-[var(--color-slate)]">到金門機場</div>
+              <div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">查看 3 路公車 →</div>
+            </a>
+            <a href="/transport/shuitou-pier/" class="rounded-xl bg-white p-4 shadow-[var(--shadow-card)]">
+              <div class="text-xs text-[var(--color-slate)]">到水頭碼頭</div>
+              <div class="mt-1 font-serif text-lg font-bold text-[var(--color-ink)]">查看 7 路公車 →</div>
+            </a>
+          </div>
+        </section>
+      )}
+
       <h2 class="font-serif text-2xl font-bold text-[var(--color-ink)]">分步路線</h2>
       <ol class="mt-5 space-y-4">
         {d.steps.map((s, i) => (

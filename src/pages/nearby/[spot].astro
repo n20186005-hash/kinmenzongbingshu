@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import ResponsiveImage from '../../components/ResponsiveImage.astro';
 import { getLocalImage } from '../../lib/images';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { faqPageLd } from '../../lib/faq';
 import { nearbySpots, type NearbySpot } from '../../data/nearby';
 
 export function getStaticPaths() {
@@ -14,11 +16,57 @@ const { spot } = Astro.props as { spot: NearbySpot };
 const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
 const heroImage = getLocalImage(spot.image);
 
-// 搜尋結果補上「文化身份 + 從總兵署步行時間」，改善有曝光但無點擊的周邊景點頁
-const seoTitle = `${spot.name}（${spot.heritage}）｜從總兵署${spot.walk}`;
-const seoDescription = `${spot.note}含歷史背景、建築看點與拍照提示；從清金門鎮總兵署${spot.walk}（${spot.distance}）即可順遊。`;
+type SpotSeo = {
+  title: string;
+  description: string;
+  h1?: string;
+  aliases?: string[];
+  faqs?: { q: string; a: string }[];
+};
+
+const entitySeo: Record<string, SpotSeo> = {
+  kuige: {
+    title: '金門奎閣（魁星樓）｜Kuige / Kuixing Tower、歷史與參觀重點',
+    description: '金門奎閣又稱魁星樓，官方英文路線使用 Kuige (Kuixing Tower)；搜尋中也會出現 Kuixing Pavilion。整理 1836 年創建背景、魁星信仰、六角雙層樓閣看點與總兵署順遊方式。',
+    h1: '奎閣（魁星樓／Kuige）',
+    aliases: ['Kuige', 'Kuixing Tower', 'Kuixing Pavilion（搜尋常見寫法）', '魁星樓', '金門奎閣'],
+    faqs: [
+      { q: 'Kuixing Pavilion、Kuixing Tower、Kuige 和奎閣是在找同一個景點嗎？', a: '如果你搜尋的是金門後浦這座魁星樓，指的就是奎閣。金門官方英文路線使用 Kuige (Kuixing Tower)；搜尋查詢中也常會看到 Kuixing Pavilion 的寫法。' },
+      { q: '金門奎閣主要看什麼？', a: '重點是六角雙層樓閣、層疊屋簷與魁星信仰。建築不大，建議停留約 10–15 分鐘，再步行接邱良功母節孝坊或模範街。' },
+      { q: '奎閣離金門總兵署遠嗎？', a: '不遠，從清金門鎮總兵署步行約 4–6 分鐘即可到達，適合放進同一段後浦步行路線。' },
+    ],
+  },
+  'wujiang-academy': {
+    title: '浯江書院與朱子祠｜金門後浦書院歷史、看點與步行路線',
+    description: '浯江書院是金門後浦重要文教空間，院內朱子祠為重要古蹟。整理書院歷史、朱子祠、講堂與碑刻看點，以及從金門總兵署步行約 4–5 分鐘的順遊方式。',
+    h1: '浯江書院與朱子祠',
+    aliases: ['浯江書院', '朱子祠', 'Wujiang Academy'],
+    faqs: [
+      { q: '浯江書院和朱子祠是同一個地方嗎？', a: '兩者位於同一歷史院區脈絡中。旅客到訪浯江書院時，也會看到與朱熹相關的朱子祠；官方旅遊路線也常以「浯江書院（朱子祠）」一起標示，是理解金門崇文傳統的重要重點。' },
+      { q: '浯江書院離金門總兵署多遠？', a: '從清金門鎮總兵署步行約 4–5 分鐘，可與將軍第、奎閣、城隍廟一起安排在後浦步行路線。' },
+      { q: '浯江書院建議停留多久？', a: '建議約 15–25 分鐘。若對書院教育、朱子祠與碑刻有興趣，可多留一些時間慢慢看。' },
+    ],
+  },
+  'memorial-arch': {
+    title: '邱良功母節孝坊｜臺閩第一坊、石雕看點與總兵署步行路線',
+    description: '邱良功母節孝坊建於 1812 年，是後浦代表性石造牌坊，常見「臺閩第一坊」稱呼。整理牌坊由來、四柱三間與人物瑞獸石雕看點，以及從金門總兵署步行約 2 分鐘的順遊方式。',
+    h1: '邱良功母節孝坊',
+    aliases: ['臺閩第一坊', '邱良功節孝坊'],
+    faqs: [
+      { q: '邱良功母節孝坊為什麼又被稱為「臺閩第一坊」？', a: '在相關旅遊與文化介紹中，這座牌坊常見「臺閩第一坊」的稱呼，用來突出其規模、石雕與歷史代表性。正式參觀時仍以「邱良功母節孝坊」辨識最清楚。' },
+      { q: '邱良功母節孝坊離總兵署多遠？', a: '距離很近，從清金門鎮總兵署步行約 2 分鐘即可到達，是參觀總兵署後最容易順遊的一站。' },
+      { q: '邱良功母節孝坊主要看什麼？', a: '可近看四柱三間格局、層疊樓簷，以及梁枋、雀替、基座上的人物、花鳥與瑞獸石雕。' },
+    ],
+  },
+};
+
+const copy = entitySeo[spot.slug];
+const seoTitle = copy?.title ?? `${spot.name}（${spot.heritage}）｜從總兵署${spot.walk}`;
+const seoDescription = copy?.description ?? `${spot.note}含歷史背景、建築看點與拍照提示；從清金門鎮總兵署${spot.walk}（${spot.distance}）即可順遊。`;
+const faqItems = copy?.faqs ?? [];
+const faqLd = faqItems.length ? faqPageLd(faqItems) : undefined;
 ---
-<Layout title={seoTitle} description={seoDescription} active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
+<Layout title={seoTitle} description={seoDescription} active="/nearby/" preloadImage={heroImage} preloadSizes="100vw" structuredData={faqLd}>
   <section class="relative min-h-[26rem] overflow-hidden">
     <div class="absolute inset-0">
       <ResponsiveImage src={heroImage} alt={spot.imageAlt} class="h-full w-full object-cover" sizes="100vw" maxWidth={1600} loading="eager" fetchpriority="high" />
@@ -29,7 +77,10 @@ const seoDescription = `${spot.note}含歷史背景、建築看點與拍照提�
         <a href="/" class="hover:text-white">首頁</a> / <a href="/nearby/" class="hover:text-white">附近景點</a> / {spot.name}
       </nav>
       <p class="eyebrow !text-[var(--color-paper)]/90">周邊順遊 · {spot.walk}</p>
-      <h1 class="mt-3 max-w-3xl font-serif text-3xl font-black !text-white sm:text-5xl">{spot.name}</h1>
+      <h1 class="mt-3 max-w-3xl font-serif text-3xl font-black !text-white sm:text-5xl">{copy?.h1 ?? spot.name}</h1>
+      {copy?.aliases?.length && (
+        <p class="mt-3 max-w-3xl text-sm text-white/80">常見名稱：{copy.aliases.join(' · ')}</p>
+      )}
       <p class="mt-4 max-w-2xl text-lg leading-8 text-white/90">{spot.lead}</p>
       <div class="mt-5 flex flex-wrap gap-2 text-sm text-white">
         <span class="rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">{spot.heritage}</span>
@@ -101,4 +152,8 @@ const seoDescription = `${spot.note}含歷史背景、建築看點與拍照提�
       </a>
     </div>
   </div>
+
+  {faqItems.length > 0 && (
+    <FaqBlock items={faqItems} eyebrow="景點常見問題" heading={`${copy?.h1 ?? spot.name}常見問題`} id={`${spot.slug}-faq`} class="pb-16" />
+  )}
 </Layout>
