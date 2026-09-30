@@ -3,6 +3,8 @@ import Layout from '../../../layouts/Layout.astro';
 import PageHeader from '../../../components/PageHeader.astro';
 import ResponsiveImage from '../../../components/ResponsiveImage.astro';
 import { getLocalImage } from '../../../lib/images';
+import FaqBlock from '../../../components/FaqBlock.astro';
+import { faqPageLd } from '../../../lib/faq';
 
 const stops = [
   { name: '清金門鎮總兵署', img: 'exterior2.jpg', min: 45,
@@ -21,8 +23,14 @@ const stops = [
     note: '紅磚連廊式老街，後浦最上鏡的街景，適合逛街、拍照與喝杯豆花收尾。' },
 ];
 const heroImage = getLocalImage('historic.jpg');
+const faqs = [
+  { q: '後浦老街有統一營業時間嗎？', a: '沒有。後浦老街是金城後浦核心街區，不是單一封閉式景點，街道本身沒有統一開關門時間；餐飲、伴手禮與個別景點各自營業，想逛店家建議安排白天到傍晚。' },
+  { q: '金城老街和後浦老街是同一個地方嗎？', a: '旅遊搜尋中「金城老街」通常是在指金城鎮後浦一帶的老街區，但它不是嚴格的單一官方景點名稱。規劃路線時可把總兵署、節孝坊、模範街、浯江書院與城隍廟視為同一個後浦步行圈。' },
+  { q: '後浦老街建議逛多久？', a: '只走模範街與總兵署周邊約 45–60 分鐘；若依本站路線串聯 7 個主要停靠點，建議保留約 2 小時。' },
+];
+const faqLd = faqPageLd(faqs);
 ---
-<Layout title="後浦老街深度路線" description="後浦老街深度步行路線：從清金門鎮總兵署出發，串聯邱良功母節孝坊、將軍第、浯江書院、奎閣、城隍廟到模範街，約 2 小時走完金城後浦精華。" active="/nearby/" preloadImage={heroImage} preloadSizes="100vw">
+<Layout title="後浦老街攻略｜金城老街營業時間、景點與 2 小時步行路線" description="後浦老街（金城後浦）完整攻略：街區沒有統一營業時間；從清金門鎮總兵署出發，串聯邱良功母節孝坊、將軍第、浯江書院、奎閣、城隍廟與模範街，約 2 小時走完精華。" active="/nearby/" preloadImage={heroImage} preloadSizes="100vw" structuredData={faqLd}>
   <!-- Hero -->
   <section class="relative overflow-hidden">
     <div class="absolute inset-0">
@@ -34,10 +42,10 @@ const heroImage = getLocalImage('historic.jpg');
         <a href="/" class="hover:text-white">首頁</a> / <a href="/nearby/" class="hover:text-white">周邊順遊</a> / 後浦老街深度路線
       </nav>
       <p class="eyebrow text-[var(--color-paper)]/90">周邊順遊 · 深度步行</p>
-      <h1 class="mt-3 font-serif text-3xl font-black text-white sm:text-5xl">後浦老街深度路線</h1>
+      <h1 class="mt-3 font-serif text-3xl font-black text-white sm:text-5xl">後浦老街（金城老街）完整攻略</h1>
       <p class="mt-4 max-w-2xl text-lg leading-8 text-white/90">
         以總兵署為起點，把後浦老城區的古蹟、書院、廟宇、牌坊與老街一次走完。
-        全程平地步行，約 2 小時，是認識金城後浦的最佳路線。
+        街區本身沒有統一「營業時間」，店家各自營業；全程平地步行約 2 小時，是認識金城後浦最實用的路線。
       </p>
       <div class="mt-5 flex flex-wrap gap-2 text-sm text-white">
         <span class="rounded-full bg-white/15 px-4 py-2">共 {stops.length} 站</span>
@@ -54,6 +62,15 @@ const heroImage = getLocalImage('historic.jpg');
       傍晚走到模範街剛好可以銜接 19:30 的
       <a class="text-[var(--color-brick)] underline" href="/houpu-night-walk/">後浦夜遊</a>。
     </p>
+
+    <section class="mb-10 rounded-2xl bg-[var(--color-paper-deep)] p-6 sm:p-8">
+      <p class="eyebrow">很多人先搜尋這個</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--color-ink)]">金城老街／後浦老街有統一營業時間嗎？</h2>
+      <p class="mt-3 text-sm leading-7 text-[var(--color-wood-soft)]">
+        沒有統一營業時間。後浦是開放式歷史街區，公共街道可自由通行；餐飲、伴手禮與室內景點則依各自公告營業。
+        如果目標是逛店家與吃小吃，建議安排<strong>白天到傍晚</strong>；晚上可銜接 19:30 後浦夜遊。
+      </p>
+    </section>
 
     <!-- 逐站時間線 -->
     <ol class="relative space-y-6 border-l-2 border-[var(--color-slate-line)] pl-6 sm:pl-8">
@@ -101,4 +118,6 @@ const heroImage = getLocalImage('historic.jpg');
       </a>
     </div>
   </div>
+
+  <FaqBlock items={faqs} eyebrow="後浦老街常見問題" heading="營業時間、範圍與停留時間" id="houpu-old-street-faq" class="pb-16" />
 </Layout>
