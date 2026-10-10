@@ -48,11 +48,11 @@ const seo: Record<string, { title: string; description: string }> = {
     description: '金門金城車站（常簡稱金城站）是後浦主要公車樞紐：到總兵署步行約 195 米、3 分鐘，也整理前往金門機場與水頭碼頭的公車方向、返程與轉乘。',
   },
   'kinmen-airport': {
-    title: '金門機場↔金城車站公車｜3 路、時間與返程攻略',
+    title: '金門機場到金城車站怎麼搭？公車路線、時間與交通指南',
     description: '金門機場到金城車站可搭 3 路公車，車程約 15–20 分鐘；也整理金城車站到機場的返程方式、預留時間、計程車與機場租車提醒。',
   },
   'shuitou-pier': {
-    title: '水頭碼頭↔金城車站公車｜7 路、時間與小三通轉乘',
+    title: '水頭碼頭到金城車站交通｜公車、計程車與路線',
     description: '水頭碼頭到金城車站可搭 7 路公車，車程約 12–15 分鐘；也整理金城到水頭碼頭返程、小三通趕船時間、碼頭租車與計程車方式。',
   },
 };
@@ -133,6 +133,16 @@ const pageHeading = t.id === 'jincheng-bus-station'
           </li>
         ))}
       </ol>
+
+      {(t.id === 'kinmen-airport' || t.id === 'shuitou-pier') && (
+        <div class="mt-8 rounded-2xl border border-[var(--color-slate-line)] bg-white p-6">
+          <h3 class="font-serif text-lg font-bold text-[var(--color-ink)]">班次、站牌與車資（核實於 2026-10）</h3>
+          <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]">
+            公車班次會依平假日、時段與季節調整，車資亦可能變動；出發前請以金門縣公車動態資訊網查詢當日實際班次、站牌位置與收費。
+          </p>
+          <a href="https://bus.kinmen.gov.tw/" target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">金門縣公車動態資訊網 ↗</a>
+        </div>
+      )}
 
       {d.rental && (
         <div class="mt-8 rounded-2xl border border-[var(--color-slate-line)] bg-white p-6">

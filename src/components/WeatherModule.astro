@@ -65,7 +65,9 @@ const COPY = {
     refresh: '重新整理',
     loading: '正在取得最新天氣…',
     unavailable: '目前無法取得即時天氣資料。',
+    stale: '天氣資料已超過更新時效，暫不顯示預報。',
     fallbackHint: '以下為季節概況，實際天氣請以中央氣象署發布資訊為準。',
+    cwa: '中央氣象署',
     umbrella: ['不必帶傘', '建議帶摺傘備用', '建議帶傘', '務必攜帶雨具'],
     adviceTitle: '今天怎麼安排',
     labels: { alertTitle: '風險提醒', dress: '出行穿搭', plan: '遊玩安排', pack: '隨身物品' } as AdviceLabels,
@@ -90,7 +92,9 @@ const COPY = {
     refresh: '重新整理',
     loading: '正在获取最新天气…',
     unavailable: '暂时无法取得实时天气资料。',
+    stale: '天气资料已超过更新时效，暂不显示预报。',
     fallbackHint: '以下为季节概况，实际天气请以中央气象署发布资讯为准。',
+    cwa: '中央气象署',
     umbrella: ['不必带伞', '建议带折叠伞备用', '建议带伞', '务必携带雨具'],
     adviceTitle: '今天怎么安排',
     labels: { alertTitle: '风险提醒', dress: '出行穿搭', plan: '游玩安排', pack: '随身物品' } as AdviceLabels,
@@ -115,7 +119,9 @@ const COPY = {
     refresh: 'Refresh',
     loading: 'Fetching the latest conditions…',
     unavailable: 'Live weather is temporarily unavailable.',
+    stale: 'Weather data is past its update window and is hidden.',
     fallbackHint: 'Seasonal averages are shown below; always check official warnings before travelling.',
+    cwa: 'Central Weather Administration',
     umbrella: ['No umbrella needed', 'A compact umbrella may help', 'Bring an umbrella', 'Rain gear is essential'],
     adviceTitle: 'How to plan today',
     labels: { alertTitle: 'Weather alerts', dress: 'What to wear', plan: 'What to plan', pack: 'What to pack' } as AdviceLabels,
@@ -163,6 +169,9 @@ const chipsHtml = renderChipsHtml(chips);
 const sectionTitle = heading ?? copy.title;
 const rounded = (value: number) => Math.round(value);
 
+const MAX_AGE_HOURS = 6;
+const CWA_URL = 'https://www.cwa.gov.tw/';
+
 const config = {
   id,
   latitude: attraction.coordinates.lat,
@@ -172,6 +181,11 @@ const config = {
   icuLocale: locale === 'en' ? 'en' : locale === 'zh-Hans' ? 'zh-Hans' : 'zh-Hant',
   adviceLocale: adviceLocaleTag,
   labels: copy.labels,
+  fetchedAt: initial?.fetchedAt ?? null,
+  maxAgeHours: MAX_AGE_HOURS,
+  cwaUrl: CWA_URL,
+  cwaLabel: copy.cwa,
+  staleLabel: copy.stale,
   copy: {
     feels: copy.feels,
     humidity: copy.humidity,
@@ -195,6 +209,7 @@ const config = {
   aria-labelledby={`${id}-title`}
   data-wx-scope
 >
+  <div data-wx-main>
   <div class="flex flex-wrap items-end justify-between gap-3">
     <div>
       <p class="eyebrow">{copy.eyebrow}</p>
@@ -326,15 +341,33 @@ const config = {
     </div>
   </div>
 
-  <!-- 出行建議核心區：一句話結論 + 出行穿搭 / 遊玩安排 / 隨身物品 -->
-  <div class="mt-8">
-    <p class="font-serif text-lg text-[var(--color-wood)]">{copy.adviceTitle}</p>
-    <div class="mt-4" data-wx-advice set:html={adviceHtml} />
+  {variant === 'full' && (
+    <div>
+      <!-- 出行建議核心區：一句話結論 + 出行穿搭 / 遊玩安排 / 隨身物品 -->
+      <div class="mt-8">
+        <p class="font-serif text-lg text-[var(--color-wood)]">{copy.adviceTitle}</p>
+        <div class="mt-4" data-wx-advice set:html={adviceHtml} />
+      </div>
+
+      <p class="mt-6 text-xs leading-6 text-[var(--color-slate)]" data-wx="disclaimer">
+        {copy.disclaimer}
+      </p>
+    </div>
+  )}
+
+  {variant === 'compact' && (
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      <a href="/visit/#weather" class="btn btn-secondary px-4 py-2 text-sm">檢視 7 日預報與出行建議 →</a>
+    </div>
+  )}
   </div>
 
-  <p class="mt-6 text-xs leading-6 text-[var(--color-slate)]" data-wx="disclaimer">
-    {copy.disclaimer}
-  </p>
+  <!-- 資料過期或取數失敗時顯示的替代區塊 -->
+  <div class="mt-8 rounded-2xl border border-[var(--color-slate-line)] bg-[var(--color-paper-deep)] p-6" data-wx-fallback hidden>
+    <p class="font-serif text-lg text-[var(--color-wood)]" data-wx-fallback-title>{copy.unavailable}</p>
+    <p class="mt-2 text-sm leading-7 text-[var(--color-wood-soft)]" data-wx-fallback-text>{copy.fallbackHint}</p>
+    <a href={CWA_URL} target="_blank" rel="noopener" class="mt-3 inline-block text-sm font-medium text-[var(--color-brick)] hover:underline">{copy.cwa} ↗</a>
+  </div>
 </section>
 
 <script type="application/json" id={`${id}-config`} set:html={JSON.stringify(config)} is:inline></script>
@@ -382,6 +415,11 @@ const config = {
         windUnit: string;
         refresh: string;
       };
+      fetchedAt: string | null;
+      maxAgeHours: number;
+      cwaUrl: string;
+      cwaLabel: string;
+      staleLabel: string;
       icons: Record<string, string>;
     };
     try {
@@ -430,6 +468,17 @@ const config = {
       if (el) el.innerHTML = html;
     };
 
+    const showFallback = (root: Element, title?: string) => {
+      const main = root.querySelector('[data-wx-main]');
+      const fb = root.querySelector('[data-wx-fallback]');
+      if (main) (main as HTMLElement).hidden = true;
+      if (fb) {
+        (fb as HTMLElement).hidden = false;
+        const titleEl = fb.querySelector('[data-wx-fallback-title]');
+        if (titleEl && title) titleEl.textContent = title;
+      }
+    };
+
     const render = (raw: unknown) => {
       const fetchedAt =
         raw && typeof raw === 'object' && 'fetchedAt' in raw && typeof (raw as { fetchedAt?: unknown }).fetchedAt === 'string'
@@ -437,6 +486,12 @@ const config = {
           : new Date().toISOString();
       const snapshot = normalizeWeather(raw as RawWeatherPayload, fetchedAt);
       if (!snapshot) return false;
+
+      /* 成功取得有效資料：顯示主內容並隱藏替代區塊 */
+      const mainEl = scope.querySelector('[data-wx-main]');
+      const fbEl = scope.querySelector('[data-wx-fallback]');
+      if (mainEl) (mainEl as HTMLElement).hidden = false;
+      if (fbEl) (fbEl as HTMLElement).hidden = true;
 
       const cur = snapshot.current;
       const nowInfo = weatherCodeInfo(cur.weatherCode);
@@ -521,10 +576,15 @@ const config = {
           render(data);
         }
       } catch {
-        /* 連線失敗時保留伺服器端內容 */
+        /* 連線失敗：若資料已過期則改顯示替代區塊，否則保留伺服器端內容 */
+        if (bakedStale) showFallback(scope, cfg.staleLabel);
       }
     };
 
+    const bakedAt = cfg.fetchedAt ? new Date(cfg.fetchedAt).getTime() : NaN;
+    const bakedStale = Number.isFinite(bakedAt) && Date.now() - bakedAt > cfg.maxAgeHours * 3600 * 1000;
+
+    if (bakedStale) showFallback(scope, cfg.staleLabel);
     const cached = readCache();
     if (cached) render(cached);
     else load();

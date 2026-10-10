@@ -9,8 +9,8 @@ export const site = {
   subtitle: '獨立遊客指南',
   domain: 'kinmenzongbingshu.com',
   tagline: '到訪前知道怎麼安排，進入後知道怎麼看。',
-  verifiedAt: '2026-07-20',
-  googleReviewedAt: '2026-09-13',
+  verifiedAt: '2026-10-10',
+  googleReviewedAt: '2026-10-10',
 };
 
 // 單景點 SEO 實體綁定配置（對應需求中的變數表）
@@ -53,20 +53,36 @@ export const attraction = {
 // Google 評分／評論（最新一次核實，頁面須註明來源）
 export const googleRating = {
   value: 4.4,
-  count: 6212,
+  count: 6249,
   best: 5,
   worst: 1,
   source: 'Google 地圖',
   sourceEn: 'Google Maps',
   sourceUrl: 'https://maps.app.goo.gl/tHLfKByzmUA8UU1o8',
-  reviewedAt: '2026-09-13',
+  reviewedAt: '2026-10-10',
 };
 
 // 現場夜遊（後浦美麗小鎮之旅）
 export const nightWalk = {
   time: '19:30',
   meetPoint: '總兵署現場報名',
-  note: '每日 19:30 在總兵署現場報名，路線從總兵署出發，經書院、宗祠、廟宇、洋樓與牌坊，終點為模範街，全程免費並提供解說。',
+  distance: '約 1.8 公里',
+  duration: '約 90 分鐘',
+  // 官方公布的大致導覽站點（後浦美麗小鎮之旅）
+  stops: [
+    '清金門鎮總兵署（集合出發）',
+    '北鎮廟',
+    '將軍第',
+    '陳氏宗祠',
+    '浯江書院',
+    '浯島城隍廟',
+    '奎閣',
+    '邱良功母節孝坊',
+    '模範街（終點）',
+  ],
+  note: '每日 19:30 在總兵署現場報名，路線從總兵署出發，經北鎮廟、將軍第、陳氏宗祠、浯江書院、城隍廟、奎閣、邱良功母節孝坊，終點為模範街，全程約 1.8 公里、約 90 分鐘，免費並提供解說。',
+  source: '金門縣觀光旅遊網',
+  sourceUrl: 'https://kinmen.travel/zh-tw/Travel/Attraction/393',
 };
 
 // 首頁資訊卡
@@ -76,7 +92,7 @@ export const quickFacts = [
   { label: '建議停留', value: '30–60 分鐘', tag: 'onsite' },
   { label: '最近交通', value: '金城站步行約 195 米', tag: 'official' },
   { label: '夜間導覽', value: '19:30 現場報名', tag: 'check' },
-  { label: 'Google 評分', value: '4.4 ★（6,212 則）', tag: 'check' },
+  { label: 'Google 評分', value: '4.4 ★（6,249 則）', tag: 'check' },
 ] as const;
 
 // 主導航
